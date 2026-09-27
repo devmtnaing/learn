@@ -42,8 +42,8 @@
 .bf-step.pending{background:transparent;border-style:dashed}
 .bf-step.pending, .bf-step.pending *{color:var(--ink-3)}
 .bf-step.active{background:var(--surface);border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
-.bf-step h3{margin-bottom:9px;color:var(--ink-2)}
-.bf-step h3 .n{font-family:"IBM Plex Mono",monospace;color:var(--accent);margin-right:6px}
+.bf-step h5{margin-bottom:9px;color:var(--ink-2)}
+.bf-step h5 .n{font-family:"IBM Plex Mono",monospace;color:var(--accent);margin-right:6px}
 .bars{display:flex;flex-direction:column;gap:5px}
 .bar-row{display:grid;grid-template-columns:34px 1fr 30px;align-items:center;gap:8px;font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-variant-numeric:tabular-nums}
 .bar-track{background:var(--surface);border:1px solid var(--line);border-radius:4px;height:15px;overflow:hidden}

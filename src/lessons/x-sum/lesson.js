@@ -420,11 +420,11 @@ function drawBrute(s, { k }) {
   const cls = (n) => (s.stage === n ? 'active' : s.stage < n ? 'pending' : '');
   return stagePanel(pick(L.windowFromScratch(s.lo)), `[${s.win.join(', ')}]`, '')
     + '<div class="bf-steps">'
-    + `<div class="bf-step ${cls(1)}"><h3><span class="n">1</span>${pick(L.tallyHead(k))}</h3>`
+    + `<div class="bf-step ${cls(1)}"><h5 class="as-h3"><span class="n">1</span>${pick(L.tallyHead(k))}</h5>`
     + `<div class="bars">${s.stage >= 1 ? bars : `<span class="empty">${pick(L.notCounted)}</span>`}</div></div>`
-    + `<div class="bf-step ${cls(2)}"><h3><span class="n">2</span>${pick(L.rankHead(s.keep))}</h3>`
+    + `<div class="bf-step ${cls(2)}"><h5 class="as-h3"><span class="n">2</span>${pick(L.rankHead(s.keep))}</h5>`
     + `<div class="rank">${s.stage >= 2 ? rankHTML : `<span class="empty">${pick(L.notRanked)}</span>`}</div></div>`
-    + `<div class="bf-step ${cls(3)}"><h3><span class="n">3</span>${pick(L.sumHead)}</h3>`
+    + `<div class="bf-step ${cls(3)}"><h5 class="as-h3"><span class="n">3</span>${pick(L.sumHead)}</h5>`
     + `<div class="ledger bare"><span class="expr">${s.stage >= 3 ? kept.map((e) => `${e.v}×${e.c}`).join('  +  ') : '—'}</span>`
     + `<span class="total">${s.stage >= 3 ? s.sum : '·'}<small>X-SUM</small></span></div></div>`
     + '</div>';

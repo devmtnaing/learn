@@ -48,6 +48,10 @@ const selectTabs = (tabs, isOn) => tabs.forEach((b) => {
   const on = isOn(b);
   b.setAttribute('aria-selected', String(on));
   b.tabIndex = on ? 0 : -1;
+  // a tab row that scrolls sideways (a narrow phone) shows its selected tab —
+  // moving the row only, never the page
+  const row = b.parentElement;
+  if (on && row.scrollWidth > row.clientWidth) row.scrollLeft = b.offsetLeft - (row.clientWidth - b.offsetWidth) / 2;
 });
 
 /* Arrow keys, Home and End inside a tablist: move to that tab and select it. */
@@ -117,6 +121,7 @@ export function mountLesson(cfg) {
     timer: null,                               // set while playing
     input: structuredClone(cfg.input),
     varNames: [],
+    open: null,                                // part 3 solutions shown open
   };
 
   /* ---------------- building ---------------- */
@@ -417,6 +422,7 @@ export function mountLesson(cfg) {
       stop();
       state.mode = card.dataset.mode;
       selectTabs(root.querySelectorAll('[data-mode]'), (b) => b.dataset.mode === state.mode);
+      showSolution(state, state.mode, true);
       rebuild();
       return;
     }
@@ -550,7 +556,7 @@ export function mountLesson(cfg) {
   function paintAll() {
     paint();
     renderExamples(cfg, loadInput);
-    renderSolutions(cfg, state.lang);
+    renderSolutions(cfg, state);
     rebuild(state.i);
   }
 
@@ -636,10 +642,25 @@ function approachBlock(a, cost) {
   </div>`;
 }
 
-function renderSolutions(cfg, activeLang) {
+/* Part 3 opens on the approach the reader chose in 2·1; the others fold to
+ * their heading, copyable still. Choosing another approach in 2·1 opens that
+ * one too. A lesson with a single approach has nothing to fold. */
+function showSolution(state, mode, open) {
+  if (!state.open) return;
+  if (open) state.open.add(mode); else state.open.delete(mode);
+  document.querySelectorAll(`#solutions .src[data-src="${mode}"]`).forEach((src) => {
+    src.querySelector('.src-toggle')?.setAttribute('aria-expanded', String(open));
+    src.querySelector('pre.full').hidden = !open;
+  });
+}
+
+function renderSolutions(cfg, state) {
   const host = document.getElementById('solutions');
   if (!host) return;
   const langs = cfg.languages;
+  const activeLang = state.lang;
+  const folds = cfg.modes.length > 1;
+  state.open ??= new Set([state.mode]);
 
   // verification[lang] is one badge for every approach, or { [mode]: badge }
   // when one approach in that language behaves differently from the other.
@@ -657,15 +678,18 @@ function renderSolutions(cfg, activeLang) {
         ${cfg.modes.map((m) => {
           const meta = cfg.solutions?.[m.id] || {};
           const lines = (cfg.code[m.id]?.[l.id] || []).map(([, html]) => html).join('\n');
+          const open = !folds || state.open.has(m.id);
+          const id = `src-${l.id}-${m.id}`;
+          const title = `${esc(pick(m.name))}${m.sub ? ` <span class="sub-name">&middot; ${esc(pick(m.sub))}</span>` : ''}${meta.tag ? `<span class="tagpill">${esc(meta.tag)}</span>` : ''}`;
           return `
-          <div class="src">
+          <div class="src" data-src="${m.id}">
             <div class="src-head">
-              <h3 class="as-h2">${esc(pick(m.name))}${m.sub ? ` <span class="sub-name">&middot; ${esc(pick(m.sub))}</span>` : ''}${meta.tag ? `<span class="tagpill">${esc(meta.tag)}</span>` : ''}</h3>
+              <h3 class="as-h2">${folds ? `<button class="src-toggle" aria-expanded="${open}" aria-controls="${id}"><span>${title}</span></button>` : title}</h3>
               ${badge(l.id, m.id)}
               <button class="btn copy" data-copy>${esc(pick(UI.copy))}</button>
               ${meta.desc ? `<p class="sub">${pick(meta.desc)}</p>` : `<p class="sub mono">${esc(pick(m.cost))}</p>`}
             </div>
-            <pre class="full" tabindex="0">${lines}</pre>
+            <pre class="full" id="${id}" tabindex="0"${open ? '' : ' hidden'}>${lines}</pre>
           </div>`;
         }).join('')}
       </div>`).join('')}`;
@@ -675,6 +699,8 @@ function renderSolutions(cfg, activeLang) {
     const langBtn = e.target.closest('[data-lang]');
     // the live code panel's tab switches every tab and pane on the page
     if (langBtn) return document.querySelector(`#lesson [data-lang="${langBtn.dataset.lang}"]`)?.click();
+    const fold = e.target.closest('.src-toggle');
+    if (fold) return showSolution(state, fold.closest('.src').dataset.src, fold.getAttribute('aria-expanded') !== 'true');
     const copy = e.target.closest('[data-copy]');
     if (copy) {
       const text = copy.closest('.src').querySelector('pre.full').textContent;

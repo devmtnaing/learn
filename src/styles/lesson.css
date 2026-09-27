@@ -416,6 +416,41 @@ td.mono{font-variant-numeric:tabular-nums}
 .player .bench > .panel{border-left:1px solid var(--line);padding:16px 18px}
 @media (max-width:900px){.player .bench > .panel{border-left:0;border-top:1px solid var(--line)}}
 
+/* The transport and narration stay under the masthead while the reader looks
+   down at the stage and the code, and let go at the end of the player. Not on
+   a short window, where they would cover too much of it. */
+@media (min-height:600px){
+  .player-run{position:sticky;top:56px;z-index:5;box-shadow:0 8px 12px -12px rgba(0,0,0,.4)}
+  /* whatever takes keyboard focus below scrolls clear of the bar */
+  .player .bench *{scroll-margin-top:200px}
+}
+/* On a phone only the buttons stick, as one row (two below ~330px): with
+   the narration too it took a third of the screen. The narration stays in
+   the flow above the stage. */
+@media (max-width:560px){
+  .player-run{display:contents}
+  .player .transport{
+    position:sticky;top:56px;z-index:5;gap:6px;
+    padding:8px 14px;background:var(--sunk);border-top:1px solid var(--line);
+    box-shadow:0 8px 12px -12px rgba(0,0,0,.4);
+  }
+  .player .transport .btn{min-height:40px;padding-inline:9px}
+  .player .transport input[type=range]{flex:1 1 36px;min-width:36px}
+  .player .transport .counter{font-size:12px}
+  .player .narration{margin:10px 14px 14px}
+  .player .bench *{scroll-margin-top:130px}
+}
+
+/* The array strip wraps onto more rows rather than scrolling sideways, with
+   room under each row for the pointer labels. */
+[data-strip]{flex-wrap:wrap}
+[data-strip]:has(.ptr){row-gap:26px}
+@media (max-width:560px){
+  [data-strip]{gap:5px}
+  [data-strip] > .cell,[data-strip] > .has-ptr > .cell{width:36px;height:44px;font-size:15px}
+  [data-strip] > .cell.wide,[data-strip] > .has-ptr > .cell.wide{width:auto;min-width:40px;padding-inline:6px}
+}
+
 /* 2·3 — going deeper: the price, then the questions */
 .deeper{display:flex;flex-direction:column;gap:22px}
 .deeper-block{display:flex;flex-direction:column;gap:6px}

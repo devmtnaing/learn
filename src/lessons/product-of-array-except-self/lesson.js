@@ -9,7 +9,7 @@
  */
 import { mountLesson } from '../../lib/stepper.js';
 import { pick, onLangChange } from '../../lib/i18n.js';
-import { cells, readout, stagePanel } from '../../lib/stage.js';
+import { blank, cells, readout, stagePanel } from '../../lib/stage.js';
 import { t, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, intList, presetChips, widgetLabel } from '../../lib/kit.js';
 
 const MAX_LEN = 10;
@@ -178,7 +178,7 @@ function draw(s, { nums }) {
 /* The answer card: a slot per index, filled once that answer is final. */
 function answer(s) {
   const done = s.view === 'brute' ? s.answer.map((v) => v != null) : s.final;
-  const html = s.answer.map((v, i) => `<span class="slot${done[i] ? ' filled' : ''}${i === s.just && done[i] ? ' just' : ''}">${done[i] ? v : '·'}</span>`).join('');
+  const html = s.answer.map((v, i) => `<span class="slot${done[i] ? ' filled' : ''}${i === s.just && done[i] ? ' just' : ''}">${done[i] ? v : blank()}</span>`).join('');
   return { html, note: s.finished ? t('every product, no division', 'မြှောက်လဒ် အားလုံး၊ စားခြင်း မပါ') : t('one product per index', 'index တစ်ခုစီ မြှောက်လဒ် တစ်ခု') };
 }
 

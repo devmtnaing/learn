@@ -10,6 +10,7 @@
  */
 
 import { esc } from './stepper.js';
+import { pick } from './i18n.js';
 
 const tones = (t) => (t ? ` t-${t}` : '');
 
@@ -46,6 +47,11 @@ export function cells(items, o = {}) {
   return hasMarks ? `<div class="strip has-ptr">${html}</div>` : html;
 }
 
+/* What an answer slot holds before its value is known: a faint "?" on
+ * screen, "not yet" to a screen reader. */
+const NOT_YET = { en: 'not yet', my: 'မရသေး' };
+export const blank = () => `<span aria-hidden="true">?</span><span class="vh">${esc(pick(NOT_YET))}</span>`;
+
 /* The answer card's slots: filled ones hold a value, `just` marks the one
  * this step wrote. */
 export function slots(values, o = {}) {
@@ -53,7 +59,7 @@ export function slots(values, o = {}) {
   let html = '';
   for (let i = 0; i < total; i++) {
     const filled = i < values.length;
-    html += `<span class="slot${filled ? ' filled' : ''}${i === just ? ' just' : ''}">${filled ? esc(values[i]) : '·'}</span>`;
+    html += `<span class="slot${filled ? ' filled' : ''}${i === just ? ' just' : ''}">${filled ? esc(values[i]) : blank()}</span>`;
   }
   return html;
 }

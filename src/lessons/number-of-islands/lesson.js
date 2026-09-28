@@ -7,9 +7,9 @@
  * visited set.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, slots, stagePanel, stack, readout } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, labelledRows, stageRow, stageGap, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, labelledRows, stageRow, stageGap, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 
 const MAX_R = 6, MAX_C = 7;
 
@@ -542,19 +542,12 @@ function mountIslandWidget(host) {
     host.querySelector(`[data-r="${r}"][data-c="${c}"]`)?.focus();
   }
   host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (chip) { state.set = Number(chip.dataset.set); state.g = QW_SETS[state.set].g.map((r) => r.split('')); return render(); }
     const conn = ev.target.closest('[data-eight]');
     if (conn) { state.eight = conn.dataset.eight === 'true'; return render(); }
     const cell = ev.target.closest('[data-r]');
     if (cell) toggle(cell);
   });
-  host.addEventListener('keydown', (ev) => {
-    const cell = ev.target.closest('[data-r]');
-    if (cell && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); toggle(cell); }
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.g = QW_SETS[state.set].g.map((r) => r.split('')); } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

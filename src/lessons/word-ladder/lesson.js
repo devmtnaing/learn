@@ -9,9 +9,9 @@
  * however long the list is.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, slots, stagePanel, readout } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, labelledRows, stageRow, stageGap, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, labelledRows, stageRow, stageGap, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 
 const MAX_WORDS = 10, MAX_LEN = 5;
 
@@ -588,13 +588,10 @@ function mountLadderWidget(host) {
     q('[data-total]').innerHTML = `${ans}<small>${pick(t('words', 'စကားလုံး'))}</small>`;
   }
   host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (chip) { state.set = Number(chip.dataset.set); state.off = new Set(); return render(); }
     const w = ev.target.closest('[data-word]');
     if (w) { const x = w.dataset.word; state.off.has(x) ? state.off.delete(x) : state.off.add(x); render(); }
   });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.off = new Set(); } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

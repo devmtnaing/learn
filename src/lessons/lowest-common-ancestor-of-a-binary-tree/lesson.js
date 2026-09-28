@@ -8,9 +8,9 @@
  * from both sides is the answer.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, tree, stack, readout, slots, stagePanel, panels } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, stageGap, intValue, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, stageGap, intValue, widgetLabel, wireWidget } from '../../lib/kit.js';
 import { buildTree, levelOrder, asNested, preorderKeys, nameOf, treeInput, formatLevelOrder } from '../../lib/tree.js';
 
 const EX = [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4];
@@ -507,12 +507,7 @@ function mountPathsWidget(host) {
   }
   function choose(el) { state[el.dataset.which] = Number(el.dataset.v); render(); }
   host.addEventListener('click', (ev) => { const el = ev.target.closest('[data-which]'); if (el) choose(el); });
-  host.addEventListener('keydown', (ev) => {
-    const el = ev.target.closest('[data-which]');
-    if (el && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); choose(el); }
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render });
 }
 
 /* ---------------- the approach, in brief ---------------- */

@@ -8,9 +8,9 @@
  * nothing left to wait for and checks whether it ran out early.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, stagePanel, stack, readout } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, labelledRows, stageRow, stageGap, verdictAnswer, intValue, widgetLabel, presetChips } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, labelledRows, stageRow, stageGap, verdictAnswer, intValue, widgetLabel, presetChips, wireWidget } from '../../lib/kit.js';
 
 const MAX_N = 8, MAX_PAIRS = 12;
 
@@ -601,22 +601,10 @@ function mountArrowWidget(host) {
     render();
   }
   host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (chip) { load(Number(chip.dataset.set)); return render(); }
     const node = ev.target.closest('[data-u]');
     if (node) tap(Number(node.dataset.u));
   });
-  host.addEventListener('keydown', (ev) => {
-    const node = ev.target.closest('[data-u]');
-    if (node && (ev.key === 'Enter' || ev.key === ' ')) {
-      ev.preventDefault();
-      const u = Number(node.dataset.u);
-      tap(u);
-      host.querySelector(`[data-u="${u}"]`)?.focus();
-    }
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: load });
 }
 
 /* ---------------- the approach, in brief ---------------- */

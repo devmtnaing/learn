@@ -9,9 +9,9 @@
  * with no recursion at all.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, slots, stagePanel, stack, readout, panels } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, labelledRows, stageRow, stageGap, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, labelledRows, stageRow, stageGap, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 
 const MAX_R = 5, MAX_C = 5, MAX_V = 999;
 
@@ -655,19 +655,12 @@ function mountClimbWidget(host) {
     host.querySelector(`[data-r="${state.r}"][data-c="${state.c}"]`)?.focus();
   }
   host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (chip) { state.set = Number(chip.dataset.set); state.r = 0; state.c = 0; return render(); }
     const conn = ev.target.closest('[data-eight]');
     if (conn) { state.eight = conn.dataset.eight === 'true'; return render(); }
     const el = ev.target.closest('[data-r]');
     if (el) choose(el);
   });
-  host.addEventListener('keydown', (ev) => {
-    const el = ev.target.closest('[data-r]');
-    if (el && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); choose(el); }
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.r = 0; state.c = 0; } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

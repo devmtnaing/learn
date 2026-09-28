@@ -8,9 +8,9 @@
  * tall — so one pass with two pointers and two running maxima does it.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, stagePanel, readout, slots } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, labelledRows, stageGap, intList, listText, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, labelledRows, stageGap, intList, listText, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 
 const MAX_N = 14, MAX_H = 8;
 
@@ -381,19 +381,12 @@ function mountWallWidget(host) {
   }
   const pickCol = (el) => { state.at = Number(el.dataset.col); render(); host.querySelector(`[data-col="${state.at}"]`)?.focus(); };
   host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (chip) { state.set = Number(chip.dataset.set); state.h = [...QW_SETS[state.set].h]; state.at = Math.floor(state.h.length / 2); return render(); }
     const d = ev.target.closest('[data-d]');
     if (d) { const i = Math.min(state.at, state.h.length - 1); state.h[i] = Math.max(0, Math.min(MAX_H, state.h[i] + Number(d.dataset.d))); return render(); }
     const col = ev.target.closest('[data-col]');
     if (col) pickCol(col);
   });
-  host.addEventListener('keydown', (ev) => {
-    const col = ev.target.closest('[data-col]');
-    if (col && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); pickCol(col); }
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.h = [...QW_SETS[state.set].h]; state.at = Math.floor(state.h.length / 2); } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

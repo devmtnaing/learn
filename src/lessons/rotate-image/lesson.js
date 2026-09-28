@@ -7,9 +7,9 @@
  * ((i, j) → (j, i)), then reversing every row ((j, i) → (j, n − 1 − i)).
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { blank, cells, slots, stagePanel, readout } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, labelledRows, stageGap, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, labelledRows, stageGap, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 
 const MAX_N = 5;
 
@@ -348,17 +348,10 @@ function mountTurnWidget(host) {
   }
   function pickCell(el) { state.i = Number(el.dataset.i); state.j = Number(el.dataset.j); render(); }
   host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (chip) { state.set = Number(chip.dataset.set); state.i = 0; state.j = 1; return render(); }
     const cell = ev.target.closest('[data-i]');
     if (cell) pickCell(cell);
   });
-  host.addEventListener('keydown', (ev) => {
-    const cell = ev.target.closest('[data-i]');
-    if (cell && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); pickCell(cell); }
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.i = 0; state.j = 1; } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

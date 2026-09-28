@@ -9,9 +9,9 @@
  * appears.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, readout, slots, stagePanel } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, intList, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, intList, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 
 const MAX_LEN = 12;
 
@@ -382,15 +382,7 @@ function mountRunWidget(host) {
     else return;
     render();
   });
-  host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (!chip) return;
-    const set = QW_SETS[Number(chip.dataset.set)];
-    Object.assign(state, { set: Number(chip.dataset.set), from: set.from, to: set.to });
-    render();
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { const set = QW_SETS[i]; Object.assign(state, { set: i, from: set.from, to: set.to }); } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

@@ -9,9 +9,9 @@
  * recursive parser), or an explicit stack of (total, sign) pairs can.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, slots, stagePanel, stack, readout } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, stageGap, presetChips, widgetLabel, stageEmpty } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, stageGap, presetChips, widgetLabel, stageEmpty, wireWidget } from '../../lib/kit.js';
 
 const MAX_LEN = 24;
 
@@ -528,8 +528,6 @@ function mountSignWidget(host) {
     q('[data-total]').innerHTML = `${total}<small>${pick(t('value', 'တန်ဖိုး'))}</small>`;
   }
   host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (chip) { state.set = Number(chip.dataset.set); state.s = QW_SETS[state.set].s; return render(); }
     const op = ev.target.closest('[data-flip]');
     if (op) {
       const i = Number(op.dataset.flip);
@@ -541,8 +539,7 @@ function mountSignWidget(host) {
       host.querySelector(`[data-flip="${i}"]`)?.focus();
     }
   });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.s = QW_SETS[state.set].s; } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

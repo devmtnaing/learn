@@ -6,9 +6,9 @@
  * pointer hanging off a dummy node. The recursion holds it in the call stack,
  * and does not link anything until the calls start returning.
  */
-import { t, plural, exampleTitle, LANGUAGES, k, labelledRows, intList, presetChips, widgetLabel, stageEmpty } from '../../lib/kit.js';
+import { t, plural, exampleTitle, LANGUAGES, k, labelledRows, intList, presetChips, widgetLabel, stageEmpty, wireWidget } from '../../lib/kit.js';
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, chain, stack, panels, slots, stagePanel } from '../../lib/stage.js';
 
 
@@ -546,15 +546,7 @@ function mountFrontsWidget(host) {
     if (ev.target.id !== 'qw-k') return;
     state.k = Number(ev.target.value); render();
   });
-  host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (!chip) return;
-    state.set = Number(chip.dataset.set);
-    state.k = 0;
-    render();
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.k = 0; } });
 }
 
 /* ---------------- the approach, in brief ----------------

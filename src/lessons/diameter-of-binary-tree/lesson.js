@@ -9,9 +9,9 @@
  * bottom-up, and records the bend on the way back.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, tree, stack, readout, panels, slots, stagePanel } from '../../lib/stage.js';
-import { t, plural, exampleTitle, LANGUAGES, k, c, stageGap, presetChips, widgetLabel, stageEmpty } from '../../lib/kit.js';
+import { t, plural, exampleTitle, LANGUAGES, k, c, stageGap, presetChips, widgetLabel, stageEmpty, wireWidget } from '../../lib/kit.js';
 import { buildTree, levelOrder, asNested, preorderKeys, treeDepth, nameOf, treeInput, formatLevelOrder } from '../../lib/tree.js';
 
 const MAX_NODES = 15;
@@ -551,15 +551,7 @@ function mountBendWidget(host) {
     if (ev.target.id !== 'qw-b') return;
     state.b = Number(ev.target.value) - 1; render();
   });
-  host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (!chip) return;
-    state.set = Number(chip.dataset.set);
-    state.b = 0;
-    render();
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.b = 0; } });
 }
 
 /* The constraints start at one node, and a diameter needs somewhere to bend. */

@@ -13,9 +13,9 @@
  * kit itself. Its generators, stage and widget are ported from the original.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, slots, stagePanel } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, intList, intValue, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, intList, intValue, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 
 const MAX_N = 12;
 
@@ -1957,15 +1957,7 @@ function mountRankWidget(host) {
     if (ev.target.id !== 'qw-x') return;
     state.x = Number(ev.target.value); render();
   });
-  host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (!chip) return;
-    state.set = Number(chip.dataset.set);
-    state.x = Math.min(2, new Set(QW_SETS[state.set].win).size);
-    render();
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.x = Math.min(2, new Set(QW_SETS[state.set].win).size); } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

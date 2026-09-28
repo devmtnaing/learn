@@ -5,7 +5,7 @@
  * markup returns an HTML string styled by kit.css — no inline styles.
  */
 
-import { pick } from './i18n.js';
+import { pick, onLangChange } from './i18n.js';
 
 /** A reader-facing sentence in both languages; `pick()` chooses the side. */
 export const t = (en, my) => ({ en, my });
@@ -120,4 +120,29 @@ export const presetChips = (sets, active) => sets.map((x, i) =>
 export function widgetLabel(text) {
   const el = document.getElementById('q-label');
   if (el) el.textContent = text;
+}
+
+/**
+ * The wiring every part 1 widget shares, called once its markup is in `host`:
+ *   - a click on a preset chip ([data-set]) calls `choose(index)`, then redraws
+ *   - Enter or space on a [role="button"] cell clicks it, so the widget's one
+ *     click listener serves the keyboard too; a widget that handles a key its
+ *     own way (valid-anagram's focus follows the moved letter) calls
+ *     preventDefault() in a listener added before this, and is left alone
+ *   - `render()` runs now and again on every language change
+ * The stepper puts focus back on a redrawn chip or cell (see keepFocus).
+ */
+export function wireWidget(host, { render, choose }) {
+  host.addEventListener('click', (e) => {
+    const chip = e.target.closest('[data-set]');
+    if (chip && choose) { choose(Number(chip.dataset.set)); render(); }
+  });
+  host.addEventListener('keydown', (e) => {
+    if ((e.key !== 'Enter' && e.key !== ' ') || e.defaultPrevented) return;
+    const cell = e.target.closest('[role="button"]');
+    // dispatched, not .click(): an SVG node (course-schedule's graph) has no click()
+    if (cell) { e.preventDefault(); cell.dispatchEvent(new MouseEvent('click', { bubbles: true })); }
+  });
+  onLangChange(() => render());
+  render();
 }

@@ -7,9 +7,9 @@
  * so every answer it needs is already written down.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, kv, stack, readout, slots, stagePanel } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, intList, intValue, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, intList, intValue, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 
 const MAX_AMOUNT = 11;
 
@@ -434,15 +434,7 @@ function mountGreedyWidget(host) {
     if (ev.target.id !== 'qw-amt') return;
     state.amount = Number(ev.target.value); render();
   });
-  host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (!chip) return;
-    const set = QW_SETS[Number(chip.dataset.set)];
-    Object.assign(state, { set: Number(chip.dataset.set), amount: set.amount });
-    render();
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { const set = QW_SETS[i]; Object.assign(state, { set: i, amount: set.amount }); } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

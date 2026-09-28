@@ -7,9 +7,9 @@
  */
 import { mountLesson } from '../../lib/stepper.js';
 import { heapNested } from '../../lib/tree.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, tree, readout, slots, stagePanel } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, intList, intValue, presetChips, widgetLabel, stageEmpty } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, intList, intValue, presetChips, widgetLabel, stageEmpty, wireWidget } from '../../lib/kit.js';
 
 const MAX_LEN = 10;
 
@@ -382,15 +382,7 @@ function mountRankWidget(host) {
     if (ev.target.id !== 'qw-k') return;
     state.k = Number(ev.target.value); render();
   });
-  host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (!chip) return;
-    const set = QW_SETS[Number(chip.dataset.set)];
-    Object.assign(state, { set: Number(chip.dataset.set), k: set.k });
-    render();
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { const set = QW_SETS[i]; Object.assign(state, { set: i, k: set.k }); } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

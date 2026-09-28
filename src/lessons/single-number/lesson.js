@@ -8,9 +8,9 @@
  * 1-bits flip those columns of the accumulator, and the second copy of that
  * value flips them straight back.
  */
-import { t, exampleTitle, LANGUAGES, k, c, intList, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, intList, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, kv, strip as bitRow, slots, stagePanel } from '../../lib/stage.js';
 
 
@@ -441,15 +441,7 @@ function mountFoldWidget(host) {
     if (ev.target.id !== 'qw-k') return;
     state.k = Number(ev.target.value); render();
   });
-  host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (!chip) return;
-    state.set = Number(chip.dataset.set);
-    state.k = 0;
-    render();
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.k = 0; } });
 }
 
 /* ---------------- the approach, in brief ----------------

@@ -8,9 +8,9 @@
  * character enters the window once and the left edge only moves forward.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, kv, readout, slots, stagePanel } from '../../lib/stage.js';
-import { t, esc, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, esc, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 
 const MAX_LEN = 12;
 
@@ -444,21 +444,16 @@ function mountRunWidget(host) {
     render();
   }
   host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (chip) {
-      const set = QW_SETS[Number(chip.dataset.set)];
-      Object.assign(state, { set: Number(chip.dataset.set), from: set.from, to: set.to, next: 'from' });
-      return render();
-    }
     const cell = ev.target.closest('[data-i]');
     if (cell) pickCell(Number(cell.dataset.i));
   });
-  host.addEventListener('keydown', (ev) => {
-    const cell = ev.target.closest('[data-i]');
-    if (cell && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); pickCell(Number(cell.dataset.i)); }
+  wireWidget(host, {
+    render,
+    choose: (i) => {
+      const set = QW_SETS[i];
+      Object.assign(state, { set: i, from: set.from, to: set.to, next: 'from' });
+    },
   });
-  onLangChange(render);
-  render();
 }
 
 /* ---------------- the approach, in brief ---------------- */

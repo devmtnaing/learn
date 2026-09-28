@@ -6,10 +6,10 @@
  * `slow` is already where it belongs — so the array is partially correct at
  * every single step, and no second array is ever allocated.
  */
-import { t, exampleTitle, LANGUAGES, k, c, intList, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, intList, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 import { mountLesson } from '../../lib/stepper.js';
 import { cells, panels, stagePanel } from '../../lib/stage.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 
 
 /* ---------------- step generators ---------------- */
@@ -478,12 +478,6 @@ function mountWidget(host) {
     render();
   });
   host.addEventListener('click', (e) => {
-    const chip = e.target.closest('[data-set]');
-    if (chip) {
-      state.set = Number(chip.dataset.set);
-      state.pos = 0;
-      return render();
-    }
     const cell = e.target.closest('[data-i]');
     if (cell) {
       state.pos = Number(cell.dataset.i);
@@ -492,18 +486,7 @@ function mountWidget(host) {
       render();
     }
   });
-  host.addEventListener('keydown', (e) => {
-    const cell = e.target.closest('[data-i]');
-    if (cell && (e.key === 'Enter' || e.key === ' ')) {
-      e.preventDefault();
-      state.pos = Number(cell.dataset.i);
-      qw('#mw-sweep').value = String(state.pos);
-      qw('[data-out]').textContent = String(state.pos);
-      render();
-    }
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.pos = 0; } });
 }
 
 /* ---------------- the approach, in brief ----------------

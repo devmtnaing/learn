@@ -8,9 +8,9 @@
  * fresh window from every start instead.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, slots, stagePanel, kv, readout } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, stageGap, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, stageGap, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 
 const MAX_S = 16, MAX_T = 6;
 
@@ -490,12 +490,7 @@ function mountCoverWidget(host) {
   }
   qq('[data-lo]').addEventListener('input', (ev) => { state.lo = Number(ev.target.value); if (state.hi < state.lo) state.hi = state.lo; render(); });
   qq('[data-hi]').addEventListener('input', (ev) => { state.hi = Number(ev.target.value); if (state.lo > state.hi) state.lo = state.hi; render(); });
-  host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (chip) { state.set = Number(chip.dataset.set); state.lo = QW_SETS[state.set].lo; state.hi = QW_SETS[state.set].hi; render(); }
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.lo = QW_SETS[state.set].lo; state.hi = QW_SETS[state.set].hi; } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

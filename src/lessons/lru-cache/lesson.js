@@ -9,9 +9,9 @@
  * cut out and moved to the front in a few pointer writes.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, slots, stagePanel, kv, chain, readout } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, intValue, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, intValue, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 
 const MAX_OPS = 12;
 
@@ -779,17 +779,10 @@ function mountEvictWidget(host) {
     host.querySelector(`[data-key="${el.dataset.key}"]`)?.focus();
   }
   host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (chip) { state.set = Number(chip.dataset.set); state.seq = [...QW_SETS[state.set].seq]; return render(); }
     const key = ev.target.closest('[data-key]');
     if (key) read(key);
   });
-  host.addEventListener('keydown', (ev) => {
-    const key = ev.target.closest('[data-key]');
-    if (key && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); read(key); }
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.seq = [...QW_SETS[state.set].seq]; } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

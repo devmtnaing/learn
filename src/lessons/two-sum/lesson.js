@@ -5,9 +5,9 @@
  * complete this one?" once per element. Same answer, and the second question
  * can be answered without looking at anything else.
  */
-import { t, exampleTitle, LANGUAGES, k, c, intList, intValue, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, intList, intValue, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, kv, readout, slots, stagePanel } from '../../lib/stage.js';
 
 
@@ -353,22 +353,10 @@ function mountComplementWidget(host) {
     state.target = Number(e.target.value); render();
   });
   host.addEventListener('click', (e) => {
-    const chip = e.target.closest('[data-set]');
-    if (chip) {
-      state.set = Number(chip.dataset.set);
-      state.target = QW_SETS[state.set].target;
-      state.sel = 0;
-      return render();
-    }
     const c = e.target.closest('[data-i]');
     if (c) { state.sel = Number(c.dataset.i); render(); }
   });
-  host.addEventListener('keydown', (e) => {
-    const c = e.target.closest('[data-i]');
-    if (c && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); state.sel = Number(c.dataset.i); render(); }
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.target = QW_SETS[state.set].target; state.sel = 0; } });
 }
 
 /* ---------------- mount ----------------

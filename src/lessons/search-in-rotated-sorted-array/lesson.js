@@ -8,9 +8,9 @@
  * way. The scan is here as the answer that ignores the order entirely.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, readout, slots, stagePanel } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, intList, intValue, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, intList, intValue, widgetLabel, wireWidget } from '../../lib/kit.js';
 
 const MAX_LEN = 12;
 
@@ -389,8 +389,7 @@ function mountRotationWidget(host) {
     if (ev.target.id !== 'qw-k') return;
     state.k = Number(ev.target.value); render();
   });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render });
 }
 
 /* ---------------- the approach, in brief ---------------- */

@@ -9,9 +9,9 @@
  * extra space, which is the follow-up.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, chain, slots, stagePanel, stack, readout } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, labelledRows, stageGap, intList, intValue, listText, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, labelledRows, stageGap, intList, intValue, listText, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 
 const MAX_N = 10;
 
@@ -446,12 +446,7 @@ function mountGroupWidget(host) {
     q('[data-total]').innerHTML = `${full}<small>${pick(t('groups reversed', 'ပြောင်းပြန် အုပ်စု'))}</small>`;
   }
   q('[data-k]').addEventListener('input', (ev) => { state.k = Number(ev.target.value); render(); });
-  host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (chip) { state.set = Number(chip.dataset.set); render(); }
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

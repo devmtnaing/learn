@@ -9,9 +9,9 @@
  * two tokens. The first recurses as deep as the tree; the second never does.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, slots, stagePanel, tree, stack, panels } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, presetChips, widgetLabel, stageEmpty } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, presetChips, widgetLabel, stageEmpty, wireWidget } from '../../lib/kit.js';
 import { buildTree, levelOrder, asNested, nameOf, treeInput, formatLevelOrder } from '../../lib/tree.js';
 
 const MAX_NODES = 12;
@@ -677,13 +677,10 @@ function mountMarksWidget(host) {
     q('[data-total]').innerHTML = `${same ? '✗' : '✓'}<small>${pick(same ? t('ambiguous', 'မရှင်း') : t('distinct', 'ကွဲပြား'))}</small>`;
   }
   host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (chip) { state.set = Number(chip.dataset.set); return render(); }
     const m = ev.target.closest('[data-marks]');
     if (m) { state.marks = m.dataset.marks === 'true'; render(); }
   });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

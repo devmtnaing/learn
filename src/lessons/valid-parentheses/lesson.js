@@ -7,9 +7,9 @@
  * opener nobody has closed yet?" — and the top of a stack is exactly that, so
  * the answer is free and one pass is enough.
  */
-import { t, exampleTitle, LANGUAGES, k, c, verdictAnswer, stageRow, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, verdictAnswer, stageRow, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, stack, stagePanel } from '../../lib/stage.js';
 
 
@@ -516,15 +516,7 @@ function mountStackWidget(host) {
     if (e.target.id !== 'qw-k') return;
     state.k = Number(e.target.value); render();
   });
-  host.addEventListener('click', (e) => {
-    const chip = e.target.closest('[data-set]');
-    if (!chip) return;
-    state.set = Number(chip.dataset.set);
-    state.k = 0;
-    render();
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.k = 0; } });
 }
 
 /* ---------------- the approach, in brief ----------------

@@ -453,7 +453,7 @@ function mountTopWidget(host) {
 
 function atLeastOne(text) {
   const level = treeInput(MAX_NODES)(text);
-  if (!level.length) throw new Error('at least one node — the constraints start at 1');
+  if (!level.length) throw new Error('at least one node; the constraints start at 1');
   return level;
 }
 
@@ -461,25 +461,25 @@ function atLeastOne(text) {
 
 const APPROACH = {
   every: {
-    idea: t('Every path has a top node. For each node as the top, add its value to the best path going down each side — or nothing, if a side is negative — and keep the best.',
-            'လမ်းကြောင်းတိုင်းတွင် ထိပ် node ရှိသည်။ node တစ်ခုစီကို ထိပ်အဖြစ်ထား၍ ၎င်း၏ value ကို ဘက်တစ်ခုစီ၏ အောက်ဆင်း အကောင်းဆုံး လမ်းကြောင်းနှင့် ပေါင်း — ဘက်တစ်ခု အနုတ်ဖြစ်လျှင် ဘာမှမပေါင်း — အကောင်းဆုံးကို ထိန်းသည်။'),
+    idea: t('Every path has a top node. For each node as the top, add its value to the best path going down each side (or nothing, if a side is negative) and keep the best.',
+            'လမ်းကြောင်းတိုင်းတွင် ထိပ် node ရှိသည်။ node တစ်ခုစီကို ထိပ်အဖြစ်ထား၍ ၎င်း၏ value ကို ဘက်တစ်ခုစီ၏ အောက်ဆင်း အကောင်းဆုံး လမ်းကြောင်းနှင့် ပေါင်းပြီး (ဘက်တစ်ခု အနုတ်ဖြစ်လျှင် ဘာမှမပေါင်း) အကောင်းဆုံးကို ထိန်းသည်။'),
     steps: [
-      t('<code>down(node)</code>: the best path starting at node and going down, from scratch.', '<code>down(node)</code> — node မှ စ၍ အောက်ဆင်းသော အကောင်းဆုံး လမ်းကြောင်း၊ အစမှ။'),
+      t('<code>down(node)</code>: the best path starting at node and going down, from scratch.', '<code>down(node)</code>: node မှ စ၍ အောက်ဆင်းသော အကောင်းဆုံး လမ်းကြောင်းကို အစမှ တွက်သည်။'),
       t('<code>top = val + max(0, down(left)) + max(0, down(right))</code>.', '<code>top = val + max(0, down(left)) + max(0, down(right))</code>။'),
-      t('Return the largest of <code>top</code>, <code>best(left)</code> and <code>best(right)</code>; an empty subtree gives −∞.', '<code>top</code>၊ <code>best(left)</code> နှင့် <code>best(right)</code> အနက် အကြီးဆုံးကို ပြန် — ဗလာ subtree က −∞။'),
+      t('Return the largest of <code>top</code>, <code>best(left)</code> and <code>best(right)</code>; an empty subtree gives −∞.', '<code>top</code>၊ <code>best(left)</code> နှင့် <code>best(right)</code> အနက် အကြီးဆုံးကို ပြန်ပေးသည်။ ဗလာ subtree က −∞ ပေးသည်။'),
     ],
-    cost: t('Each subtree is re-walked by <code>down</code> once for every ancestor: O(n²) — about 9 × 10⁸ calls to <code>down</code> on a 3 × 10⁴-node chain (computed).', 'subtree တစ်ခုစီကို ancestor တစ်ခုလျှင် <code>down</code> က တစ်ကြိမ် ပြန်လျှောက်သည် — O(n²) — node 3 × 10⁴ ကွင်းဆက်တွင် <code>down</code> call 9 × 10⁸ ခန့် (တွက်ထားသည်)။'),
+    cost: t('Each subtree is re-walked by <code>down</code> once for every ancestor: O(n²), about 9 × 10⁸ calls to <code>down</code> on a 3 × 10⁴-node chain (computed).', 'subtree တစ်ခုစီကို ancestor တစ်ခုလျှင် <code>down</code> က တစ်ကြိမ် ပြန်လျှောက်သည်: O(n²)။ node 3 × 10⁴ ကွင်းဆက်တွင် <code>down</code> call 9 × 10⁸ ခန့် (တွက်ထားသည်)။'),
   },
   once: {
-    idea: t('Compute each node\'s best downward sum bottom-up, once. At every node both children\'s sums are already in hand, which is exactly what the path bending there needs: record it on the way back.',
-            'node တစ်ခုစီ၏ အောက်ဆင်း အကောင်းဆုံး ပေါင်းလဒ်ကို အောက်မှ အပေါ်သို့ တစ်ကြိမ် တွက်သည်။ node တိုင်းတွင် ကလေးနှစ်ခု၏ ပေါင်းလဒ် ရှိပြီးသား ဖြစ်ပြီး ထိုနေရာတွင် ကွေ့သော လမ်းကြောင်း လိုသည့်အရာ အတိအကျ ဖြစ်သည် — ပြန်လာစဉ် မှတ်သည်။'),
+    idea: t('Compute each node\'s best downward sum bottom-up, once. At every node both children\'s sums are already in hand, which is what the path bending there needs. Record it on the way back.',
+            'node တစ်ခုစီ၏ အောက်ဆင်း အကောင်းဆုံး ပေါင်းလဒ်ကို အောက်မှ အပေါ်သို့ တစ်ကြိမ် တွက်သည်။ node တိုင်းတွင် ကလေးနှစ်ခု၏ ပေါင်းလဒ် ရှိပြီးသား ဖြစ်ပြီး ထိုနေရာတွင် ကွေ့သော လမ်းကြောင်း လိုသည့်အရာ အတိအကျ ဖြစ်သည်။ ပြန်လာစဉ် မှတ်သည်။'),
     steps: [
       t('<code>best</code> starts at −∞.', '<code>best</code> သည် −∞ မှ စသည်။'),
-      t('<code>gain(node)</code>: <code>left</code> and <code>right</code> are the children\'s gains, with anything below 0 counted as 0.', '<code>gain(node)</code> — <code>left</code> နှင့် <code>right</code> သည် ကလေးများ၏ gain၊ 0 အောက်ကို 0 ဟု ရေတွက်။'),
-      t('<code>best = max(best, val + left + right)</code> — the path bending here.', '<code>best = max(best, val + left + right)</code> — ဤနေရာတွင် ကွေ့သော လမ်းကြောင်း။'),
-      t('Return <code>val + max(left, right)</code>: only one side can go on up.', '<code>val + max(left, right)</code> ကို ပြန် — ဘက်တစ်ဘက်သာ ဆက်တက်နိုင်သည်။'),
+      t('<code>gain(node)</code>: <code>left</code> and <code>right</code> are the children\'s gains, with anything below 0 counted as 0.', '<code>gain(node)</code>: <code>left</code> နှင့် <code>right</code> သည် ကလေးများ၏ gain ဖြစ်ပြီး 0 အောက်ကို 0 ဟု ရေတွက်သည်။'),
+      t('<code>best = max(best, val + left + right)</code>: the path bending here.', '<code>best = max(best, val + left + right)</code>: ဤနေရာတွင် ကွေ့သော လမ်းကြောင်း။'),
+      t('Return <code>val + max(left, right)</code>: only one side can go on up.', '<code>val + max(left, right)</code> ကို ပြန်ပေးသည်။ ဘက်တစ်ဘက်သာ ဆက်တက်နိုင်သည်။'),
     ],
-    cost: t('Every node is visited once: O(n) time, and O(h) stack — 3 × 10⁴ deep on a chain.', 'node တိုင်းကို တစ်ကြိမ် ရောက်သည် — O(n) အချိန်၊ O(h) stack — ကွင်းဆက်တွင် 3 × 10⁴ ဆင့်။'),
+    cost: t('Every node is visited once: O(n) time, and O(h) stack, which is 3 × 10⁴ deep on a chain.', 'node တိုင်းကို တစ်ကြိမ် ရောက်သည်: O(n) အချိန်၊ O(h) stack (ကွင်းဆက်တွင် 3 × 10⁴ ဆင့်)။'),
   },
 };
 
@@ -498,9 +498,9 @@ mountLesson({
   ],
   examples: [
     { title: exampleTitle(1), inputHtml: '<code>root = [1,2,3]</code>', output: '6',
-      why: [t('The path 2 → 1 → 3 bends at the root: 2 + 1 + 3 = 6.', '2 → 1 → 3 လမ်းကြောင်းသည် root တွင် ကွေ့သည် — 2 + 1 + 3 = 6။')], load: { level: [1, 2, 3] } },
+      why: [t('The path 2 → 1 → 3 bends at the root: 2 + 1 + 3 = 6.', '2 → 1 → 3 လမ်းကြောင်းသည် root တွင် ကွေ့သည်: 2 + 1 + 3 = 6။')], load: { level: [1, 2, 3] } },
     { title: exampleTitle(2), inputHtml: '<code>root = [-10,9,20,null,null,15,7]</code>', output: '42',
-      why: [t('The path 15 → 20 → 7 bends at 20 and never touches the root, whose −10 would only lower it: 42.', '15 → 20 → 7 လမ်းကြောင်းသည် 20 တွင် ကွေ့ပြီး root ကို မထိပါ — ၎င်း၏ −10 က လျော့စေရုံသာ — 42။')],
+      why: [t('The path 15 → 20 → 7 bends at 20 and never touches the root, whose −10 would only lower it: 42.', '15 → 20 → 7 လမ်းကြောင်းသည် 20 တွင် ကွေ့ပြီး root ကို မထိပါ (၎င်း၏ −10 က လျော့စေရုံသာ)။ အဖြေ 42။')],
       load: { level: [-10, 9, 20, null, null, 15, 7] } },
   ],
   modes: [
@@ -508,7 +508,7 @@ mountLesson({
       desc: t('Score each node as the bend, measuring both sides from scratch.', 'node တစ်ခုစီကို ကွေ့ရာအဖြစ် အမှတ်ပေး၊ ဘက်နှစ်ဖက်ကို အစမှ တိုင်း။'),
       cost: 'O(n²) time · O(h) stack', build: buildEvery },
     { id: 'once', name: 'One pass returning gain',
-      desc: t('Return each node\'s best downward sum; record the bend on the way.', 'node တစ်ခုစီ၏ အောက်ဆင်း အကောင်းဆုံးကို ပြန် — ကွေ့ရာကို လမ်းတွင် မှတ်။'),
+      desc: t('Return each node\'s best downward sum; record the bend on the way.', 'node တစ်ခုစီ၏ အောက်ဆင်း အကောင်းဆုံးကို ပြန်ပေးပြီး ကွေ့ရာကို လမ်းတွင် မှတ်သည်။'),
       cost: 'O(n) time · O(h) stack', build: buildOnce },
   ],
   languages: LANGUAGES,
@@ -516,10 +516,10 @@ mountLesson({
   hover: { ruby: { '@best': 'best' } },
   solutions: {
     every: { approach: APPROACH.every,
-      desc: t('The definition written down: every node tried as the top. Correct, but it walks each subtree again for every ancestor.', 'အဓိပ္ပာယ်ကို ချရေးထားခြင်း — node တိုင်းကို ထိပ်အဖြစ် စမ်းသည်။ မှန်သော်လည်း ancestor တိုင်းအတွက် subtree တစ်ခုစီကို ထပ်လျှောက်သည်။') },
+      desc: t('The definition written down: every node tried as the top. Correct, but it walks each subtree again for every ancestor.', 'အဓိပ္ပာယ်ကို ချရေးထားခြင်း ဖြစ်သည်။ node တိုင်းကို ထိပ်အဖြစ် စမ်းသည်။ မှန်သော်လည်း ancestor တိုင်းအတွက် subtree တစ်ခုစီကို ထပ်လျှောက်သည်။') },
     once: { approach: APPROACH.once,
       desc: t('The answer to write: Diameter of Binary Tree\'s one pass, with values instead of edges and a negative side dropped. Start best at −∞, not 0.',
-              'ရေးသင့်သည့် အဖြေ — Diameter of Binary Tree ၏ pass တစ်ခုတည်း၊ edge အစား value များဖြင့်၊ အနုတ်ဘက်ကို ချန်သည်။ best ကို 0 မဟုတ်ဘဲ −∞ မှ စပါ။') },
+              'ရေးသင့်သည့် အဖြေ: Diameter of Binary Tree ၏ pass တစ်ခုတည်း၊ edge အစား value များဖြင့်၊ အနုတ်ဘက်ကို ချန်သည်။ best ကို 0 မဟုတ်ဘဲ −∞ မှ စပါ။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the 2 examples, 5 edges, 15,000 random trees of up to 9
@@ -537,14 +537,14 @@ mountLesson({
   },
   caveats: {
     once: {
-      ruby: t('Correct on all 20,013 cases with a larger stack, but on Ruby 3.1\'s default stack a chain deeper than 8,186 nodes overflows it (<code>SystemStackError</code>) — measured here — and the constraint allows 3 × 10⁴.',
-              'stack ပိုကြီးလျှင် case 20,013 ခုလုံးတွင် မှန်သည်၊ သို့သော် Ruby 3.1 ၏ default stack ပေါ်တွင် node 8,186 ထက် နက်သော ကွင်းဆက်က overflow (<code>SystemStackError</code>) ဖြစ်စေသည် — ဤနေရာတွင် တိုင်းတာထားသည် — ကန့်သတ်ချက်က 3 × 10⁴ ကို ခွင့်ပြုသည်။'),
-      javascript: t('Correct on all 20,013 cases with a larger stack, but on Node 24\'s default stack a chain deeper than 6,911 nodes overflows it (<code>RangeError</code>) — measured here, cold — and the constraint allows 3 × 10⁴.',
-                    'stack ပိုကြီးလျှင် case 20,013 ခုလုံးတွင် မှန်သည်၊ သို့သော် Node 24 ၏ default stack ပေါ်တွင် node 6,911 ထက် နက်သော ကွင်းဆက်က overflow (<code>RangeError</code>) ဖြစ်စေသည် — ဤနေရာတွင် တိုင်းတာထားသည် — ကန့်သတ်ချက်က 3 × 10⁴ ကို ခွင့်ပြုသည်။'),
-      python: t('The <code>setrecursionlimit</code> line is part of the answer: the default of 1,000 is far below the 3 × 10⁴-node chain the constraint allows.', '<code>setrecursionlimit</code> စာကြောင်းသည် အဖြေ၏ အစိတ်အပိုင်း — default 1,000 သည် ကန့်သတ်ချက် ခွင့်ပြုသော node 3 × 10⁴ ကွင်းဆက်ထက် အများကြီး နိမ့်သည်။'),
+      ruby: t('Correct on all 20,013 cases with a larger stack, but on Ruby 3.1\'s default stack a chain deeper than 8,186 nodes overflows it (<code>SystemStackError</code>, measured here), and the constraint allows 3 × 10⁴.',
+              'stack ပိုကြီးလျှင် case 20,013 ခုလုံးတွင် မှန်သည်၊ သို့သော် Ruby 3.1 ၏ default stack ပေါ်တွင် node 8,186 ထက် နက်သော ကွင်းဆက်က overflow (<code>SystemStackError</code>) ဖြစ်စေသည် (ဤနေရာတွင် တိုင်းတာထားသည်)။ ကန့်သတ်ချက်က 3 × 10⁴ ကို ခွင့်ပြုသည်။'),
+      javascript: t('Correct on all 20,013 cases with a larger stack, but on Node 24\'s default stack a chain deeper than 6,911 nodes overflows it (<code>RangeError</code>, measured here, cold), and the constraint allows 3 × 10⁴.',
+                    'stack ပိုကြီးလျှင် case 20,013 ခုလုံးတွင် မှန်သည်၊ သို့သော် Node 24 ၏ default stack ပေါ်တွင် node 6,911 ထက် နက်သော ကွင်းဆက်က overflow (<code>RangeError</code>) ဖြစ်စေသည် (ဤနေရာတွင် တိုင်းတာထားသည်)။ ကန့်သတ်ချက်က 3 × 10⁴ ကို ခွင့်ပြုသည်။'),
+      python: t('The <code>setrecursionlimit</code> line is part of the answer: the default of 1,000 is far below the 3 × 10⁴-node chain the constraint allows.', '<code>setrecursionlimit</code> စာကြောင်းသည် အဖြေ၏ အစိတ်အပိုင်း ဖြစ်သည်။ default 1,000 သည် ကန့်သတ်ချက် ခွင့်ပြုသော node 3 × 10⁴ ကွင်းဆက်ထက် အများကြီး နိမ့်သည်။'),
     },
   },
-  stripLabel: t('root, in level order', 'root — level order'),
+  stripLabel: t('root, in level order', 'root၊ level order'),
   strip,
   draw,
   answer,

@@ -618,26 +618,26 @@ const APPROACH = {
       t("Point <code>curr.next</code> at <code>prev</code>.",
         "<code>curr.next</code> ကို <code>prev</code> သို့ ညွှန်စေသည်။"),
       t("Move <code>prev</code> to <code>curr</code> and <code>curr</code> to <code>nxt</code>; when <code>curr</code> runs off the end, <code>prev</code> is the new head.",
-        "<code>prev</code> ကို <code>curr</code> သို့၊ <code>curr</code> ကို <code>nxt</code> သို့ ရွှေ့သည် — <code>curr</code> အဆုံးကျော်သွားသည့်အခါ <code>prev</code> သည် head အသစ် ဖြစ်သည်။"),
+        "<code>prev</code> ကို <code>curr</code> သို့၊ <code>curr</code> ကို <code>nxt</code> သို့ ရွှေ့သည်။ <code>curr</code> အဆုံးကျော်သွားသည့်အခါ <code>prev</code> သည် head အသစ် ဖြစ်သည်။"),
     ],
-    cost: t("one pass and three pointers; no node is created.",
-        "တစ်ကြိမ် ဖြတ်ခြင်းနှင့် pointer သုံးခု — node အသစ် မဖန်တီးပါ။"),
+    cost: t("One pass and three pointers. No node is created.",
+        "တစ်ကြိမ် ဖြတ်ခြင်းနှင့် pointer သုံးခု။ node အသစ် မဖန်တီးပါ။"),
   },
   recursive: {
     idea: t("Reverse the rest of the list first, then attach the current node to its end. The call stack remembers the way back.",
         "list ၏ ကျန်အပိုင်းကို အရင် ပြောင်းပြန်လုပ်ပြီးမှ လက်ရှိ node ကို ၎င်း၏ အဆုံးတွင် တပ်သည်။ ပြန်လမ်းကို call stack က မှတ်ထားသည်။"),
     steps: [
       t("A list of zero or one node is its own reverse: return <code>head</code>.",
-        "node သုည သို့မဟုတ် တစ်ခုရှိ list သည် ၎င်းကိုယ်တိုင်၏ ပြောင်းပြန် ဖြစ်သည် — <code>head</code> ကို ပြန်ပေးသည်။"),
+        "node သုည သို့မဟုတ် တစ်ခုရှိ list သည် ၎င်းကိုယ်တိုင်၏ ပြောင်းပြန် ဖြစ်သည်။ <code>head</code> ကို ပြန်ပေးသည်။"),
       t("Reverse from <code>head.next</code> onward; the result, <code>new_head</code>, is the old tail.",
-        "<code>head.next</code> မှ စ၍ ပြောင်းပြန်လုပ်သည် — ရလဒ် <code>new_head</code> သည် tail အဟောင်း ဖြစ်သည်။"),
+        "<code>head.next</code> မှ စ၍ ပြောင်းပြန်လုပ်သည်။ ရလဒ် <code>new_head</code> သည် tail အဟောင်း ဖြစ်သည်။"),
       t("Point <code>head.next.next</code> back at <code>head</code>, then cut <code>head.next</code>.",
         "<code>head.next.next</code> ကို <code>head</code> သို့ ပြန်ညွှန်ပြီး <code>head.next</code> ကို ဖြတ်သည်။"),
       t("Return <code>new_head</code> from every level.",
         "အဆင့်တိုင်းမှ <code>new_head</code> ကို ပြန်ပေးသည်။"),
     ],
-    cost: t("the same n rewrites, plus one stack frame per node — which is why Python needs its recursion limit raised at 5,000 nodes.",
-        "ပြန်ရေးခြင်း n ကြိမ် အတူတူ၊ node တစ်ခုလျှင် stack frame တစ်ခု ထပ်လိုသည် — ထို့ကြောင့် node 5,000 တွင် Python ၏ recursion limit ကို မြှင့်ရသည်။"),
+    cost: t("The same n rewrites, plus one stack frame per node, which is why Python needs its recursion limit raised at 5,000 nodes.",
+        "ပြန်ရေးခြင်း n ကြိမ် အတူတူ၊ node တစ်ခုလျှင် stack frame တစ်ခု ထပ်လိုသည်။ ထို့ကြောင့် node 5,000 တွင် Python ၏ recursion limit ကို မြှင့်ရသည်။"),
   },
 };
 
@@ -660,7 +660,7 @@ mountLesson({
   ],
   examples: [
     { title: exampleTitle(1), inputHtml: '<code>head = [1,2,3,4,5]</code>', output: '[5,4,3,2,1]',
-      why: [t('Every one of the four links flips direction, and node 1 — the old head — ends up pointing at <code>null</code>.',
+      why: [t('Every one of the four links flips direction, and node 1, the old head, ends up pointing at <code>null</code>.',
               'link လေးခုလုံး ဦးတည်ရာ ပြောင်းပြီး မူလ head ဖြစ်သော node 1 သည် နောက်ဆုံးတွင် <code>null</code> ကို ညွှန်သွားသည်။')],
       load: { nums: [1, 2, 3, 4, 5] } },
     { title: exampleTitle(2), inputHtml: '<code>head = [1,2]</code>', output: '[2,1]',
@@ -668,8 +668,8 @@ mountLesson({
               'ပြောင်းရန် link တစ်ခု။ recursive ပုံစံ၏ ခဏတာ node နှစ်ခု loop ကို ဤနေရာတွင် အရှင်းဆုံး မြင်ရသည်။')],
       load: { nums: [1, 2] } },
     { title: exampleTitle(3), inputHtml: '<code>head = []</code>', output: '[]',
-      why: [t('No nodes. Both versions must return <code>null</code> without dereferencing it — the loop never runs, the recursion hits its guard.',
-              'node မရှိပါ။ နှစ်မျိုးစလုံး null ကို မဖတ်ဘဲ <code>null</code> ပြန်ပေးရမည် — loop မပတ်ပါ၊ recursion က guard တွင် ရပ်သည်။')],
+      why: [t('No nodes. Both versions must return <code>null</code> without dereferencing it. The loop never runs, and the recursion hits its guard.',
+              'node မရှိပါ။ နှစ်မျိုးစလုံး null ကို မဖတ်ဘဲ <code>null</code> ပြန်ပေးရမည်။ loop မပတ်ပါ၊ recursion က guard တွင် ရပ်သည်။')],
       load: { nums: [] } },
   ],
   modes: [
@@ -687,10 +687,10 @@ mountLesson({
     javascript: { newHead: 'new_head' }, go: { newHead: 'new_head' },
   },
   solutions: {
-    iterative: { approach: APPROACH.iterative, desc: t('The submission worth writing. Save <code>next</code> before overwriting <code>curr.next</code>, and return <code>prev</code> — <code>curr</code> has run off the end.',
-                         'ရေးသင့်သည့် submission ဖြစ်သည်။ <code>curr.next</code> ကို မရေးမီ <code>next</code> ကို သိမ်းပါ၊ <code>prev</code> ကို ပြန်ပေးပါ — <code>curr</code> သည် အဆုံးကို ကျော်သွားပြီ။') },
-    recursive: { approach: APPROACH.recursive, desc: t('The follow-up. Same n rewrites, with the back-pointers held by the call stack — which is why it costs <code>O(n)</code> stack, and why Python needs its recursion limit raised for 5,000 nodes.',
-                         'follow-up အတွက်။ ပြန်ရေးခြင်း n ကြိမ် အတူတူ၊ နောက်ပြန် pointer များကို call stack က ကိုင်ထားသည် — ထို့ကြောင့် <code>O(n)</code> stack ကုန်ပြီး node 5,000 အတွက် Python ၏ recursion limit ကို မြှင့်ရသည်။') },
+    iterative: { approach: APPROACH.iterative, desc: t('The one to submit. Save <code>next</code> before overwriting <code>curr.next</code>, and return <code>prev</code>, because <code>curr</code> has run off the end.',
+                         'တင်သင့်သည့် ဗားရှင်း ဖြစ်သည်။ <code>curr.next</code> ကို မရေးမီ <code>next</code> ကို သိမ်းပါ၊ <code>prev</code> ကို ပြန်ပေးပါ။ <code>curr</code> သည် အဆုံးကို ကျော်သွားပြီ။') },
+    recursive: { approach: APPROACH.recursive, desc: t('The follow-up. Same n rewrites, with the back-pointers held by the call stack, which is why it costs <code>O(n)</code> stack and why Python needs its recursion limit raised for 5,000 nodes.',
+                         'follow-up အတွက်။ ပြန်ရေးခြင်း n ကြိမ် အတူတူ၊ နောက်ပြန် pointer များကို call stack က ကိုင်ထားသည်။ ထို့ကြောင့် <code>O(n)</code> stack ကုန်ပြီး node 5,000 အတွက် Python ၏ recursion limit ကို မြှင့်ရသည်။') },
   },
   // How each language was actually checked. Printed as a badge on every
   // listing in part 3. The corpus: the 3 examples, 2 edges, 15,000 lists of

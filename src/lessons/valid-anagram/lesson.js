@@ -346,7 +346,7 @@ const CODE = {
  */
 
 const W = {
-  start: { en: '<b>s</b> and <b>t</b> hold exactly the same letters, so <b>t</b> is an anagram of <b>s</b>. Now move the letters of <b>t</b> and watch what does — and does not — change.',
+  start: { en: '<b>s</b> and <b>t</b> hold exactly the same letters, so <b>t</b> is an anagram of <b>s</b>. Now move the letters of <b>t</b> and watch what changes, and what does not.',
            my: '<b>s</b> နှင့် <b>t</b> တွင် စာလုံးများ အတိအကျ တူညီသဖြင့် <b>t</b> သည် <b>s</b> ၏ anagram ဖြစ်သည်။ ယခု <b>t</b> ၏ စာလုံးများကို ရွှေ့ကြည့်ပြီး ဘာပြောင်းသည်၊ ဘာ မပြောင်းသည်ကို ကြည့်ပါ။' },
   held: {
     en: (n) => `Rearranged ${n} time${n === 1 ? '' : 's'}. <b>t</b> reads differently every time and not one count has moved. Order carries no information here — the counts carry all of it.`,
@@ -531,16 +531,16 @@ const APPROACH = {
   },
   count: {
     idea: t("Count instead of sorting: add one for every letter of <code>s</code> and take one away for every letter of <code>t</code>. Anagrams bring every count back to zero.",
-        "sort မလုပ်ဘဲ ရေတွက်သည် — <code>s</code> ၏ စာလုံးတိုင်းအတွက် တစ်ပေါင်းပြီး <code>t</code> ၏ စာလုံးတိုင်းအတွက် တစ်နုတ်သည်။ anagram ဖြစ်လျှင် count တိုင်း သုညသို့ ပြန်ရောက်သည်။"),
+        "sort မလုပ်ဘဲ ရေတွက်သည်။ <code>s</code> ၏ စာလုံးတိုင်းအတွက် တစ်ပေါင်းပြီး <code>t</code> ၏ စာလုံးတိုင်းအတွက် တစ်နုတ်သည်။ anagram ဖြစ်လျှင် count တိုင်း သုညသို့ ပြန်ရောက်သည်။"),
     steps: [
       t("If the lengths differ, return <code>false</code>.",
         "အရှည် မတူလျှင် <code>false</code> ကို ပြန်ပေးသည်။"),
       t("Walk <code>s</code>: <code>count[ch] += 1</code>.",
-        "<code>s</code> ကို လျှောက်သည် — <code>count[ch] += 1</code>။"),
+        "<code>s</code> ကို လျှောက်သည်: <code>count[ch] += 1</code>။"),
       t("Walk <code>t</code>: <code>count[ch] −= 1</code>, and return <code>false</code> the moment a count drops below zero.",
-        "<code>t</code> ကို လျှောက်သည် — <code>count[ch] −= 1</code>၊ count တစ်ခု သုညအောက် ရောက်သည်နှင့် <code>false</code> ကို ပြန်ပေးသည်။"),
+        "<code>t</code> ကို လျှောက်သည်: <code>count[ch] −= 1</code>၊ count တစ်ခု သုညအောက် ရောက်သည်နှင့် <code>false</code> ကို ပြန်ပေးသည်။"),
       t("If <code>t</code> finishes, return <code>true</code>: with equal lengths, nothing can be left over.",
-        "<code>t</code> ဆုံးသွားလျှင် <code>true</code> ကို ပြန်ပေးသည် — အရှည် တူသဖြင့် ဘာမျှ ပိုမကျန်နိုင်ပါ။"),
+        "<code>t</code> ဆုံးသွားလျှင် <code>true</code> ကို ပြန်ပေးသည်။ အရှည် တူသဖြင့် ဘာမျှ ပိုမကျန်နိုင်ပါ။"),
     ],
     cost: t("each string is read once, and the table has at most 26 rows, one per lowercase letter.",
         "string တစ်ခုစီကို တစ်ကြိမ်သာ ဖတ်ပြီး table တွင် စာလုံးအသေး တစ်လုံးလျှင် row တစ်ခု၊ အများဆုံး row 26 ခုသာ ရှိသည်။"),
@@ -604,25 +604,25 @@ mountLesson({
   examples: [
     { title: exampleTitle(1),
       inputHtml: '<code>s = "anagram"</code>, <code>t = "nagaram"</code>', output: 'true',
-      why: [t('<code>s</code> rearranged is exactly <code>t</code> — each letter appears the same number of times.',
-              '<code>s</code> ကို ပြန်စီလိုက်လျှင် <code>t</code> အတိုင်း ဖြစ်သည် — စာလုံးတိုင်း၏ အရေအတွက် တူညီသည်။')],
+      why: [t('<code>s</code> rearranged is exactly <code>t</code>: each letter appears the same number of times.',
+              '<code>s</code> ကို ပြန်စီလိုက်လျှင် <code>t</code> အတိုင်း ဖြစ်သည်။ စာလုံးတိုင်း၏ အရေအတွက် တူညီသည်။')],
       load: { s: 'anagram', t: 'nagaram' } },
     { title: exampleTitle(2),
       inputHtml: '<code>s = "rat"</code>, <code>t = "car"</code>', output: 'false',
-      why: [t('<code>r</code> appears in both, but <code>a</code> and <code>t</code> are in <code>s</code> while <code>c</code> is in <code>t</code> — the counts do not match.',
-              '<code>r</code> သည် နှစ်ခုလုံးတွင် ပါသော်လည်း <code>a</code> နှင့် <code>t</code> က <code>s</code> ထဲတွင် ရှိပြီး <code>c</code> က <code>t</code> ထဲတွင် ရှိသည် — အရေအတွက်များ မကိုက်ညီပါ။')],
+      why: [t('<code>r</code> appears in both, but <code>a</code> and <code>t</code> are in <code>s</code> while <code>c</code> is in <code>t</code>, so the counts do not match.',
+              '<code>r</code> သည် နှစ်ခုလုံးတွင် ပါသော်လည်း <code>a</code> နှင့် <code>t</code> က <code>s</code> ထဲတွင် ရှိပြီး <code>c</code> က <code>t</code> ထဲတွင် ရှိသဖြင့် အရေအတွက်များ မကိုက်ညီပါ။')],
       load: { s: 'rat', t: 'car' } },
   ],
   modes: [
     { id: 'sort',
       name: { en: 'Sort both', my: 'နှစ်ခုလုံးကို sort လုပ်ရန်' },
-      desc: t('Same letters, same sorted string — two sorts, then walk both together.',
-              'စာလုံးတူလျှင် sort လုပ်ထားသည့် စာကြောင်းလည်း တူသည် — sort နှစ်ခါ၊ ပြီးလျှင် အတူလျှောက်ကြည့်ရုံ။'),
+      desc: t('Same letters, same sorted string: two sorts, then walk both together.',
+              'စာလုံးတူလျှင် sort လုပ်ထားသည့် စာကြောင်းလည်း တူသည်။ sort နှစ်ခါ လုပ်ပြီး ပြီးလျှင် အတူလျှောက်ကြည့်ရုံ ဖြစ်သည်။'),
       cost: 'O(n log n) time · O(n) space', build: buildSort },
     { id: 'count',
       name: { en: 'Count letters', my: 'စာလုံးများကို ရေတွက်ရန်' },
       desc: t('One tally, up on s and down on t. The first number below zero says no.',
-              'ဇယားတစ်ခုတည်း — s တွင် တိုး၊ t တွင် နုတ်။ သုညအောက် ရောက်သည်နှင့် false ပြန်လိုက်သည်။'),
+              'ဇယားတစ်ခုတည်း ထားပြီး s တွင် တိုး၊ t တွင် နုတ်သည်။ သုညအောက် ရောက်သည်နှင့် false ပြန်လိုက်သည်။'),
       cost: 'O(n) time · O(1) space', build: buildCount },
   ],
   languages: LANGUAGES,
@@ -630,8 +630,8 @@ mountLesson({
   solutions: {
     sort: { approach: APPROACH.sort, desc: t('Sort a copy of each string, then compare. Three lines, hard to get wrong, and the only approach that handles Unicode without an edit.',
                     'စာကြောင်းနှစ်ခုစလုံး၏ မိတ္တူကို sort လုပ်ပြီး နှိုင်းယှဉ်သည်။ သုံးကြောင်းသာ ရှိပြီး မှားရန် ခက်သည်။ Unicode ကို ဘာမှ မပြင်ဘဲ ရင်ဆိုင်နိုင်သည့် တစ်ခုတည်းသော နည်းလည်း ဖြစ်သည်။') },
-    count: { approach: APPROACH.count, desc: t('Walk s and add to a count table, walk t and subtract. The moment a row goes below zero, return false — no recovery possible.',
-                    's ကို လျှောက်ပြီး ရေတွက်ဇယားတွင် တိုးသည်၊ t ကို လျှောက်ပြီး နုတ်သည်။ အတန်းတစ်ခု သုညအောက် ရောက်သည်နှင့် false ပြန်လိုက်သည် — ပြန်တက်လာနိုင်မည် မဟုတ်ပါ။') },
+    count: { approach: APPROACH.count, desc: t('Walk s and add to a count table, walk t and subtract. The moment a row goes below zero, return false; there is no way back.',
+                    's ကို လျှောက်ပြီး ရေတွက်ဇယားတွင် တိုးသည်၊ t ကို လျှောက်ပြီး နုတ်သည်။ အတန်းတစ်ခု သုညအောက် ရောက်သည်နှင့် false ပြန်လိုက်သည်။ ပြန်တက်လာနိုင်မည် မဟုတ်ပါ။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: 6 edges, 15,000 strings over "abc", 5,000 permutations (half with one letter changed), three at 5 × 10⁴ — against a Counter.

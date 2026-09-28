@@ -380,21 +380,21 @@ function mountDequeWidget(host) {
 
 const APPROACH = {
   brute: {
-    idea: t('Every window gets its own scan: start from its first value and keep the biggest.', 'window တိုင်းကို ကိုယ်ပိုင် scan တစ်ခုစီ ပေးသည် — ပထမ value မှ စ၍ အကြီးဆုံးကို ထိန်းသည်။'),
+    idea: t('Every window gets its own scan: start from its first value and keep the biggest.', 'window တိုင်းကို ကိုယ်ပိုင် scan တစ်ခုစီ ပေးသည်: ပထမ value မှ စ၍ အကြီးဆုံးကို ထိန်းသည်။'),
     steps: [
       t('For each start <code>i</code>, set <code>best = nums[i]</code>.', 'အစ <code>i</code> တစ်ခုစီအတွက် <code>best = nums[i]</code> ထားသည်။'),
       t('Compare the other <code>k − 1</code> values against <code>best</code>.', 'ကျန် value <code>k − 1</code> ခုကို <code>best</code> နှင့် နှိုင်းယှဉ်သည်။'),
       t('Append <code>best</code> to <code>out</code>.', '<code>best</code> ကို <code>out</code> ထဲ ထည့်သည်။'),
     ],
     cost: t('(n − k + 1) windows × (k − 1) comparisons: O(n · k). At n = 10⁵ and k = 5 × 10⁴ that is 2.5 × 10⁹ (computed).',
-            'window (n − k + 1) ခု × နှိုင်းယှဉ်ခြင်း (k − 1) — O(n · k)။ n = 10⁵၊ k = 5 × 10⁴ တွင် 2.5 × 10⁹ (တွက်ထားသည်)။'),
+            'window (n − k + 1) ခု × နှိုင်းယှဉ်ခြင်း (k − 1): O(n · k)။ n = 10⁵၊ k = 5 × 10⁴ တွင် 2.5 × 10⁹ (တွက်ထားသည်)။'),
   },
   deque: {
-    idea: t('Keep only the indices whose values could still be a window\'s maximum. A new value evicts every smaller-or-equal one at the back — they can never win while it is around — so the deque falls from front to back and its front is the answer.',
-            'window ၏ maximum ဖြစ်နိုင်သေးသော value ရှိ index များကိုသာ ထိန်းသည်။ value အသစ်က နောက်ဘက်ရှိ ငယ် သို့မဟုတ် တူသော value တိုင်းကို ဖယ်သည် — ၎င်း ရှိနေသမျှ ၎င်းတို့ မနိုင်နိုင် — ထို့ကြောင့် deque သည် ရှေ့မှ နောက်သို့ ကျဆင်းပြီး ရှေ့ဆုံးသည် အဖြေ ဖြစ်သည်။'),
+    idea: t('Keep only the indices whose values could still be a window\'s maximum. A new value evicts every smaller-or-equal one at the back, since they can never win while it is around, so the deque falls from front to back and its front is the answer.',
+            'window ၏ maximum ဖြစ်နိုင်သေးသော value ရှိ index များကိုသာ ထိန်းသည်။ value အသစ်က နောက်ဘက်ရှိ ငယ် သို့မဟုတ် တူသော value တိုင်းကို ဖယ်သည်။ ၎င်း ရှိနေသမျှ ၎င်းတို့ မနိုင်နိုင်ပါ။ ထို့ကြောင့် deque သည် ရှေ့မှ နောက်သို့ ကျဆင်းပြီး ရှေ့ဆုံးသည် အဖြေ ဖြစ်သည်။'),
     steps: [
       t('Pop from the back while its value is <code>≤ x</code>; push <code>i</code>.', 'နောက်ဆုံး၏ value <code>≤ x</code> ဖြစ်နေသမျှ pop လုပ်ပြီး <code>i</code> ကို push သည်။'),
-      t('If the front index is <code>≤ i − k</code>, it has left the window: pop it from the front.', 'ရှေ့ဆုံး index <code>≤ i − k</code> ဖြစ်လျှင် window မှ ထွက်သွားပြီ — ရှေ့မှ pop သည်။'),
+      t('If the front index is <code>≤ i − k</code>, it has left the window, so pop it from the front.', 'ရှေ့ဆုံး index <code>≤ i − k</code> ဖြစ်လျှင် window မှ ထွက်သွားပြီ ဖြစ်သဖြင့် ရှေ့မှ pop သည်။'),
       t('Once <code>i ≥ k − 1</code>, the front\'s value is this window\'s maximum.', '<code>i ≥ k − 1</code> ဖြစ်သည်နှင့် ရှေ့ဆုံး၏ value သည် ဤ window ၏ maximum။'),
     ],
     cost: t('Each index enters the deque once and leaves at most once, so the pops cost O(n) in total, whatever k is.', 'index တစ်ခုစီသည် deque ထဲ တစ်ကြိမ် ဝင်ပြီး အများဆုံး တစ်ကြိမ် ထွက်သဖြင့် k မည်မျှပင်ဖြစ်စေ pop များ၏ ကုန်ကျမှု စုစုပေါင်း O(n)။'),
@@ -420,7 +420,7 @@ mountLesson({
   examples: [
     { title: exampleTitle(1), inputHtml: '<code>nums = [1,3,-1,-3,5,3,6,7], k = 3</code>', output: '[3,3,5,5,6,7]',
       why: [t('Six windows of three: [1,3,−1] → 3, [3,−1,−3] → 3, [−1,−3,5] → 5, [−3,5,3] → 5, [5,3,6] → 6, [3,6,7] → 7.',
-              'သုံးခုစီပါ window ခြောက်ခု — [1,3,−1] → 3၊ [3,−1,−3] → 3၊ [−1,−3,5] → 5၊ [−3,5,3] → 5၊ [5,3,6] → 6၊ [3,6,7] → 7။')],
+              'သုံးခုစီပါ window ခြောက်ခု: [1,3,−1] → 3၊ [3,−1,−3] → 3၊ [−1,−3,5] → 5၊ [−3,5,3] → 5၊ [5,3,6] → 6၊ [3,6,7] → 7။')],
       load: { nums: EX1, k: 3 } },
     { title: exampleTitle(2), inputHtml: '<code>nums = [1], k = 1</code>', output: '[1]',
       why: [t('One window holding one value.', 'value တစ်ခုပါသော window တစ်ခု။')], load: { nums: [1], k: 1 } },
@@ -430,18 +430,18 @@ mountLesson({
       desc: t('Look at all k values of each window.', 'window တစ်ခုစီ၏ value k ခုလုံးကို ကြည့်။'),
       cost: 'O(n · k) time · O(1) extra', build: buildBrute },
     { id: 'deque', name: 'Monotonic deque',
-      desc: t('Keep only values that can still win, falling front to back.', 'နိုင်နိုင်သေးသော value များကိုသာ ထိန်း — ရှေ့မှ နောက်သို့ ကျဆင်း။'),
+      desc: t('Keep only values that can still win, falling front to back.', 'နိုင်နိုင်သေးသော value များကိုသာ ထိန်းပြီး ရှေ့မှ နောက်သို့ ကျဆင်းစေသည်။'),
       cost: 'O(n) time · O(k) extra', build: buildDeque },
   ],
   languages: LANGUAGES,
   code: CODE,
   solutions: {
     brute: { approach: APPROACH.brute,
-      desc: t('Correct, and the definition written down — but the windows overlap in k − 1 values and it compares them all again every time.',
-              'မှန်ပြီး အဓိပ္ပာယ်ကို ချရေးထားခြင်း — သို့သော် window များသည် value k − 1 ခု ထပ်နေပြီး အကြိမ်တိုင်း အားလုံးကို ထပ်နှိုင်းယှဉ်သည်။') },
+      desc: t('Correct, and the definition written down. But the windows overlap in k − 1 values and it compares them all again every time.',
+              'မှန်ပြီး အဓိပ္ပာယ်ကို ချရေးထားခြင်း ဖြစ်သည်။ သို့သော် window များသည် value k − 1 ခု ထပ်နေပြီး အကြိမ်တိုင်း အားလုံးကို ထပ်နှိုင်းယှဉ်သည်။') },
     deque: { approach: APPROACH.deque,
       desc: t('The O(n) answer. Store indices, not values: an index tells you when its value has left the window.',
-              'O(n) အဖြေ။ value မဟုတ်ဘဲ index ကို သိမ်းပါ — index က ၎င်း၏ value window မှ ထွက်သွားချိန်ကို ပြောပြသည်။') },
+              'O(n) အဖြေ။ value မဟုတ်ဘဲ index ကို သိမ်းပါ။ index က ၎င်း၏ value window မှ ထွက်သွားချိန်ကို ပြောပြသည်။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the 2 examples, 6 edges, 15,000 random arrays of up to 12
@@ -456,7 +456,7 @@ mountLesson({
     go: { brute: 'ran here · 20,008 cases, not the five at n = 10⁵ · Go 1.23', deque: 'ran here · 20,013 cases · Go 1.23' },
     rust: { brute: 'ran here · 20,008 cases, not the five at n = 10⁵ · rustc 1.98', deque: 'ran here · 20,013 cases · rustc 1.98' },
   },
-  stripLabel: t('nums, the window lit', 'nums — window ကို လင်းပြ'),
+  stripLabel: t('nums, with the window lit', 'nums၊ window ကို လင်းပြထားသည်'),
   strip,
   draw,
   answer,

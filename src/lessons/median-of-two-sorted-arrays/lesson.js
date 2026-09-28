@@ -444,22 +444,22 @@ function mountCutWidget(host) {
 
 const APPROACH = {
   merge: {
-    idea: t('Merge the two arrays the way Merge Sorted Array does, but stop at the middle: the last one or two values taken are the median.', 'array နှစ်ခုကို Merge Sorted Array ကဲ့သို့ ပေါင်းသော်လည်း အလယ်တွင် ရပ်သည် — နောက်ဆုံး ယူခဲ့သော value တစ်ခု သို့မဟုတ် နှစ်ခုသည် median ဖြစ်သည်။'),
+    idea: t('Merge the two arrays the way Merge Sorted Array does, but stop at the middle: the last one or two values taken are the median.', 'array နှစ်ခုကို Merge Sorted Array ကဲ့သို့ ပေါင်းသော်လည်း အလယ်တွင် ရပ်သည်။ နောက်ဆုံး ယူခဲ့သော value တစ်ခု သို့မဟုတ် နှစ်ခုသည် median ဖြစ်သည်။'),
     steps: [
       t('Take the smaller head <code>total / 2 + 1</code> times, keeping the last two as <code>prev</code> and <code>cur</code>.', 'ငယ်သော ခေါင်းကို <code>total / 2 + 1</code> ကြိမ် ယူပြီး နောက်ဆုံး နှစ်ခုကို <code>prev</code> နှင့် <code>cur</code> အဖြစ် ထိန်းသည်။'),
-      t('An odd total: <code>cur</code>. Even: <code>(prev + cur) / 2</code>, as a float.', 'စုစုပေါင်း မ — <code>cur</code>။ စုံ — float အဖြစ် <code>(prev + cur) / 2</code>။'),
+      t('An odd total: <code>cur</code>. Even: <code>(prev + cur) / 2</code>, as a float.', 'စုစုပေါင်း မ ဖြစ်လျှင် <code>cur</code>။ စုံ ဖြစ်လျှင် float အဖြစ် <code>(prev + cur) / 2</code>။'),
     ],
-    cost: t('Up to 1,001 steps at the constraint: O(m + n). Correct, but it is not the O(log(m + n)) the statement asks for.', 'ကန့်သတ်ချက်တွင် အဆင့် 1,001 အထိ — O(m + n)။ မှန်သော်လည်း မေးခွန်း တောင်းသော O(log(m + n)) မဟုတ်ပါ။'),
+    cost: t('Up to 1,001 steps at the constraint: O(m + n). Correct, but it is not the O(log(m + n)) the statement asks for.', 'ကန့်သတ်ချက်တွင် အဆင့် 1,001 အထိ: O(m + n)။ မှန်သော်လည်း မေးခွန်း တောင်းသော O(log(m + n)) မဟုတ်ပါ။'),
   },
   cut: {
-    idea: t('Don\'t merge — choose the split. If the shorter array gives i values to the left half, the other gives half − i. The split is right when both left values are ≤ both right values, and a wrong one says which way to move: binary search on i.',
-            'မပေါင်းပါနှင့် — ခွဲခြမ်းမှုကို ရွေးပါ။ ပိုတိုသော array က ဘယ်တစ်ဝက်သို့ i ခု ပေးလျှင် အခြားက half − i ခု ပေးသည်။ ဘယ် value နှစ်ခုလုံး ≤ ညာ value နှစ်ခုလုံး ဖြစ်မှ ခွဲခြမ်းမှု မှန်ပြီး မှားလျှင် ဘယ်ဘက် ရွှေ့ရမလဲ ပြောသည် — i ပေါ်တွင် binary search။'),
+    idea: t('Don\'t merge. Choose the split. If the shorter array gives i values to the left half, the other gives half − i. The split is right when both left values are ≤ both right values, and a wrong one says which way to move: binary search on i.',
+            'မပေါင်းပါနှင့်။ ခွဲခြမ်းမှုကို ရွေးပါ။ ပိုတိုသော array က ဘယ်တစ်ဝက်သို့ i ခု ပေးလျှင် အခြားက half − i ခု ပေးသည်။ ဘယ် value နှစ်ခုလုံး ≤ ညာ value နှစ်ခုလုံး ဖြစ်မှ ခွဲခြမ်းမှု မှန်ပြီး မှားလျှင် ဘယ်ဘက် ရွှေ့ရမလဲ ပြောသည်။ ထို့ကြောင့် i ပေါ်တွင် binary search လုပ်သည်။'),
     steps: [
-      t('Make <code>nums1</code> the shorter; <code>half = (m + n + 1) / 2</code>.', '<code>nums1</code> ကို ပိုတိုစေ — <code>half = (m + n + 1) / 2</code>။'),
-      t('<code>i</code> in the middle of <code>lo..hi</code>, <code>j = half − i</code>; read the four values at the cut, ±∞ past the ends.', '<code>lo..hi</code> အလယ်တွင် <code>i</code>၊ <code>j = half − i</code> — ဖြတ်ရာရှိ value လေးခုကို ဖတ်၊ အစွန်ကျော်လျှင် ±∞။'),
-      t('<code>left1 > right2</code>: <code>hi = i − 1</code>. <code>left2 > right1</code>: <code>lo = i + 1</code>. Otherwise it is the median\'s split.', '<code>left1 > right2</code> — <code>hi = i − 1</code>။ <code>left2 > right1</code> — <code>lo = i + 1</code>။ မဟုတ်လျှင် median ၏ ခွဲခြမ်းမှု။'),
+      t('Make <code>nums1</code> the shorter; <code>half = (m + n + 1) / 2</code>.', '<code>nums1</code> ကို ပိုတိုစေပါ။ <code>half = (m + n + 1) / 2</code>။'),
+      t('<code>i</code> in the middle of <code>lo..hi</code>, <code>j = half − i</code>; read the four values at the cut, ±∞ past the ends.', '<code>lo..hi</code> အလယ်တွင် <code>i</code>၊ <code>j = half − i</code>။ ဖြတ်ရာရှိ value လေးခုကို ဖတ်၊ အစွန်ကျော်လျှင် ±∞။'),
+      t('<code>left1 > right2</code>: <code>hi = i − 1</code>. <code>left2 > right1</code>: <code>lo = i + 1</code>. Otherwise it is the median\'s split.', '<code>left1 > right2</code> ဖြစ်လျှင် <code>hi = i − 1</code>။ <code>left2 > right1</code> ဖြစ်လျှင် <code>lo = i + 1</code>။ မဟုတ်လျှင် median ၏ ခွဲခြမ်းမှု ဖြစ်သည်။'),
     ],
-    cost: t('A binary search over at most 1,001 cuts in the shorter array: about 10 steps, O(log min(m, n)).', 'ပိုတိုသော array ရှိ ဖြတ်ရာ 1,001 အထိပေါ်တွင် binary search — အဆင့် 10 ခန့်၊ O(log min(m, n))။'),
+    cost: t('A binary search over at most 1,001 cuts in the shorter array: about 10 steps, O(log min(m, n)).', 'ပိုတိုသော array ရှိ ဖြတ်ရာ 1,001 အထိပေါ်တွင် binary search: အဆင့် 10 ခန့်၊ O(log min(m, n))။'),
   },
 };
 
@@ -479,9 +479,9 @@ mountLesson({
   ],
   examples: [
     { title: exampleTitle(1), inputHtml: '<code>nums1 = [1,3], nums2 = [2]</code>', output: '2.00000',
-      why: [t('Merged: [1,2,3]. Three values, so the middle one, 2.', 'ပေါင်းပြီး — [1,2,3]။ value သုံးခု၊ ထို့ကြောင့် အလယ်ရှိ 2။')], load: { nums1: [1, 3], nums2: [2] } },
+      why: [t('Merged: [1,2,3]. Three values, so the middle one, 2.', 'ပေါင်းပြီး [1,2,3] ဖြစ်သည်။ value သုံးခု ဖြစ်သဖြင့် အလယ်ရှိ 2။')], load: { nums1: [1, 3], nums2: [2] } },
     { title: exampleTitle(2), inputHtml: '<code>nums1 = [1,2], nums2 = [3,4]</code>', output: '2.50000',
-      why: [t('Merged: [1,2,3,4]. Four values, so the average of the middle two, (2 + 3) / 2 = 2.5.', 'ပေါင်းပြီး — [1,2,3,4]။ value လေးခု၊ ထို့ကြောင့် အလယ် နှစ်ခု၏ ပျမ်းမျှ၊ (2 + 3) / 2 = 2.5။')], load: { nums1: [1, 2], nums2: [3, 4] } },
+      why: [t('Merged: [1,2,3,4]. Four values, so the average of the middle two, (2 + 3) / 2 = 2.5.', 'ပေါင်းပြီး [1,2,3,4] ဖြစ်သည်။ value လေးခု ဖြစ်သဖြင့် အလယ် နှစ်ခု၏ ပျမ်းမျှ (2 + 3) / 2 = 2.5။')], load: { nums1: [1, 2], nums2: [3, 4] } },
   ],
   modes: [
     { id: 'merge', name: 'Merge to the middle',
@@ -495,10 +495,10 @@ mountLesson({
   code: CODE,
   solutions: {
     merge: { approach: APPROACH.merge,
-      desc: t('Correct and simple, and fast enough at this size — but linear, where the statement asks for logarithmic.', 'မှန်ပြီး ရိုးရှင်းကာ ဤအရွယ်တွင် လုံလောက်အောင် မြန်သည် — သို့သော် မေးခွန်းက logarithmic တောင်းရာတွင် linear ဖြစ်သည်။') },
+      desc: t('Correct, simple and fast enough at this size, but linear, where the statement asks for logarithmic.', 'မှန်ပြီး ရိုးရှင်းကာ ဤအရွယ်တွင် လုံလောက်အောင် မြန်သည်။ သို့သော် မေးခွန်းက logarithmic တောင်းရာတွင် linear ဖြစ်သည်။') },
     cut: { approach: APPROACH.cut,
-      desc: t('The answer the statement asks for. Search the shorter array, and treat the ends as ±infinity — 0 is not a safe stand-in when values can be negative.',
-              'မေးခွန်း တောင်းသော အဖြေ။ ပိုတိုသော array ကို ရှာပြီး အစွန်များကို ±infinity အဖြစ် သဘောထားပါ — value များ အနုတ်ဖြစ်နိုင်သဖြင့် 0 သည် ဘေးကင်းသော အစားထိုး မဟုတ်ပါ။') },
+      desc: t('The answer the statement asks for. Search the shorter array, and treat the ends as ±infinity. 0 is not a safe stand-in when values can be negative.',
+              'မေးခွန်း တောင်းသော အဖြေ။ ပိုတိုသော array ကို ရှာပြီး အစွန်များကို ±infinity အဖြစ် သဘောထားပါ။ value များ အနုတ်ဖြစ်နိုင်သဖြင့် 0 သည် ဘေးကင်းသော အစားထိုး မဟုတ်ပါ။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the 2 examples, 8 edges, 15,000 random pairs of up to 6

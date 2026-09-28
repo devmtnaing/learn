@@ -623,25 +623,25 @@ function mountPathWidget(host) {
 const APPROACH = {
   each: {
     idea: t('Word Search I, once per word: for every word, try every cell as its start and backtrack through neighbours, marking cells used on the current path.',
-            'Word Search I ကို word တစ်ခုလျှင် တစ်ကြိမ် — word တိုင်းအတွက် cell တိုင်းကို အစအဖြစ် စမ်းပြီး ဘေးများမှတစ်ဆင့် backtrack လုပ်ကာ လက်ရှိ လမ်းကြောင်းတွင် သုံးပြီး cell များကို မှတ်သည်။'),
+            'Word Search I ကို word တစ်ခုလျှင် တစ်ကြိမ် run သည်။ word တိုင်းအတွက် cell တိုင်းကို အစအဖြစ် စမ်းပြီး ဘေးများမှတစ်ဆင့် backtrack လုပ်ကာ လက်ရှိ လမ်းကြောင်းတွင် သုံးပြီး cell များကို မှတ်သည်။'),
     steps: [
-      t('<code>match(r, c, w, k)</code>: the cell must hold <code>w[k]</code>; the last letter means found.', '<code>match(r, c, w, k)</code> — cell တွင် <code>w[k]</code> ရှိရမည် — နောက်ဆုံး စာလုံးဆိုလျှင် တွေ့ပြီ။'),
+      t('<code>match(r, c, w, k)</code>: the cell must hold <code>w[k]</code>; the last letter means found.', '<code>match(r, c, w, k)</code>: cell တွင် <code>w[k]</code> ရှိရမည်။ နောက်ဆုံး စာလုံးဆိုလျှင် တွေ့ပြီ ဖြစ်သည်။'),
       t('Otherwise mark it <code>\'#\'</code>, try the four neighbours for <code>k + 1</code>, and restore the letter.', 'မဟုတ်လျှင် <code>\'#\'</code> မှတ်၊ ဘေး လေးခုတွင် <code>k + 1</code> ကို စမ်း၊ စာလုံးကို ပြန်ထားသည်။'),
       t('A word goes in <code>found</code> if any start cell matches it.', 'မည်သည့် အစ cell ကမဆို ကိုက်လျှင် word ကို <code>found</code> ထဲ ထည့်သည်။'),
     ],
     cost: t('Up to W × m·n × 4·3^(L−1) steps for W words of length L: every word pays for its own search, even when words share a beginning.',
-            'အရှည် L ရှိ word W ခုအတွက် W × m·n × 4·3^(L−1) အဆင့်အထိ — word များ အစ တူသည့်အခါပင် word တိုင်း ကိုယ်ပိုင် ရှာဖွေမှုကို ပေးရသည်။'),
+            'အရှည် L ရှိ word W ခုအတွက် W × m·n × 4·3^(L−1) အဆင့်အထိ။ word များ အစ တူသည့်အခါပင် word တိုင်း ကိုယ်ပိုင် ရှာဖွေမှုကို ပေးရသည်။'),
   },
   trie: {
     idea: t('Put every word in a trie, then walk the board once from each cell, stepping down the trie with each letter. A missing child ends the path for all words at once; a node with a word is a find.',
-            'word တိုင်းကို trie ထဲ ထည့်ပြီး cell တစ်ခုစီမှ board ကို တစ်ကြိမ် လျှောက်ကာ စာလုံးတိုင်းဖြင့် trie အောက်သို့ ဆင်းသည်။ child မရှိလျှင် word အားလုံးအတွက် လမ်းကြောင်း တစ်ပြိုင်နက် ပြီးဆုံးသည် — word ပါသော node သည် တွေ့ရှိမှု ဖြစ်သည်။'),
+            'word တိုင်းကို trie ထဲ ထည့်ပြီး cell တစ်ခုစီမှ board ကို တစ်ကြိမ် လျှောက်ကာ စာလုံးတိုင်းဖြင့် trie အောက်သို့ ဆင်းသည်။ child မရှိလျှင် word အားလုံးအတွက် လမ်းကြောင်း တစ်ပြိုင်နက် ပြီးဆုံးသည်။ word ပါသော node သည် တွေ့ရှိမှု ဖြစ်သည်။'),
     steps: [
       t('Build the trie, storing each word on its last node.', 'trie ကို တည်ဆောက်ပြီး word တစ်ခုစီကို ၎င်း၏ နောက်ဆုံး node တွင် သိမ်းသည်။'),
-      t('<code>dfs(r, c, parent)</code>: no child for the cell\'s letter → return; a word on the child → add it and clear it.', '<code>dfs(r, c, parent)</code> — cell ၏ စာလုံးအတွက် child မရှိလျှင် return — child တွင် word ရှိလျှင် ထည့်ပြီး ရှင်းသည်။'),
-      t('Mark the cell, recurse into unused neighbours, restore it; if the child is now empty, delete it from <code>parent</code>.', 'cell ကို မှတ်၊ မသုံးရသေးသော ဘေးများထဲ recurse၊ ပြန်ထား — child ယခု ဗလာဖြစ်လျှင် <code>parent</code> မှ ဖျက်သည်။'),
+      t('<code>dfs(r, c, parent)</code>: no child for the cell\'s letter means return; a word on the child means add it and clear it.', '<code>dfs(r, c, parent)</code>: cell ၏ စာလုံးအတွက် child မရှိလျှင် return ပြန်သည်။ child တွင် word ရှိလျှင် ထည့်ပြီး ရှင်းသည်။'),
+      t('Mark the cell, recurse into unused neighbours, restore it; if the child is now empty, delete it from <code>parent</code>.', 'cell ကို မှတ်၊ မသုံးရသေးသော ဘေးများထဲ recurse၊ ပြန်ထားသည်။ child ယခု ဗလာဖြစ်လျှင် <code>parent</code> မှ ဖျက်သည်။'),
     ],
-    cost: t('One search from each of the m·n cells, bounded by the trie: shared beginnings are walked once, and pruning stops found branches being walked again.',
-            'm·n cell တစ်ခုစီမှ ရှာဖွေမှု တစ်ကြိမ်၊ trie က ကန့်သတ်သည် — တူသော အစများကို တစ်ကြိမ်သာ လျှောက်ပြီး ဖြတ်ခြင်းက တွေ့ပြီး အကိုင်းများကို ထပ်မလျှောက်စေ။'),
+    cost: t('One search from each of the m·n cells, bounded by the trie. Shared beginnings are walked once, and pruning stops found branches being walked again.',
+            'm·n cell တစ်ခုစီမှ ရှာဖွေမှု တစ်ကြိမ်၊ trie က ကန့်သတ်သည်။ တူသော အစများကို တစ်ကြိမ်သာ လျှောက်ပြီး ဖြတ်ခြင်းက တွေ့ပြီး အကိုင်းများကို ထပ်မလျှောက်စေပါ။'),
   },
 };
 
@@ -662,11 +662,11 @@ mountLesson({
   ],
   examples: [
     { title: t('Example 1', 'ဥပမာ 1'), inputHtml: '<code>board = [["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]],<br>words = ["oath","pea","eat","rain"]</code>', output: '["eat","oath"]',
-      why: [t('"oath" runs o → a → t → h down from the top-left corner; "eat" runs e → a → t in the middle.', '"oath" သည် ဘယ်ဘက်အပေါ်ထောင့်မှ o → a → t → h ဆင်းသွားသည် — "eat" သည် အလယ်တွင် e → a → t သွားသည်။'),
+      why: [t('"oath" runs o → a → t → h down from the top-left corner; "eat" runs e → a → t in the middle.', '"oath" သည် ဘယ်ဘက်အပေါ်ထောင့်မှ o → a → t → h ဆင်းသွားသည်။ "eat" သည် အလယ်တွင် e → a → t သွားသည်။'),
         t('There is no p for "pea", and "rain" has no path.', '"pea" အတွက် p မရှိ၊ "rain" တွင် လမ်းကြောင်း မရှိ။')],
       load: EX1 },
     { title: t('Example 2', 'ဥပမာ 2'), inputHtml: '<code>board = [["a","b"],["c","d"]], words = ["abcb"]</code>', output: '[]',
-      why: [t('The only b has a and d as neighbours, never c, and it cannot be used twice anyway.', 'b တစ်လုံးတည်း၏ ဘေးတွင် a နှင့် d သာ ရှိပြီး c မရှိ — နှစ်ကြိမ်လည်း မသုံးရ။')],
+      why: [t('The only b has a and d as neighbours, never c, and it cannot be used twice anyway.', 'b တစ်လုံးတည်း၏ ဘေးတွင် a နှင့် d သာ ရှိပြီး c မရှိပါ။ နှစ်ကြိမ်လည်း မသုံးရပါ။')],
       load: { board: ['ab', 'cd'], words: ['abcb'] } },
   ],
   modes: [
@@ -676,17 +676,17 @@ mountLesson({
       cost: 'O(W · m·n · 3^L) time', build: buildEach },
     { id: 'trie', name: 'Trie + one walk',
       sub: t('backtracking', 'backtracking'),
-      desc: t('All words at once: follow a trie as you walk the board.', 'word အားလုံး တစ်ပြိုင်နက် — board ကို လျှောက်စဉ် trie ကို လိုက်။'),
+      desc: t('All words at once: follow a trie as you walk the board.', 'word အားလုံး တစ်ပြိုင်နက်: board ကို လျှောက်စဉ် trie ကို လိုက်သည်။'),
       cost: 'O(m·n · 3^L) time · O(total letters) trie', build: buildTrie },
   ],
   languages: LANGUAGES,
   code: CODE,
   solutions: {
     each: { approach: APPROACH.each,
-      desc: t('Correct, and fine for a few words — but with thousands that share beginnings, it repeats the same walks for each one.', 'မှန်ပြီး word အနည်းငယ်အတွက် အဆင်ပြေသည် — သို့သော် အစ တူသော ထောင်ချီအတွက် တစ်ခုစီအတွက် လျှောက်ခြင်း အတူတူကို ထပ်လုပ်သည်။') },
+      desc: t('Correct, and fine for a few words. But with thousands that share beginnings, it repeats the same walks for each one.', 'မှန်ပြီး word အနည်းငယ်အတွက် အဆင်ပြေသည်။ သို့သော် အစ တူသော ထောင်ချီအတွက် တစ်ခုစီအတွက် လျှောက်ခြင်း အတူတူကို ထပ်လုပ်သည်။') },
     trie: { approach: APPROACH.trie,
       desc: t('The answer the problem is built for. Clearing a found word stops duplicates; pruning an emptied branch stops the walk from re-entering it.',
-              'ပြဿနာ ရည်ရွယ်ထားသော အဖြေ။ တွေ့ပြီး word ကို ရှင်းခြင်းက ထပ်နေခြင်းကို တားသည် — ဗလာဖြစ်သော အကိုင်းကို ဖြတ်ခြင်းက ၎င်းထဲ ပြန်မဝင်စေ။') },
+              'ပြဿနာ ရည်ရွယ်ထားသော အဖြေ။ တွေ့ပြီး word ကို ရှင်းခြင်းက ထပ်နေခြင်းကို တားသည်။ ဗလာဖြစ်သော အကိုင်းကို ဖြတ်ခြင်းက ၎င်းထဲ ပြန်မဝင်စေပါ။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the 2 examples, 6 edges, 15,000 random boards up to 4 × 4
@@ -701,7 +701,7 @@ mountLesson({
     go: { each: 'ran here · 20,011 cases, not the two with thousands of words · Go 1.23', trie: 'ran here · 20,013 cases · Go 1.23' },
     rust: { each: 'ran here · 20,011 cases, not the two with thousands of words · rustc 1.98', trie: 'ran here · 20,013 cases · rustc 1.98' },
   },
-  stripLabel: t('board, as the code holds it', 'board — code ကိုင်ထားသည့်အတိုင်း'),
+  stripLabel: t('board, as the code holds it', 'board၊ code ကိုင်ထားသည့်အတိုင်း'),
   strip,
   draw,
   answer,

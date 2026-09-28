@@ -497,7 +497,7 @@ function mountWidget(host) {
 const APPROACH = {
   copy: {
     idea: t("Build the answer somewhere else: every non-zero value in order, then zeros to fill, then copy it back into <code>nums</code>.",
-        "အဖြေကို အခြားနေရာတွင် တည်ဆောက်သည် — သုညမဟုတ်သော value တိုင်းကို အစဉ်အတိုင်း၊ ပြီးလျှင် သုညများဖြင့် ဖြည့်၊ ပြီးမှ <code>nums</code> ထဲ ပြန်ကူးသည်။"),
+        "အဖြေကို အခြားနေရာတွင် တည်ဆောက်သည်: သုညမဟုတ်သော value တိုင်းကို အစဉ်အတိုင်း၊ ပြီးလျှင် သုညများဖြင့် ဖြည့်၊ ပြီးမှ <code>nums</code> ထဲ ပြန်ကူးသည်။"),
     steps: [
       t("Collect each non-zero value into <code>kept</code>.",
         "သုညမဟုတ်သော value တစ်ခုစီကို <code>kept</code> ထဲ စုသည်။"),
@@ -506,12 +506,12 @@ const APPROACH = {
       t("Write <code>kept</code> back into <code>nums</code>, index by index.",
         "<code>kept</code> ကို <code>nums</code> ထဲ index အလိုက် ပြန်ရေးသည်။"),
     ],
-    cost: t("two passes and a second array as long as <code>nums</code>, which the statement's \"in-place\" asks you not to use.",
-        "နှစ်ကြိမ် ဖြတ်ပြီး <code>nums</code> အရှည်ရှိ ဒုတိယ array တစ်ခု သုံးသည် — မေးခွန်း၏ \"in-place\" က မသုံးရန် တောင်းထားသည့်အရာ ဖြစ်သည်။"),
+    cost: t("Two passes and a second array as long as <code>nums</code>, which the statement's \"in-place\" asks you not to use.",
+        "နှစ်ကြိမ် ဖြတ်ပြီး <code>nums</code> အရှည်ရှိ ဒုတိယ array တစ်ခု သုံးသည်။ ၎င်းမှာ မေးခွန်း၏ \"in-place\" က မသုံးရန် တောင်းထားသည့်အရာ ဖြစ်သည်။"),
   },
   twopointer: {
     idea: t("Keep a boundary, <code>slow</code>: everything to its left is already the final answer. A second index, <code>fast</code>, scans ahead and swaps each non-zero value down to the boundary.",
-        "<code>slow</code> ဟူသော နယ်နိမိတ်တစ်ခု ထားသည် — ၎င်း၏ ဘယ်ဘက်ရှိ အရာအားလုံးသည် နောက်ဆုံးအဖြေ ဖြစ်ပြီးသား။ ဒုတိယ index <code>fast</code> က ရှေ့သို့ ရှာပြီး သုညမဟုတ်သော value တစ်ခုစီကို နယ်နိမိတ်သို့ swap ချသည်။"),
+        "<code>slow</code> ဟူသော နယ်နိမိတ်တစ်ခု ထားသည်။ ၎င်း၏ ဘယ်ဘက်ရှိ အရာအားလုံးသည် နောက်ဆုံးအဖြေ ဖြစ်ပြီးသား။ ဒုတိယ index <code>fast</code> က ရှေ့သို့ ရှာပြီး သုညမဟုတ်သော value တစ်ခုစီကို နယ်နိမိတ်သို့ swap ချသည်။"),
     steps: [
       t("Start with <code>slow = 0</code>.",
         "<code>slow = 0</code> ဖြင့် စသည်။"),
@@ -547,26 +547,26 @@ mountLesson({
     { title: exampleTitle(1),
       inputHtml: '<code>nums = [0,1,0,3,12]</code>', output: '[1,3,12,0,0]',
       why: [t(
-        'All non-zeros — 1, 3, and 12 — keep their relative order in the front. The zeros fill in afterwards, any way they like.',
-        'Non-zero အားလုံး — 1, 3, နှင့် 12 — တို့သည် ၎င်းတို့၏ မူရင်း အစီအစဉ်အတိုင်း ရှေ့တွင် ရှိနေသည်။ သုညများက နောက်မှ လိုက်လာပြီး ၎င်းတို့အချင်းချင်း မည်သည့် အစီအစဉ်ဖြင့်မဆို ရှိနိုင်သည်။')],
+        'All non-zeros (1, 3 and 12) keep their relative order in the front. The zeros fill in afterwards, in any order.',
+        'Non-zero အားလုံး (1, 3, နှင့် 12) တို့သည် ၎င်းတို့၏ မူရင်း အစီအစဉ်အတိုင်း ရှေ့တွင် ရှိနေသည်။ သုညများက နောက်မှ လိုက်လာပြီး ၎င်းတို့အချင်းချင်း မည်သည့် အစီအစဉ်ဖြင့်မဆို ရှိနိုင်သည်။')],
       load: { nums: [0, 1, 0, 3, 12] } },
     { title: exampleTitle(2),
       inputHtml: '<code>nums = [0]</code>', output: '[0]',
       why: [t(
-        'A single zero — nothing to move, nothing to preserve. The array is already the answer.',
-        'သုညတစ်လုံးတည်း — ရွှေ့စရာ မရှိ၊ ထိန်းသိမ်းစရာ မရှိ။ Array သည် မူလအတိုင်းပင် အဖြေ ဖြစ်သည်။')],
+        'A single zero: nothing to move and nothing to preserve. The array is already the answer.',
+        'သုညတစ်လုံးတည်း ဖြစ်သည်။ ရွှေ့စရာ မရှိ၊ ထိန်းသိမ်းစရာ မရှိ။ Array သည် မူလအတိုင်းပင် အဖြေ ဖြစ်သည်။')],
       load: { nums: [0] } },
   ],
   modes: [
     { id: 'copy',
       name: t('Copy out and back', 'ကူးထုတ်၍ ပြန်ထည့်'),
-      desc: t('Collect non-zeros, pad, write back — right answer from the wrong array.',
-               'Non-zero များကို စုဆောင်း၊ သုညများ ဖြည့်၊ ပြန်ရေး — မှားသော array မှ မှန်သော အဖြေ။'),
+      desc: t('Collect non-zeros, pad, write back: the right answer from the wrong array.',
+               'Non-zero များကို စုဆောင်း၊ သုညများ ဖြည့်၊ ပြန်ရေးသည်: မှားသော array မှ မှန်သော အဖြေ။'),
       cost: 'O(n) time · O(n) space', build: buildCopy },
     { id: 'twopointer',
       name: t('Two pointers', 'Pointer နှစ်ခု'),
-      desc: t('One boundary, one scanner — swap across it and the invariant holds after every step.',
-               'နယ်ခြားမျဉ်း တစ်ခုနှင့် scanner တစ်ခု — လဲလှယ်လိုက်တိုင်း invariant က မှန်နေသည်။'),
+      desc: t('One boundary and one scanner. Swap across it and the invariant holds after every step.',
+               'နယ်ခြားမျဉ်း တစ်ခုနှင့် scanner တစ်ခု။ လဲလှယ်လိုက်တိုင်း invariant က မှန်နေသည်။'),
       cost: 'O(n) time · O(1) space', build: buildTwoPointer },
   ],
   languages: LANGUAGES,
@@ -576,8 +576,8 @@ mountLesson({
       'Collect every non-zero value in a second array, pad with zeros, then write it back. Returns the right answer but spends the <code>O(n)</code> memory the problem asked you not to.',
       'Non-zero တန်ဖိုးတိုင်းကို ဒုတိယ array တစ်ခုထဲ စုဆောင်း၊ သုညများ ဖြည့်၊ ပြီးမှ ပြန်ရေးသည်။ အဖြေ မှန်သော်လည်း မေးခွန်းက မသုံးရန် တောင်းဆိုထားသည့် <code>O(n)</code> memory ကို သုံးထားသည်။') },
     twopointer: { approach: APPROACH.twopointer, desc: t(
-      'The submission worth writing. <code>slow</code> is a boundary, not an index — everything to its left is correct and never touched again. Swap a non-zero value down to <code>slow</code> and advance both pointers.',
-      'ရေးသင့်သည့် submission ဖြစ်သည်။ <code>slow</code> သည် index မဟုတ်ဘဲ boundary ဖြစ်သည် — ၎င်း၏ ဘယ်ဘက်ရှိ အားလုံးသည် မှန်ကန်ပြီး နောက်ထပ် ထိတော့မည် မဟုတ်။ Non-zero တစ်လုံးကို <code>slow</code> သို့ swap ချပြီး pointer နှစ်ခုလုံး ရှေ့သို့ တိုးသည်။') },
+      'The one to submit. <code>slow</code> is a boundary, not an index: everything to its left is correct and never touched again. Swap a non-zero value down to <code>slow</code> and advance both pointers.',
+      'တင်သင့်သည့် ဗားရှင်း ဖြစ်သည်။ <code>slow</code> သည် index မဟုတ်ဘဲ boundary ဖြစ်သည်။ ၎င်း၏ ဘယ်ဘက်ရှိ အားလုံးသည် မှန်ကန်ပြီး နောက်ထပ် ထိတော့မည် မဟုတ်။ Non-zero တစ်လုံးကို <code>slow</code> သို့ swap ချပြီး pointer နှစ်ခုလုံး ရှေ့သို့ တိုးသည်။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: 5 edges, 15,000 short arrays heavy in zeros, 5,000 up to 80 values over the full 32-bit range, two at n = 10⁴ — against filter-and-append.

@@ -552,10 +552,10 @@ const APPROACH = {
       t('For every <code>i &lt; j &lt; k</code>, test whether the three sum to 0.',
         '<code>i &lt; j &lt; k</code> တိုင်းအတွက် သုံးလုံးပေါင်း 0 ဖြစ်သလား စစ်သည်။'),
       t('Put each one that does into <code>found</code>, a set; a triplet already there is dropped.',
-        'ဖြစ်သည့် တစ်ခုစီကို set ဖြစ်သော <code>found</code> ထဲ ထည့်သည် — ရှိပြီးသား triplet ကို ပယ်သည်။'),
+        'ဖြစ်သည့် တစ်ခုစီကို set ဖြစ်သော <code>found</code> ထဲ ထည့်သည်။ ရှိပြီးသား triplet ကို ပယ်သည်။'),
     ],
     cost: t('n(n − 1)(n − 2)/6 triples: about 4.5 × 10⁹ at n = 3000.',
-            'triple n(n − 1)(n − 2)/6 ခု — n = 3000 တွင် 4.5 × 10⁹ ခန့်။'),
+            'triple n(n − 1)(n − 2)/6 ခု၊ n = 3000 တွင် 4.5 × 10⁹ ခန့်။'),
   },
   pointers: {
     idea: t('Sort, then fix the smallest number of the triplet. The other two must sum to its negative, and in a sorted array two pointers find every such pair in one squeeze.',
@@ -569,7 +569,7 @@ const APPROACH = {
         'သုည ဆိုလျှင် မှတ်ပြီး နှစ်ခုလုံး ရွှေ့ကာ <code>lo</code> ကို တူသော value များ ကျော်စေသည်။'),
     ],
     cost: t('the sort, then one squeeze of at most n steps for each i: about 4.5 × 10⁶ pointer moves at n = 3000. No set: skipping equal values keeps the answer distinct.',
-            'sort၊ ပြီးမှ i တစ်ခုစီအတွက် အဆင့် n အထိ ညှပ်ခြင်း တစ်ကြိမ် — n = 3000 တွင် pointer ရွှေ့ခြင်း 4.5 × 10⁶ ခန့်။ set မလို — တူသော value များ ကျော်ခြင်းက အဖြေကို ကွဲပြားစေသည်။'),
+            'sort၊ ပြီးမှ i တစ်ခုစီအတွက် အဆင့် n အထိ ညှပ်ခြင်း တစ်ကြိမ်၊ n = 3000 တွင် pointer ရွှေ့ခြင်း 4.5 × 10⁶ ခန့်။ set မလိုပါ။ တူသော value များ ကျော်ခြင်းက အဖြေကို ကွဲပြားစေသည်။'),
   },
 };
 
@@ -591,14 +591,14 @@ mountLesson({
   ],
   examples: [
     { title: exampleTitle(1), inputHtml: '<code>nums = [-1,0,1,2,-1,-4]</code>', output: '[[-1,-1,2],[-1,0,1]]',
-      why: [t('Three index triples sum to 0: (0,1,2), (1,2,4) and (0,3,4).', 'index triple သုံးခု ပေါင်းလျှင် 0 ရသည် — (0,1,2)၊ (1,2,4) နှင့် (0,3,4)။'),
+      why: [t('Three index triples sum to 0: (0,1,2), (1,2,4) and (0,3,4).', 'index triple သုံးခု ပေါင်းလျှင် 0 ရသည်: (0,1,2)၊ (1,2,4) နှင့် (0,3,4)။'),
             t('(0,1,2) and (1,2,4) are both the triplet [-1,0,1], so it is listed once.', '(0,1,2) နှင့် (1,2,4) နှစ်ခုစလုံးသည် triplet [-1,0,1] ဖြစ်သဖြင့် တစ်ကြိမ်သာ ဖော်ပြသည်။')],
       load: { nums: [-1, 0, 1, 2, -1, -4] } },
     { title: exampleTitle(2), inputHtml: '<code>nums = [0,1,1]</code>', output: '[]',
       why: [t('The only triple is 0 + 1 + 1 = 2.', 'triple တစ်ခုတည်းမှာ 0 + 1 + 1 = 2။')],
       load: { nums: [0, 1, 1] } },
     { title: exampleTitle(3), inputHtml: '<code>nums = [0,0,0]</code>', output: '[[0,0,0]]',
-      why: [t('The only triple sums to 0. The same value three times is fine — the positions differ.', 'triple တစ်ခုတည်း ပေါင်းလျှင် 0 ရသည်။ value တူ သုံးကြိမ် ဖြစ်လည်း ရသည် — နေရာ မတူပါ။')],
+      why: [t('The only triple sums to 0. The same value three times is fine, because the positions differ.', 'triple တစ်ခုတည်း ပေါင်းလျှင် 0 ရသည်။ value တူ သုံးကြိမ် ဖြစ်လည်း ရသည်၊ နေရာ မတူသောကြောင့်။')],
       load: { nums: [0, 0, 0] } },
   ],
   modes: [
@@ -616,8 +616,8 @@ mountLesson({
       desc: t('Sort, try every triple, keep the zero-sum ones in a set. Correct, and cubic: too slow for n = 3000.',
               'sort လုပ်၊ triple တိုင်း စမ်း၊ 0 ရသည်များကို set ထဲ ထည့်။ မှန်သည်၊ သို့သော် cubic ဖြစ်၍ n = 3000 အတွက် နှေးလွန်းသည်။') },
     pointers: { approach: APPROACH.pointers,
-      desc: t('The submission worth writing. Sorted, each fixed number becomes a two-pointer squeeze, and skipping equal neighbours makes the answer distinct without a set.',
-              'ရေးသင့်သည့် submission။ sort ထားလျှင် ချုပ်ကိုင်ထားသော ကိန်းတစ်ခုစီသည် pointer နှစ်ခု ညှပ်ခြင်း ဖြစ်လာပြီး တူသော ကပ်လျက်ကိန်းများ ကျော်ခြင်းက set မပါဘဲ အဖြေကို ကွဲပြားစေသည်။') },
+      desc: t('The one to submit. Sorted, each fixed number becomes a two-pointer squeeze, and skipping equal neighbours makes the answer distinct without a set.',
+              'တင်သင့်သည့် ဗားရှင်း ဖြစ်သည်။ sort ထားလျှင် ချုပ်ကိုင်ထားသော ကိန်းတစ်ခုစီသည် pointer နှစ်ခု ညှပ်ခြင်း ဖြစ်လာပြီး တူသော ကပ်လျက်ကိန်းများ ကျော်ခြင်းက set မပါဘဲ အဖြေကို ကွဲပြားစေသည်။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the 3 examples, 5 edges, 15,000 random arrays of 3–9 values

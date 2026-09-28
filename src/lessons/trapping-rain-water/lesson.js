@@ -396,21 +396,21 @@ const APPROACH = {
     idea: t('The water over bar i reaches the lower of the tallest bar on its left and the tallest on its right. Compute both for every bar, then add up the gaps.',
             'bar i အပေါ်ရှိ ရေသည် ၎င်း၏ ဘယ်ဘက် အမြင့်ဆုံးနှင့် ညာဘက် အမြင့်ဆုံးထဲမှ နိမ့်သည့်အထိ ရောက်သည်။ bar တိုင်းအတွက် နှစ်ခုလုံးကို တွက်ပြီး ကွာဟချက်များကို ပေါင်းသည်။'),
     steps: [
-      t('<code>left[i]</code>: a running maximum from the left.', '<code>left[i]</code> — ဘယ်မှ running maximum။'),
-      t('<code>right[i]</code>: a running maximum from the right.', '<code>right[i]</code> — ညာမှ running maximum။'),
+      t('<code>left[i]</code>: a running maximum from the left.', '<code>left[i]</code>: ဘယ်မှ running maximum။'),
+      t('<code>right[i]</code>: a running maximum from the right.', '<code>right[i]</code>: ညာမှ running maximum။'),
       t('<code>water += min(left[i], right[i]) − height[i]</code> for every bar.', 'bar တိုင်းအတွက် <code>water += min(left[i], right[i]) − height[i]</code>။'),
     ],
-    cost: t('Three passes: O(n) time, and O(n) for the two arrays.', 'pass သုံးခု — O(n) အချိန်၊ array နှစ်ခုအတွက် O(n)။'),
+    cost: t('Three passes: O(n) time, and O(n) for the two arrays.', 'pass သုံးခု: O(n) အချိန်၊ array နှစ်ခုအတွက် O(n)။'),
   },
   pointers: {
-    idea: t('Walk in from both ends. If the left bar is lower than the right one, the right side is sure to hold a wall at least that tall, so the left bar\'s water depends only on the tallest bar to its left — settle it and step in. Symmetrically on the right.',
-            'အစွန်နှစ်ဖက်မှ အတွင်းသို့ လျှောက်သည်။ ဘယ် bar သည် ညာ bar ထက် နိမ့်လျှင် ညာဘက်တွင် အနည်းဆုံး ထိုမျှ မြင့်သော နံရံ သေချာ ရှိသဖြင့် ဘယ် bar ၏ ရေသည် ၎င်း၏ ဘယ်ဘက် အမြင့်ဆုံးပေါ်တွင်သာ မူတည်သည် — သတ်မှတ်ပြီး အတွင်းသို့ တစ်လှမ်း။ ညာဘက်တွင်လည်း ထိုနည်းတူ။'),
+    idea: t('Walk in from both ends. If the left bar is lower than the right one, the right side is sure to hold a wall at least that tall, so the left bar\'s water depends only on the tallest bar to its left. Settle it and step in. Symmetrically on the right.',
+            'အစွန်နှစ်ဖက်မှ အတွင်းသို့ လျှောက်သည်။ ဘယ် bar သည် ညာ bar ထက် နိမ့်လျှင် ညာဘက်တွင် အနည်းဆုံး ထိုမျှ မြင့်သော နံရံ သေချာ ရှိသဖြင့် ဘယ် bar ၏ ရေသည် ၎င်း၏ ဘယ်ဘက် အမြင့်ဆုံးပေါ်တွင်သာ မူတည်သည်။ သတ်မှတ်ပြီး အတွင်းသို့ တစ်လှမ်း တိုးပါ။ ညာဘက်တွင်လည်း ထိုနည်းတူ။'),
     steps: [
-      t('<code>lo</code> and <code>hi</code> at the ends; <code>left_max</code>, <code>right_max</code> and <code>water</code> at 0.', '<code>lo</code> နှင့် <code>hi</code> အစွန်တွင် — <code>left_max</code>၊ <code>right_max</code> နှင့် <code>water</code> 0။'),
-      t('The lower side moves: update its max, add <code>max − height</code>, step in.', 'နိမ့်သည့်ဘက် ရွေ့သည် — ၎င်း၏ max ကို update၊ <code>max − height</code> ပေါင်း၊ အတွင်းသို့ တစ်လှမ်း။'),
-      t('Stop when they meet — at the tallest bar, which holds nothing.', 'ဆုံသည့်အခါ ရပ် — အမြင့်ဆုံး bar တွင်၊ ၎င်းတွင် ဘာမှ မရှိ။'),
+      t('<code>lo</code> and <code>hi</code> at the ends; <code>left_max</code>, <code>right_max</code> and <code>water</code> at 0.', '<code>lo</code> နှင့် <code>hi</code> ကို အစွန်တွင်၊ <code>left_max</code>၊ <code>right_max</code> နှင့် <code>water</code> ကို 0 တွင် ထားသည်။'),
+      t('The lower side moves: update its max, add <code>max − height</code>, step in.', 'နိမ့်သည့်ဘက် ရွေ့သည်: ၎င်း၏ max ကို update လုပ်၊ <code>max − height</code> ပေါင်းပြီး အတွင်းသို့ တစ်လှမ်း တိုးသည်။'),
+      t('Stop when they meet, at the tallest bar, which holds nothing.', 'ဆုံသည့်အခါ ရပ်သည်။ ဆုံရာမှာ အမြင့်ဆုံး bar ဖြစ်ပြီး ၎င်းတွင် ရေ မရှိပါ။'),
     ],
-    cost: t('Each step settles one bar: n − 1 steps, O(n) time and O(1) extra.', 'အဆင့်တိုင်း bar တစ်ခုကို သတ်မှတ်သည် — အဆင့် n − 1၊ O(n) အချိန်နှင့် O(1) အပို။'),
+    cost: t('Each step settles one bar: n − 1 steps, O(n) time and O(1) extra.', 'အဆင့်တိုင်း bar တစ်ခုကို သတ်မှတ်သည်: အဆင့် n − 1၊ O(n) အချိန်နှင့် O(1) အပို။'),
   },
 };
 
@@ -435,7 +435,7 @@ mountLesson({
       why: [t('1 unit over bar 2, 4 in the dip from bar 4 to bar 6, and 1 over bar 9.', 'bar 2 အပေါ်တွင် 1 unit၊ bar 4 မှ bar 6 အထိ ချိုင့်တွင် 4၊ bar 9 အပေါ်တွင် 1။')],
       load: { height: EX1 } },
     { title: exampleTitle(2), inputHtml: '<code>height = [4,2,0,3,2,5]</code>', output: '9',
-      why: [t('The walls are 4 and 5, so the water level between them is 4: 2 + 4 + 1 + 2 = 9.', 'နံရံများ 4 နှင့် 5 ဖြစ်သဖြင့် ၎င်းတို့ကြား ရေအမြင့် 4 — 2 + 4 + 1 + 2 = 9။')],
+      why: [t('The walls are 4 and 5, so the water level between them is 4: 2 + 4 + 1 + 2 = 9.', 'နံရံများ 4 နှင့် 5 ဖြစ်သဖြင့် ၎င်းတို့ကြား ရေအမြင့် 4 ဖြစ်သည်: 2 + 4 + 1 + 2 = 9။')],
       load: { height: EX2 } },
   ],
   modes: [
@@ -444,7 +444,7 @@ mountLesson({
       desc: t('Tallest bar to the left and right of every bar, then sum.', 'bar တိုင်း၏ ဘယ်နှင့် ညာ အမြင့်ဆုံး bar၊ ပြီးမှ ပေါင်း။'),
       cost: 'O(n) time · O(n) extra', build: buildLevels },
     { id: 'pointers', name: 'Two pointers',
-      desc: t('Walk in from both ends; the lower side is always settled.', 'အစွန်နှစ်ဖက်မှ အတွင်းသို့ — နိမ့်သည့်ဘက်ကို အမြဲ သတ်မှတ်နိုင်။'),
+      desc: t('Walk in from both ends; the lower side is always settled.', 'အစွန်နှစ်ဖက်မှ အတွင်းသို့ လျှောက်ပြီး နိမ့်သည့်ဘက်ကို အမြဲ သတ်မှတ်နိုင်သည်။'),
       cost: 'O(n) time · O(1) extra', build: buildPointers },
   ],
   languages: LANGUAGES,
@@ -452,10 +452,10 @@ mountLesson({
   solutions: {
     levels: { approach: APPROACH.levels,
       desc: t('The formula written out: the two walls for every bar, then the sum. Easy to trust, and it shows exactly where each unit of water comes from.',
-              'ပုံသေနည်းကို ချရေးထားခြင်း — bar တိုင်းအတွက် နံရံနှစ်ခု၊ ပြီးမှ ပေါင်းလဒ်။ ယုံရလွယ်ပြီး ရေ unit တစ်ခုစီ ဘယ်ကလာသလဲ အတိအကျ ပြသည်။') },
+              'ပုံသေနည်းကို ချရေးထားခြင်း ဖြစ်သည်: bar တိုင်းအတွက် နံရံနှစ်ခု၊ ပြီးမှ ပေါင်းလဒ်။ ယုံရလွယ်ပြီး ရေ unit တစ်ခုစီ ဘယ်ကလာသလဲ အတိအကျ ပြသည်။') },
     pointers: { approach: APPROACH.pointers,
-      desc: t('The same answer in one pass and no arrays. Move the lower side — moving the taller one is the classic slip.',
-              'pass တစ်ခုတည်းဖြင့်၊ array မလိုဘဲ အဖြေ အတူတူ။ နိမ့်သည့်ဘက်ကို ရွှေ့ပါ — မြင့်သည့်ဘက်ကို ရွှေ့ခြင်းသည် ဂန္တဝင် အမှား။') },
+      desc: t('The same answer in one pass and no arrays. Move the lower side; moving the taller one is the classic slip.',
+              'pass တစ်ခုတည်းဖြင့်၊ array မလိုဘဲ အဖြေ အတူတူ။ နိမ့်သည့်ဘက်ကို ရွှေ့ပါ။ မြင့်သည့်ဘက်ကို ရွှေ့ခြင်းသည် ဂန္တဝင် အမှား။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the 2 examples, 6 edges, 15,000 random landscapes of up to 12

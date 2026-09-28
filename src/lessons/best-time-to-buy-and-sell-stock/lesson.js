@@ -558,7 +558,7 @@ const APPROACH = {
         "<code>best</code> ကို ပြန်ပေးသည်။"),
     ],
     cost: t("n(n − 1)/2 trades, which is 4,999,950,000 at the n = 10⁵ constraint; only <code>best</code> is stored.",
-        "အရောင်းအဝယ် n(n − 1)/2 ခု — ကန့်သတ်ချက် n = 10⁵ တွင် 4,999,950,000။ <code>best</code> တစ်ခုတည်းကိုသာ သိမ်းသည်။"),
+        "အရောင်းအဝယ် n(n − 1)/2 ခု၊ ကန့်သတ်ချက် n = 10⁵ တွင် 4,999,950,000။ <code>best</code> တစ်ခုတည်းကိုသာ သိမ်းသည်။"),
   },
   onepass: {
     idea: t("The best sale on any day is that day's price minus the cheapest price before it. So walk once, remembering the cheapest price so far and the best profit so far.",
@@ -600,13 +600,13 @@ mountLesson({
       inputHtml: '<code>prices = [7,1,5,3,6,4]</code>', output: '5',
       why: [t(
         'Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6 - 1 = 5. Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.',
-        'နေ့ 2 (ဈေး = 1) မှာ ဝယ်ပြီး နေ့ 5 (ဈေး = 6) မှာ ရောင်းပါ၊ အမြတ် = 6 - 1 = 5။ နေ့ 2 မှာ ဝယ်ပြီး နေ့ 1 မှာ ရောင်းတာ မရပါ — ရောင်းမည့်နေ့ မတိုင်မီ ဝယ်ထားရမည် ဖြစ်သောကြောင့် ဖြစ်သည်။')],
+        'နေ့ 2 (ဈေး = 1) မှာ ဝယ်ပြီး နေ့ 5 (ဈေး = 6) မှာ ရောင်းပါ၊ အမြတ် = 6 - 1 = 5။ နေ့ 2 မှာ ဝယ်ပြီး နေ့ 1 မှာ ရောင်းတာ မရပါ။ ရောင်းမည့်နေ့ မတိုင်မီ ဝယ်ထားရမည် ဖြစ်သောကြောင့် ဖြစ်သည်။')],
       load: { prices: [7, 1, 5, 3, 6, 4] } },
     { title: exampleTitle(2),
       inputHtml: '<code>prices = [7,6,4,3,1]</code>', output: '0',
       why: [t(
-        'Prices only go down — any later sell after buying on day 0 loses money. <code>max - min = 6</code> is wrong because the cheapest day (day 4) comes after the dearest (day 0). Not taking a trade is the best move: return <code>0</code>.',
-        'ဈေးက တစ်ရှိန်ထိုး ကျဆင်းနေသည် — နေ့ 0 မှာ 7 နှင့် ဝယ်လျှင် နောက်ပိုင်း ရောင်းတိုင်း အရှုံးသာ ရသည်။ <code>max - min = 6</code> ဟု တွက်မိလျှင် မှားသည် — ဈေးအသက်သာဆုံးနေ့ (နေ့ 4) သည် ဈေးအကြီးဆုံးနေ့ (နေ့ 0) ၏ နောက်မှ ကျရောက်နေသောကြောင့် ဖြစ်သည်။ ဘာမှ မဝယ်၊ မရောင်းဘဲ <code>0</code> ပြန်ပေးခြင်းက အကောင်းဆုံး ဖြစ်သည်။')],
+        'Prices only go down, so any later sell after buying on day 0 loses money. <code>max - min = 6</code> is wrong because the cheapest day (day 4) comes after the dearest (day 0). Not taking a trade is the best move: return <code>0</code>.',
+        'ဈေးက တစ်ရှိန်ထိုး ကျဆင်းနေသဖြင့် နေ့ 0 မှာ 7 နှင့် ဝယ်လျှင် နောက်ပိုင်း ရောင်းတိုင်း အရှုံးသာ ရသည်။ <code>max - min = 6</code> ဟု တွက်မိလျှင် မှားသည်။ ဈေးအသက်သာဆုံးနေ့ (နေ့ 4) သည် ဈေးအကြီးဆုံးနေ့ (နေ့ 0) ၏ နောက်မှ ကျရောက်နေသောကြောင့် ဖြစ်သည်။ ဘာမှ မဝယ်၊ မရောင်းဘဲ <code>0</code> ပြန်ပေးခြင်းက အကောင်းဆုံး ဖြစ်သည်။')],
       load: { prices: [7, 6, 4, 3, 1] } },
   ],
   modes: [
@@ -617,8 +617,8 @@ mountLesson({
       cost: 'O(n²) time · O(1) space', build: buildBrute },
     { id: 'onepass',
       name: t('One pass', 'တစ်ခေါက်တည်း'),
-      desc: t('Cheapest price so far, best profit against it — one walk, two numbers.',
-               'ယခုအထိ ဈေးအသက်သာဆုံးနှင့် ၎င်းနှင့် တွဲ၍ အမြတ်အများဆုံး — တစ်ခေါက်၊ ဂဏန်း နှစ်လုံး။'),
+      desc: t('Track the cheapest price so far and the best profit against it, in one walk with two numbers.',
+               'ယခုအထိ ဈေးအသက်သာဆုံးနှင့် ၎င်းနှင့် တွဲ၍ အမြတ်အများဆုံးကို တစ်ခေါက်တည်းတွင် ဂဏန်း နှစ်လုံးဖြင့် မှတ်ထားသည်။'),
       cost: 'O(n) time · O(1) space', build: buildOnePass },
   ],
   solutions: {
@@ -626,8 +626,8 @@ mountLesson({
       'Two nested loops, <code>sell</code> always after <code>buy</code> so no element pairs with itself. Correct, and quadratic.',
       'Loop နှစ်ထပ်၊ element တစ်ခု သူ့ကိုယ်သူ မတွဲမိစေရန် <code>sell</code> ကို <code>buy</code> ၏ နောက်မှသာ စသည်။ မှန်သည်၊ သို့သော် quadratic ဖြစ်သည်။') },
     onepass: { approach: APPROACH.onepass, desc: t(
-      'The submission worth writing. One walk, two variables — <code>cheapest</code> starts at ∞ so day 0 needs no special case.',
-      'ရေးသင့်သည့် submission ဖြစ်သည်။ တစ်ခေါက်တည်း၊ variable နှစ်လုံး — <code>cheapest</code> ကို ∞ ဖြင့် စတင်သဖြင့် နေ့ 0 အတွက် သီးသန့် စစ်ဆေးစရာ မလိုပါ။') },
+      'The one to submit. One walk and two variables, and <code>cheapest</code> starts at ∞ so day 0 needs no special case.',
+      'တင်သင့်သည့် ဗားရှင်း ဖြစ်သည်။ တစ်ခေါက်တည်း၊ variable နှစ်လုံးဖြင့် ရေးသည်။ <code>cheapest</code> ကို ∞ ဖြင့် စတင်သဖြင့် နေ့ 0 အတွက် သီးသန့် စစ်ဆေးစရာ မလိုပါ။') },
   },
   languages: LANGUAGES,
   code: CODE,

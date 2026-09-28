@@ -356,17 +356,17 @@ const APPROACH = {
       t('Move <code>hi</code> right the same way.', '<code>hi</code> ကို ထိုနည်းတူ ညာသို့ ရွှေ့သည်။'),
       t('<code>best = max(best, heights[i] × (hi − lo + 1))</code>.', '<code>best = max(best, heights[i] × (hi − lo + 1))</code>။'),
     ],
-    cost: t('Each bar can grow across the whole array: O(n²) — 10¹⁰ steps on 10⁵ equal bars (computed).', 'bar တစ်ခုစီသည် array တစ်ခုလုံးကို ဖြတ်၍ ကြီးထွားနိုင်သည် — O(n²) — တူညီသော bar 10⁵ တွင် 10¹⁰ လှမ်း (တွက်ထားသည်)။'),
+    cost: t('Each bar can grow across the whole array: O(n²), or 10¹⁰ steps on 10⁵ equal bars (computed).', 'bar တစ်ခုစီသည် array တစ်ခုလုံးကို ဖြတ်၍ ကြီးထွားနိုင်သည်: O(n²)။ တူညီသော bar 10⁵ တွင် 10¹⁰ လှမ်း (တွက်ထားသည်)။'),
   },
   stack: {
-    idea: t('Keep a stack of bars whose heights rise. When a bar arrives that is not taller than the top, the top has found its right limit, and the bar under it is its left limit — measure it and pop.',
-            'အမြင့်များ တက်သော bar များ၏ stack ကို ထိန်းသည်။ ထိပ်ထက် မမြင့်သော bar ရောက်လာလျှင် ထိပ်သည် ၎င်း၏ ညာကန့်သတ်ကို တွေ့ပြီ ဖြစ်ပြီး ၎င်းအောက်ရှိ bar သည် ဘယ်ကန့်သတ် — တိုင်းပြီး pop သည်။'),
+    idea: t('Keep a stack of bars whose heights rise. When a bar arrives that is not taller than the top, the top has found its right limit, and the bar under it is its left limit. Measure it and pop.',
+            'အမြင့်များ တက်သော bar များ၏ stack ကို ထိန်းသည်။ ထိပ်ထက် မမြင့်သော bar ရောက်လာလျှင် ထိပ်သည် ၎င်း၏ ညာကန့်သတ်ကို တွေ့ပြီ ဖြစ်ပြီး ၎င်းအောက်ရှိ bar သည် ဘယ်ကန့်သတ် ဖြစ်သည်။ တိုင်းပြီး pop သည်။'),
     steps: [
       t('Walk <code>i</code> over the bars and one extra 0 at the end.', 'bar များနှင့် အဆုံးရှိ အပို 0 တစ်ခုကို <code>i</code> ဖြင့် လျှောက်သည်။'),
-      t('While the top is <code>≥ h</code>: pop it; its width runs from the new top + 1 to <code>i − 1</code>.', 'ထိပ်သည် <code>≥ h</code> ဖြစ်နေသမျှ — pop — ၎င်း၏ အကျယ်သည် ထိပ်အသစ် + 1 မှ <code>i − 1</code> အထိ။'),
+      t('While the top is <code>≥ h</code>: pop it; its width runs from the new top + 1 to <code>i − 1</code>.', 'ထိပ်သည် <code>≥ h</code> ဖြစ်နေသမျှ pop သည်။ ၎င်း၏ အကျယ်သည် ထိပ်အသစ် + 1 မှ <code>i − 1</code> အထိ ဖြစ်သည်။'),
       t('Push <code>i</code>.', '<code>i</code> ကို push သည်။'),
     ],
-    cost: t('Every bar is pushed once and popped once: O(n) time and O(n) for the stack.', 'bar တိုင်းကို တစ်ကြိမ် push ပြီး တစ်ကြိမ် pop သည် — O(n) အချိန်နှင့် stack အတွက် O(n)။'),
+    cost: t('Every bar is pushed once and popped once: O(n) time and O(n) for the stack.', 'bar တိုင်းကို တစ်ကြိမ် push ပြီး တစ်ကြိမ် pop သည်: O(n) အချိန်နှင့် stack အတွက် O(n)။'),
   },
 };
 
@@ -389,11 +389,11 @@ mountLesson({
     { title: exampleTitle(1), inputHtml: '<code>heights = [2,1,5,6,2,3]</code>', output: '10',
       why: [t('Bars 2 and 3 (heights 5 and 6) make a rectangle 5 tall and 2 wide.', 'bar 2 နှင့် 3 (အမြင့် 5 နှင့် 6) သည် 5 မြင့်ပြီး 2 ကျယ်သော rectangle ဖြစ်စေသည်။')], load: { heights: EX1 } },
     { title: exampleTitle(2), inputHtml: '<code>heights = [2,4]</code>', output: '4',
-      why: [t('Either 2 × 2 across both bars or 4 × 1 on the taller one: 4.', 'bar နှစ်ခုလုံးကို ဖြတ်၍ 2 × 2 သို့မဟုတ် မြင့်သည့်ပေါ်တွင် 4 × 1 — 4။')], load: { heights: [2, 4] } },
+      why: [t('Either 2 × 2 across both bars or 4 × 1 on the taller one: 4.', 'bar နှစ်ခုလုံးကို ဖြတ်၍ 2 × 2 သို့မဟုတ် မြင့်သည့်ပေါ်တွင် 4 × 1: 4။')], load: { heights: [2, 4] } },
   ],
   modes: [
     { id: 'extend', name: 'Grow around each bar',
-      desc: t('Each bar as the shortest: stretch it as wide as it goes.', 'bar တစ်ခုစီကို အတိုဆုံးအဖြစ် — ဆန့်နိုင်သမျှ ကျယ်အောင်။'),
+      desc: t('Each bar as the shortest: stretch it as wide as it goes.', 'bar တစ်ခုစီကို အတိုဆုံးအဖြစ် ထား၍ ဆန့်နိုင်သမျှ ကျယ်အောင် ဆန့်သည်။'),
       cost: 'O(n²) time · O(1) extra', build: buildExtend },
     { id: 'stack', name: 'Monotonic stack',
       desc: t('A stack of rising bars finds both limits of each bar in one pass.', 'တက်သော bar များ၏ stack က bar တစ်ခုစီ၏ ကန့်သတ် နှစ်ဖက်လုံးကို pass တစ်ခုဖြင့် ရှာသည်။'),
@@ -406,7 +406,7 @@ mountLesson({
       desc: t('Correct and direct, but a row of equal bars makes every bar grow across all of them.', 'မှန်ပြီး တိုက်ရိုက်၊ သို့သော် တူညီသော bar တန်းက bar တိုင်းကို အားလုံးကို ဖြတ်၍ ကြီးထွားစေသည်။') },
     stack: { approach: APPROACH.stack,
       desc: t('The O(n) answer. The extra 0 at the end is what measures the bars still on the stack; leave it out and they are never counted.',
-              'O(n) အဖြေ။ အဆုံးရှိ အပို 0 သည် stack ပေါ်တွင် ကျန်နေသေးသော bar များကို တိုင်းပေးသည် — ချန်ခဲ့လျှင် ၎င်းတို့ကို ဘယ်တော့မှ မရေတွက်။') },
+              'O(n) အဖြေ။ အဆုံးရှိ အပို 0 သည် stack ပေါ်တွင် ကျန်နေသေးသော bar များကို တိုင်းပေးသည်။ ချန်ခဲ့လျှင် ၎င်းတို့ကို ဘယ်တော့မှ မရေတွက်။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the 2 examples, 6 edges, 15,000 random histograms of up to

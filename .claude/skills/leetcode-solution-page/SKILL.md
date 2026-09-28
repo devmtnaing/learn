@@ -102,6 +102,12 @@ lessons the taller column went either way, and the fix that suited x-sum
 made most pages worse. Script the measurement in a browser, and when the
 choice changes how pages look, show a before and after.
 
+**Write the prose plainly.** No em or en dashes, in either language: in
+English use a period, colon, comma or parentheses, in Burmese `။` or `၊`.
+Skip stock phrases ("the whole trick", "the submission worth writing", "a
+licence to"); the caption of the approach to submit starts "The one to
+submit." Plain sentences are fine as they are.
+
 ## Burmese
 
 English-only is acceptable, because a missing Burmese side falls back to

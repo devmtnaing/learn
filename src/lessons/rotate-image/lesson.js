@@ -362,21 +362,21 @@ const APPROACH = {
             'နာရီလက်တံအတိုင်း လေးပုံတစ်ပုံ လှည့်ခြင်းက row i ကို column n − 1 − i သို့ ပို့သည်။ value တိုင်းကို ဒုတိယ matrix ထဲ နေရာသစ်တွင် ရေးပြီး ပြန်ကူးသည်။'),
     steps: [
       t('Make an empty <code>out</code>, n × n.', 'n × n <code>out</code> ဗလာ တစ်ခု လုပ်သည်။'),
-      t('For every <code>(i, j)</code>: <code>out[j][n − 1 − i] = matrix[i][j]</code>.', '<code>(i, j)</code> တိုင်းအတွက် — <code>out[j][n − 1 − i] = matrix[i][j]</code>။'),
+      t('For every <code>(i, j)</code>: <code>out[j][n − 1 − i] = matrix[i][j]</code>.', '<code>(i, j)</code> တိုင်းအတွက်: <code>out[j][n − 1 − i] = matrix[i][j]</code>။'),
       t('Copy <code>out</code> into <code>matrix</code>, the one the caller holds.', '<code>out</code> ကို ခေါ်သူ ကိုင်ထားသော <code>matrix</code> ထဲ ကူးသည်။'),
     ],
-    cost: t('n² moves and n² extra cells — the extra matrix the statement rules out.', 'ရွှေ့ခြင်း n² နှင့် အပို cell n² — မေးခွန်းက ပယ်ထားသော အပို matrix။'),
+    cost: t('n² moves and n² extra cells: the extra matrix the statement rules out.', 'ရွှေ့ခြင်း n² နှင့် အပို cell n²။ ၎င်းမှာ မေးခွန်းက ပယ်ထားသော အပို matrix ဖြစ်သည်။'),
   },
   inplace: {
     idea: t('Split the turn in two moves that are swaps: a transpose mirrors (i, j) to (j, i), and reversing each row then takes (j, i) to (j, n − 1 − i). Together they are the clockwise turn.',
-            'လှည့်ခြင်းကို လဲလှယ်ခြင်းများသာ ဖြစ်သော အဆင့်နှစ်ခု ခွဲသည် — transpose က (i, j) ကို (j, i) သို့ မှန်ပြောင်းပြီး row တိုင်းကို ပြောင်းပြန်လုပ်ခြင်းက (j, i) ကို (j, n − 1 − i) သို့ ယူသွားသည်။ နှစ်ခုပေါင်း နာရီလက်တံအတိုင်း လှည့်ခြင်း ဖြစ်သည်။'),
+            'လှည့်ခြင်းကို လဲလှယ်ခြင်းများသာ ဖြစ်သော အဆင့်နှစ်ခု ခွဲသည်: transpose က (i, j) ကို (j, i) သို့ မှန်ပြောင်းပြီး row တိုင်းကို ပြောင်းပြန်လုပ်ခြင်းက (j, i) ကို (j, n − 1 − i) သို့ ယူသွားသည်။ နှစ်ခုပေါင်း နာရီလက်တံအတိုင်း လှည့်ခြင်း ဖြစ်သည်။'),
     steps: [
       t('Transpose: for every <code>j &gt; i</code>, swap <code>matrix[i][j]</code> and <code>matrix[j][i]</code>.',
-        'Transpose — <code>j &gt; i</code> တိုင်းအတွက် <code>matrix[i][j]</code> နှင့် <code>matrix[j][i]</code> ကို လဲသည်။'),
+        'Transpose: <code>j &gt; i</code> တိုင်းအတွက် <code>matrix[i][j]</code> နှင့် <code>matrix[j][i]</code> ကို လဲသည်။'),
       t('Reverse every row.', 'row တိုင်းကို ပြောင်းပြန်လုပ်သည်။'),
     ],
-    cost: t('n(n − 1)/2 swaps, then n row reversals: every value moves twice, and no second matrix.',
-            'လဲခြင်း n(n − 1)/2၊ ပြီးမှ row ပြောင်းပြန် n ကြိမ် — value တိုင်း နှစ်ကြိမ် ရွှေ့ပြီး ဒုတိယ matrix မလို။'),
+    cost: t('n(n − 1)/2 swaps, then n row reversals. Every value moves twice, and there is no second matrix.',
+            'လဲခြင်း n(n − 1)/2၊ ပြီးမှ row ပြောင်းပြန် n ကြိမ်။ value တိုင်း နှစ်ကြိမ် ရွှေ့ပြီး ဒုတိယ matrix မလို။'),
   },
 };
 
@@ -398,10 +398,10 @@ mountLesson({
   ],
   examples: [
     { title: exampleTitle(1), inputHtml: '<code>matrix = [[1,2,3],[4,5,6],[7,8,9]]</code>', output: '[[7,4,1],[8,5,2],[9,6,3]]',
-      why: [t('The first column, read bottom to top, becomes the first row: 7, 4, 1.', 'ပထမ column ကို အောက်မှ အပေါ် ဖတ်လျှင် ပထမ row ဖြစ်လာသည် — 7, 4, 1။')],
+      why: [t('The first column, read bottom to top, becomes the first row: 7, 4, 1.', 'ပထမ column ကို အောက်မှ အပေါ် ဖတ်လျှင် ပထမ row ဖြစ်လာသည်: 7, 4, 1။')],
       load: { matrix: EX1 } },
     { title: exampleTitle(2), inputHtml: '<code>matrix = [[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]</code>', output: '[[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]]',
-      why: [t('Same rule at 4 × 4: column j, bottom to top, is the new row j.', '4 × 4 တွင်လည်း စည်းမျဉ်းတူ — column j ကို အောက်မှ အပေါ် ဖတ်လျှင် row j အသစ်။')],
+      why: [t('Same rule at 4 × 4: column j, bottom to top, is the new row j.', '4 × 4 တွင်လည်း စည်းမျဉ်းတူသည်။ column j ကို အောက်မှ အပေါ် ဖတ်လျှင် row j အသစ်။')],
       load: { matrix: EX2 } },
   ],
   modes: [
@@ -418,10 +418,10 @@ mountLesson({
   solutions: {
     copy: { approach: APPROACH.copy,
       desc: t('The rule written straight down, into a second matrix. It produces the right picture, but breaks the one condition the statement insists on: no second matrix.',
-              'စည်းမျဉ်းကို ဒုတိယ matrix ထဲ တိုက်ရိုက် ရေးထားခြင်း။ မှန်ကန်သော ပုံ ထွက်သော်လည်း မေးခွန်း အခိုင်အမာ တောင်းထားသော စည်းကမ်း — ဒုတိယ matrix မသုံးရ — ကို ချိုးဖောက်သည်။') },
+              'စည်းမျဉ်းကို ဒုတိယ matrix ထဲ တိုက်ရိုက် ရေးထားခြင်း။ မှန်ကန်သော ပုံ ထွက်သော်လည်း မေးခွန်း အခိုင်အမာ တောင်းထားသော စည်းကမ်း (ဒုတိယ matrix မသုံးရ) ကို ချိုးဖောက်သည်။') },
     inplace: { approach: APPROACH.inplace,
-      desc: t('The submission worth writing: two passes of swaps, no extra matrix. Start the transpose at <code>j = i + 1</code>, and reverse each row — not the order of the rows.',
-              'ရေးသင့်သည့် submission — လဲခြင်း pass နှစ်ခု၊ အပို matrix မလို။ transpose ကို <code>j = i + 1</code> မှ စပြီး row တစ်ခုစီကို ပြောင်းပြန်လုပ်ပါ — row များ၏ အစီအစဉ်ကို မဟုတ်ပါ။') },
+      desc: t('The one to submit: two passes of swaps, no extra matrix. Start the transpose at <code>j = i + 1</code>, and reverse each row, not the order of the rows.',
+              'တင်သင့်သည့် ဗားရှင်း: လဲခြင်း pass နှစ်ခု၊ အပို matrix မလို။ transpose ကို <code>j = i + 1</code> မှ စပြီး row တစ်ခုစီကို ပြောင်းပြန်လုပ်ပါ၊ row များ၏ အစီအစဉ်ကို မဟုတ်ပါ။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the 2 examples, 3 edges, 15,000 random matrices up to 5 × 5,
@@ -436,7 +436,7 @@ mountLesson({
     go: 'ran here · 20,005 cases · Go 1.23',
     rust: 'ran here · 20,005 cases · rustc 1.98',
   },
-  stripLabel: t('matrix, as it is now', 'matrix — ယခု အခြေအနေ'),
+  stripLabel: t('matrix, as it is now', 'matrix၊ ယခု အခြေအနေ'),
   strip,
   draw,
   answer,

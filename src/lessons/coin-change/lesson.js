@@ -442,28 +442,28 @@ function mountGreedyWidget(host) {
 const APPROACH = {
   recurse: {
     idea: t('The last coin is one of the coins. Try each: the fewest for the amount is one plus the fewest for what that coin leaves. Ask that as a function call, all the way down to 0.',
-            'နောက်ဆုံး coin သည် coin များထဲက တစ်ခု ဖြစ်သည်။ တစ်ခုစီကို စမ်းသည် — amount အတွက် အနည်းဆုံးသည် 1 + ထို coin ချန်ထားသည့်အတွက် အနည်းဆုံး။ ၎င်းကို 0 အထိ function call အဖြစ် မေးသည်။'),
+            'နောက်ဆုံး coin သည် coin များထဲက တစ်ခု ဖြစ်သည်။ တစ်ခုစီကို စမ်းသည်။ amount အတွက် အနည်းဆုံးသည် 1 + ထို coin ချန်ထားသည့်အတွက် အနည်းဆုံး ဖြစ်သည်။ ၎င်းကို 0 အထိ function call အဖြစ် မေးသည်။'),
     steps: [
       t('<code>fewest(0)</code> is 0.', '<code>fewest(0)</code> သည် 0။'),
       t('For each <code>coin &lt;= left</code>: <code>best = min(best, fewest(left − coin) + 1)</code>.',
-        '<code>coin &lt;= left</code> တစ်ခုစီအတွက် — <code>best = min(best, fewest(left − coin) + 1)</code>။'),
-      t('A <code>best</code> still at ∞ means the amount cannot be made: return -1.', '<code>best</code> သည် ∞ အတိုင်း ရှိနေလျှင် amount ကို မဖွဲ့နိုင် — -1 ကို ပြန်ပေးသည်။'),
+        '<code>coin &lt;= left</code> တစ်ခုစီအတွက်: <code>best = min(best, fewest(left − coin) + 1)</code>။'),
+      t('A <code>best</code> still at ∞ means the amount cannot be made: return -1.', '<code>best</code> သည် ∞ အတိုင်း ရှိနေလျှင် amount ကို မဖွဲ့နိုင်ပါ။ -1 ကို ပြန်ပေးသည်။'),
     ],
-    cost: t('the same amounts are asked again and again: 527 calls for example 1, 64,207 for amount 20, 924,876 for 25 — exponential in the amount.',
-            'amount တူတူကို ထပ်ခါထပ်ခါ မေးသည် — ဥပမာ 1 အတွက် call 527၊ amount 20 အတွက် 64,207၊ 25 အတွက် 924,876 — amount အလိုက် exponential။'),
+    cost: t('The same amounts are asked again and again: 527 calls for example 1, 64,207 for amount 20, 924,876 for 25. Exponential in the amount.',
+            'amount တူတူကို ထပ်ခါထပ်ခါ မေးသည်: ဥပမာ 1 အတွက် call 527၊ amount 20 အတွက် 64,207၊ 25 အတွက် 924,876။ amount အလိုက် exponential ဖြစ်သည်။'),
   },
   table: {
     idea: t('Answer the same question for every amount from 0 up, and write each answer down. When amount a needs the answer for a − coin, it is already in the table.',
             'မေးခွန်းတူကို 0 မှ အထက် amount တိုင်းအတွက် ဖြေပြီး အဖြေတိုင်းကို ချရေးထားသည်။ amount a သည် a − coin ၏ အဖြေကို လိုသည့်အခါ table ထဲ ရှိပြီးသား ဖြစ်သည်။'),
     steps: [
-      t('Fill <code>dp</code> with <code>amount + 1</code> — "not reached" — and set <code>dp[0] = 0</code>.',
-        '<code>dp</code> ကို <code>amount + 1</code> — "မရောက်သေး" — ဖြင့် ဖြည့်ပြီး <code>dp[0] = 0</code> ထားသည်။'),
+      t('Fill <code>dp</code> with <code>amount + 1</code> ("not reached") and set <code>dp[0] = 0</code>.',
+        '<code>dp</code> ကို <code>amount + 1</code> ("မရောက်သေး") ဖြင့် ဖြည့်ပြီး <code>dp[0] = 0</code> ထားသည်။'),
       t('For each <code>a</code> from 1, for each <code>coin &lt;= a</code>: <code>dp[a] = min(dp[a], dp[a − coin] + 1)</code>.',
-        '1 မှ <code>a</code> တစ်ခုစီ၊ <code>coin &lt;= a</code> တစ်ခုစီအတွက် — <code>dp[a] = min(dp[a], dp[a − coin] + 1)</code>။'),
+        '1 မှ <code>a</code> တစ်ခုစီ၊ <code>coin &lt;= a</code> တစ်ခုစီအတွက်: <code>dp[a] = min(dp[a], dp[a − coin] + 1)</code>။'),
       t('Return -1 if <code>dp[amount]</code> is still more than <code>amount</code>.', '<code>dp[amount]</code> သည် <code>amount</code> ထက် ပိုနေဆဲ ဖြစ်လျှင် -1 ကို ပြန်ပေးသည်။'),
     ],
     cost: t('amount × coins steps: at most 12 × 10⁴ = 1.2 × 10⁵, and one array of amount + 1.',
-            'amount × coins အဆင့် — အများဆုံး 12 × 10⁴ = 1.2 × 10⁵၊ amount + 1 array တစ်ခု။'),
+            'amount × coins အဆင့်: အများဆုံး 12 × 10⁴ = 1.2 × 10⁵ နှင့် amount + 1 array တစ်ခု။'),
   },
 };
 
@@ -487,10 +487,10 @@ mountLesson({
       why: [t('11 = 5 + 5 + 1. No two coins reach 11.', '11 = 5 + 5 + 1။ coin နှစ်ခုဖြင့် 11 မရောက်ပါ။')],
       load: { coins: [1, 2, 5], amount: 11 } },
     { title: exampleTitle(2), inputHtml: '<code>coins = [2]</code>, <code>amount = 3</code>', output: '-1',
-      why: [t('Only 2s: every total is even, and 3 is odd.', '2 များသာ — ပေါင်းလဒ်တိုင်း စုံဂဏန်း ဖြစ်ပြီး 3 သည် မဂဏန်း။')],
+      why: [t('Only 2s: every total is even, and 3 is odd.', '2 များသာ ရှိသည်။ ပေါင်းလဒ်တိုင်း စုံဂဏန်း ဖြစ်ပြီး 3 သည် မဂဏန်း ဖြစ်သည်။')],
       load: { coins: [2], amount: 3 } },
     { title: exampleTitle(3), inputHtml: '<code>coins = [1]</code>, <code>amount = 0</code>', output: '0',
-      why: [t('Nothing to pay takes no coins — 0, not -1.', 'ပေးစရာ မရှိလျှင် coin မလို — 0၊ -1 မဟုတ်ပါ။')],
+      why: [t('Nothing to pay takes no coins: 0, not -1.', 'ပေးစရာ မရှိလျှင် coin မလိုပါ: 0၊ -1 မဟုတ်ပါ။')],
       load: { coins: [1], amount: 0 } },
   ],
   modes: [
@@ -507,10 +507,10 @@ mountLesson({
   solutions: {
     recurse: { approach: APPROACH.recurse,
       desc: t('The recurrence written straight down. Correct, and exponential: it solves the same smaller amounts over and over, and times out long before amount = 10⁴.',
-              'recurrence ကို တိုက်ရိုက် ရေးထားခြင်း။ မှန်သည်၊ သို့သော် exponential — amount ငယ်များကို ထပ်ခါထပ်ခါ ဖြေပြီး amount = 10⁴ မရောက်မီ ကြာလွန်းသည်။') },
+              'recurrence ကို တိုက်ရိုက် ရေးထားခြင်း။ မှန်သည်၊ သို့သော် exponential ဖြစ်သည်။ amount ငယ်များကို ထပ်ခါထပ်ခါ ဖြေပြီး amount = 10⁴ မရောက်မီ ကြာလွန်းသည်။') },
     table: { approach: APPROACH.table,
-      desc: t('The submission worth writing: the same recurrence, filled in from 0 upward so each amount is solved once. <code>amount + 1</code> marks "not reached" without the overflow an <code>INT_MAX</code> sentinel invites.',
-              'ရေးသင့်သည့် submission — recurrence တူတူကို 0 မှ အထက်သို့ ဖြည့်သဖြင့် amount တစ်ခုစီကို တစ်ကြိမ်သာ ဖြေသည်။ <code>amount + 1</code> သည် <code>INT_MAX</code> sentinel ဖြစ်စေတတ်သော overflow မပါဘဲ "မရောက်သေး" ကို မှတ်သည်။') },
+      desc: t('The one to submit: the same recurrence, filled in from 0 upward so each amount is solved once. <code>amount + 1</code> marks "not reached" without the overflow an <code>INT_MAX</code> sentinel invites.',
+              'တင်သင့်သည့် ဗားရှင်း ဖြစ်သည်။ recurrence တူတူကို 0 မှ အထက်သို့ ဖြည့်သဖြင့် amount တစ်ခုစီကို တစ်ကြိမ်သာ ဖြေသည်။ <code>amount + 1</code> သည် <code>INT_MAX</code> sentinel ဖြစ်စေတတ်သော overflow မပါဘဲ "မရောက်သေး" ကို မှတ်သည်။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the 3 examples, 6 edges, 15,000 random cases of 1–4 coins

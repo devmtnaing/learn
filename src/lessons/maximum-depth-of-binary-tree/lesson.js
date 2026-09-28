@@ -451,8 +451,8 @@ const APPROACH = {
       t("Return 1 plus the larger of the two.",
         "နှစ်ခုအနက် ကြီးသည့်တစ်ခုကို 1 ပေါင်း၍ ပြန်ပေးသည်။"),
     ],
-    cost: t("one visit per node; the stack grows with the height — 10,001 frames for a 10⁴-node chain.",
-        "node တစ်ခုလျှင် တစ်ကြိမ် ရောက်သည် — stack သည် အမြင့်နှင့်အမျှ ကြီးသည်၊ node 10⁴ ကွင်းဆက်အတွက် frame 10,001။"),
+    cost: t("One visit per node. The stack grows with the height: 10,001 frames for a 10⁴-node chain.",
+        "node တစ်ခုလျှင် တစ်ကြိမ် ရောက်သည်။ stack သည် အမြင့်နှင့်အမျှ ကြီးသည်: node 10⁴ ကွင်းဆက်အတွက် frame 10,001။"),
   },
   bfs: {
     idea: t("Depth is the number of levels. Hold one level at a time, count it, and replace it with its children until there are none.",
@@ -467,8 +467,8 @@ const APPROACH = {
       t("Return <code>depth</code>.",
         "<code>depth</code> ကို ပြန်ပေးသည်။"),
     ],
-    cost: t("one visit per node; memory grows with the widest level, and nothing recurses.",
-        "node တစ်ခုလျှင် တစ်ကြိမ် ရောက်သည် — memory သည် အကျယ်ဆုံး အဆင့်နှင့်အမျှ ကြီးပြီး recursion မရှိပါ။"),
+    cost: t("One visit per node. Memory grows with the widest level, and nothing recurses.",
+        "node တစ်ခုလျှင် တစ်ကြိမ် ရောက်သည်။ memory သည် အကျယ်ဆုံး အဆင့်နှင့်အမျှ ကြီးပြီး recursion မရှိပါ။"),
   },
 };
 
@@ -492,7 +492,7 @@ mountLesson({
   examples: [
     { title: exampleTitle(1), inputHtml: '<code>root = [3,9,20,null,null,15,7]</code>', output: '3',
       why: [t('The longest paths are 3 → 20 → 15 and 3 → 20 → 7: three nodes each. The path to 9 has only two.',
-              'အရှည်ဆုံး လမ်းကြောင်းများမှာ 3 → 20 → 15 နှင့် 3 → 20 → 7 — node သုံးခုစီ။ 9 သို့ သွားသော လမ်းကြောင်းတွင် node နှစ်ခုသာ ရှိသည်။'),
+              'အရှည်ဆုံး လမ်းကြောင်းများမှာ 3 → 20 → 15 နှင့် 3 → 20 → 7 ဖြစ်ပြီး node သုံးခုစီ ရှိသည်။ 9 သို့ သွားသော လမ်းကြောင်းတွင် node နှစ်ခုသာ ရှိသည်။'),
             t('Depth counts nodes, so the answer is 3, not the 2 edges on those paths.',
               'depth သည် node များကို ရေတွက်သဖြင့် အဖြေမှာ 3 ဖြစ်ပြီး ထိုလမ်းကြောင်းများပေါ်ရှိ edge 2 ခု မဟုတ်ပါ။')],
       load: { level: [3, 9, 20, null, null, 15, 7] } },
@@ -512,10 +512,10 @@ mountLesson({
   languages: LANGUAGES,
   code: CODE,
   solutions: {
-    dfs: { approach: APPROACH.dfs, desc: t('The definition, written as code: an empty tree is 0 deep, and anything else is 1 plus its deeper side. The stack grows with the height — up to 10⁴ frames here, which is where some languages run out.',
-                   'အဓိပ္ပာယ်ကို code အဖြစ် ရေးထားခြင်း — ဗလာ tree သည် 0 နက်ပြီး အခြား မည်သည့်အရာမဆို ၎င်း၏ ပိုနက်သော ဘက်ကို 1 ပေါင်းခြင်း ဖြစ်သည်။ stack သည် အမြင့်နှင့်အမျှ ကြီးသည် — ဤနေရာတွင် frame 10⁴ အထိ၊ ဘာသာစကားအချို့ ကုန်သွားသည့်နေရာ ဖြစ်သည်။') },
+    dfs: { approach: APPROACH.dfs, desc: t('The definition, written as code: an empty tree is 0 deep, and anything else is 1 plus its deeper side. The stack grows with the height, up to 10⁴ frames here, which is where some languages run out.',
+                   'အဓိပ္ပာယ်ကို code အဖြစ် ရေးထားခြင်း ဖြစ်သည်။ ဗလာ tree သည် 0 နက်ပြီး အခြား မည်သည့်အရာမဆို ၎င်း၏ ပိုနက်သော ဘက်ကို 1 ပေါင်းခြင်း ဖြစ်သည်။ stack သည် အမြင့်နှင့်အမျှ ကြီးသည်။ ဤနေရာတွင် frame 10⁴ အထိ ဖြစ်ပြီး ဘာသာစကားအချို့ ကုန်သွားသည့်နေရာ ဖြစ်သည်။') },
     bfs: { approach: APPROACH.bfs, desc: t('No recursion, so no stack to run out of: hold one level, count it, replace it with its children. Memory grows with the widest level instead.',
-                   'recursion မရှိသဖြင့် ကုန်သွားစရာ stack မရှိပါ — အဆင့်တစ်ဆင့် ကိုင်၊ ရေတွက်၊ ၎င်း၏ ကလေးများဖြင့် အစားထိုး။ memory သည် အကျယ်ဆုံး အဆင့်နှင့်အမျှ ကြီးသည်။') },
+                   'recursion မရှိသဖြင့် ကုန်သွားစရာ stack မရှိပါ။ အဆင့်တစ်ဆင့် ကိုင်၊ ရေတွက်ပြီး ၎င်း၏ ကလေးများဖြင့် အစားထိုးသည်။ memory သည် အကျယ်ဆုံး အဆင့်နှင့်အမျှ ကြီးသည်။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the 2 examples, 4 edges, 15,000 random trees of up to 9 nodes,
@@ -537,16 +537,16 @@ mountLesson({
   },
   caveats: {
     dfs: {
-      ruby: t('Correct, but on Ruby 3.1\'s default stack this recursion overflows (<code>SystemStackError</code>) past about 8,700 levels — measured here — and the constraints allow a 10⁴-node chain. It passed all 20,010 cases with a larger stack; the BFS version needs no stack at all.',
-              'မှန်ကန်သည်၊ သို့သော် Ruby 3.1 ၏ default stack ပေါ်တွင် ဤ recursion သည် အဆင့် 8,700 ခန့်ကျော်လျှင် overflow (<code>SystemStackError</code>) ဖြစ်သည် — ဤနေရာတွင် တိုင်းတာထားသည် — ကန့်သတ်ချက်က node 10⁴ ကွင်းဆက်ကို ခွင့်ပြုသည်။ stack ပိုကြီးလျှင် case 20,010 ခုလုံး အောင်သည် — BFS ပုံစံကမူ stack လုံးဝ မလိုပါ။'),
+      ruby: t('Correct, but on Ruby 3.1\'s default stack this recursion overflows (<code>SystemStackError</code>) past about 8,700 levels (measured here), and the constraints allow a 10⁴-node chain. It passed all 20,010 cases with a larger stack; the BFS version needs no stack at all.',
+              'မှန်ကန်သည်၊ သို့သော် Ruby 3.1 ၏ default stack ပေါ်တွင် ဤ recursion သည် အဆင့် 8,700 ခန့်ကျော်လျှင် overflow (<code>SystemStackError</code>) ဖြစ်သည် (ဤနေရာတွင် တိုင်းတာထားသည်)။ ကန့်သတ်ချက်က node 10⁴ ကွင်းဆက်ကို ခွင့်ပြုသည်။ stack ပိုကြီးလျှင် case 20,010 ခုလုံး အောင်သည်။ BFS ပုံစံကမူ stack လုံးဝ မလိုပါ။'),
       python: t('Python stops at 1,000 levels by default, and the constraints allow 10⁴, so the listing raises the limit first. Without that line it raises <code>RecursionError</code> on a deep chain.',
                 'Python သည် default အားဖြင့် အဆင့် 1,000 တွင် ရပ်ပြီး ကန့်သတ်ချက်က 10⁴ ကို ခွင့်ပြုသဖြင့် listing က limit ကို အရင် မြှင့်ထားသည်။ ထိုစာကြောင်း မပါလျှင် နက်သော ကွင်းဆက်တွင် <code>RecursionError</code> ဖြစ်မည်။'),
-      javascript: t('Correct on all 20,010 cases, but only because the small ones ran first and warmed the JIT. Run cold on Node 24\'s default stack it overflows (<code>RangeError</code>) on a chain longer than 7,774 nodes — measured here. Whether LeetCode\'s runner gives more stack is not something this page could check; the BFS version needs none.',
-                    'case 20,010 ခုလုံးတွင် မှန်သည်၊ သို့သော် case ငယ်များက အရင် run ပြီး JIT ကို နွှေးပေးခဲ့သောကြောင့်သာ ဖြစ်သည်။ Node 24 ၏ default stack ပေါ်တွင် cold run လုပ်လျှင် node 7,774 ထက် ရှည်သော ကွင်းဆက်တွင် overflow (<code>RangeError</code>) ဖြစ်သည် — ဤနေရာတွင် တိုင်းတာထားသည်။ LeetCode ၏ runner က stack ပိုပေးမပေး ဤစာမျက်နှာက မစစ်နိုင်ပါ — BFS ပုံစံကမူ stack မလိုပါ။'),
+      javascript: t('Correct on all 20,010 cases, but only because the small ones ran first and warmed the JIT. Run cold on Node 24\'s default stack it overflows (<code>RangeError</code>) on a chain longer than 7,774 nodes (measured here). Whether LeetCode\'s runner gives more stack is not something this page could check; the BFS version needs none.',
+                    'case 20,010 ခုလုံးတွင် မှန်သည်၊ သို့သော် case ငယ်များက အရင် run ပြီး JIT ကို နွှေးပေးခဲ့သောကြောင့်သာ ဖြစ်သည်။ Node 24 ၏ default stack ပေါ်တွင် cold run လုပ်လျှင် node 7,774 ထက် ရှည်သော ကွင်းဆက်တွင် overflow (<code>RangeError</code>) ဖြစ်သည် (ဤနေရာတွင် တိုင်းတာထားသည်)။ LeetCode ၏ runner က stack ပိုပေးမပေး ဤစာမျက်နှာက မစစ်နိုင်ပါ။ BFS ပုံစံကမူ stack မလိုပါ။'),
     },
   },
   strip,
-  stripLabel: t('The tree in level order (∅ = null)', 'Tree — level order (∅ = null)'),
+  stripLabel: t('The tree in level order (∅ = null)', 'Tree၊ level order (∅ = null)'),
   draw,
   answer,
   vars,

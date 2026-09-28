@@ -528,11 +528,11 @@ function mountDiagWidget(host) {
 const APPROACH = {
   scan: {
     idea: t('Place one queen per row. For each column in row r, scan the queens already placed; if none shares the column or a diagonal, place it, solve the next row, then lift it.',
-            'row တစ်ခုလျှင် queen တစ်ခု ထားသည်။ row r ရှိ column တစ်ခုစီအတွက် ထားပြီးသော queen များကို scan — column သို့မဟုတ် diagonal မတူလျှင် ထား၊ နောက် row ကို ဖြေရှင်း၊ ပြီးမှ ဖယ်သည်။'),
+            'row တစ်ခုလျှင် queen တစ်ခု ထားသည်။ row r ရှိ column တစ်ခုစီအတွက် ထားပြီးသော queen များကို scan လုပ်သည်။ column သို့မဟုတ် diagonal မတူလျှင် ထား၊ နောက် row ကို ဖြေရှင်းပြီးမှ ဖယ်သည်။'),
     steps: [
-      t('<code>r == n</code>: every row has a queen — write the board from <code>cols</code>.', '<code>r == n</code> — row တိုင်းတွင် queen ရှိ — <code>cols</code> မှ board ကို ရေးသည်။'),
-      t('<code>safe(r, c)</code>: for each earlier queen <code>(pr, pc)</code>, same column or <code>|pc − c| == r − pr</code> means attacked.', '<code>safe(r, c)</code> — အရင် queen <code>(pr, pc)</code> တစ်ခုစီအတွက် column တူ သို့မဟုတ် <code>|pc − c| == r − pr</code> ဆိုလျှင် တိုက်ခံရသည်။'),
-      t('Safe: push <code>c</code>, recurse on <code>r + 1</code>, pop.', 'လုံခြုံလျှင် — <code>c</code> push၊ <code>r + 1</code> ပေါ် recurse၊ pop။'),
+      t('<code>r == n</code>: every row has a queen, so write the board from <code>cols</code>.', '<code>r == n</code>: row တိုင်းတွင် queen ရှိသဖြင့် <code>cols</code> မှ board ကို ရေးသည်။'),
+      t('<code>safe(r, c)</code>: for each earlier queen <code>(pr, pc)</code>, same column or <code>|pc − c| == r − pr</code> means attacked.', '<code>safe(r, c)</code>: အရင် queen <code>(pr, pc)</code> တစ်ခုစီအတွက် column တူ သို့မဟုတ် <code>|pc − c| == r − pr</code> ဆိုလျှင် တိုက်ခံရသည်။'),
+      t('Safe: push <code>c</code>, recurse on <code>r + 1</code>, pop.', 'လုံခြုံလျှင် <code>c</code> push၊ <code>r + 1</code> ပေါ် recurse၊ ပြီးလျှင် pop။'),
     ],
     cost: t('Each square tried costs a scan of up to n − 1 queens. At n = 9 the search tries 72,378 squares and makes 243,009 comparisons (counted).',
             'စမ်းသော နေရာတိုင်းသည် queen n − 1 အထိ scan ကုန်ကျသည်။ n = 9 တွင် ရှာဖွေမှုသည် နေရာ 72,378 ခု စမ်းပြီး နှိုင်းယှဉ်ခြင်း 243,009 လုပ်သည် (ရေတွက်ထားသည်)။'),
@@ -543,10 +543,10 @@ const APPROACH = {
     steps: [
       t('<code>col</code>, <code>diag</code>, <code>anti</code> start all false.', '<code>col</code>၊ <code>diag</code>၊ <code>anti</code> အားလုံး false ဖြင့် စသည်။'),
       t('Square <code>(r, c)</code> is attacked if <code>col[c]</code>, <code>diag[r − c + n − 1]</code> or <code>anti[r + c]</code> is set.', '<code>col[c]</code>၊ <code>diag[r − c + n − 1]</code> သို့မဟုတ် <code>anti[r + c]</code> သတ်မှတ်ထားလျှင် နေရာ <code>(r, c)</code> တိုက်ခံရသည်။'),
-      t('Place: set all three, recurse, then clear all three.', 'ထား — သုံးခုလုံး သတ်မှတ်၊ recurse၊ ပြီးမှ သုံးခုလုံး ရှင်း။'),
+      t('Place: set all three, recurse, then clear all three.', 'ထားသည်: သုံးခုလုံး သတ်မှတ်၊ recurse ပြီးမှ သုံးခုလုံး ရှင်းသည်။'),
     ],
-    cost: t('Every try is one O(1) check: 72,378 at n = 9 instead of 243,009 comparisons. The search itself is the same size — this makes each step cheaper, not the search smaller.',
-            'စမ်းခြင်းတိုင်းသည် O(1) စစ်ခြင်း တစ်ကြိမ် — n = 9 တွင် နှိုင်းယှဉ်ခြင်း 243,009 အစား 72,378။ ရှာဖွေမှု အရွယ်အစား အတူတူ — ၎င်းက အဆင့်တစ်ခုစီကို သက်သာစေသည်၊ ရှာဖွေမှုကို မသေးစေပါ။'),
+    cost: t('Every try is one O(1) check: 72,378 at n = 9 instead of 243,009 comparisons. The search itself is the same size. This makes each step cheaper, not the search smaller.',
+            'စမ်းခြင်းတိုင်းသည် O(1) စစ်ခြင်း တစ်ကြိမ်: n = 9 တွင် နှိုင်းယှဉ်ခြင်း 243,009 အစား 72,378။ ရှာဖွေမှု အရွယ်အစား အတူတူ ဖြစ်သည်။ ၎င်းက အဆင့်တစ်ခုစီကို သက်သာစေသည်၊ ရှာဖွေမှုကို မသေးစေပါ။'),
   },
 };
 
@@ -558,14 +558,14 @@ mountLesson({
     { key: 'n', label: 'n', type: 'number', min: 1, max: MAX_N, parse: intValue({ lo: 1, hi: MAX_N, why: 'n = 6 already takes hundreds of steps' }) },
   ],
   presets: [
-    { label: t('Example 1: n = 4', 'ဥပမာ 1 — n = 4'), input: { n: 4 } },
-    { label: t('Example 2: n = 1', 'ဥပမာ 2 — n = 1'), input: { n: 1 } },
-    { label: t('n = 3: none', 'n = 3 — မရှိ'), input: { n: 3 } },
+    { label: t('Example 1: n = 4', 'ဥပမာ 1: n = 4'), input: { n: 4 } },
+    { label: t('Example 2: n = 1', 'ဥပမာ 2: n = 1'), input: { n: 1 } },
+    { label: t('n = 3: none', 'n = 3: မရှိ'), input: { n: 3 } },
     { label: t('n = 5', 'n = 5'), input: { n: 5 } },
   ],
   examples: [
     { title: t('Example 1', 'ဥပမာ 1'), inputHtml: '<code>n = 4</code>', output: '[[".Q..","...Q","Q...","..Q."],["..Q.","Q...","...Q",".Q.."]]',
-      why: [t('Two boards: queens in columns 1, 3, 0, 2 row by row, and its mirror image 2, 0, 3, 1.', 'board နှစ်ခု — row အလိုက် column 1, 3, 0, 2 တွင် queen များ၊ နှင့် ၎င်း၏ မှန်ပြောင်း 2, 0, 3, 1။')],
+      why: [t('Two boards: queens in columns 1, 3, 0, 2 row by row, and its mirror image 2, 0, 3, 1.', 'board နှစ်ခု: row အလိုက် column 1, 3, 0, 2 တွင် queen များ၊ နှင့် ၎င်း၏ မှန်ပြောင်း 2, 0, 3, 1။')],
       load: { n: 4 } },
     { title: t('Example 2', 'ဥပမာ 2'), inputHtml: '<code>n = 1</code>', output: '[["Q"]]',
       why: [t('One square, one queen.', 'နေရာ တစ်ခု၊ queen တစ်ခု။')], load: { n: 1 } },
@@ -584,10 +584,10 @@ mountLesson({
   code: CODE,
   solutions: {
     scan: { approach: APPROACH.scan,
-      desc: t('The search written plainly: one queen per row, each square checked against the queens above it.', 'ရှာဖွေမှုကို ရိုးရိုး ရေးထားခြင်း — row တစ်ခုလျှင် queen တစ်ခု၊ နေရာတစ်ခုစီကို အပေါ်ရှိ queen များနှင့် စစ်သည်။') },
+      desc: t('The search written plainly: one queen per row, each square checked against the queens above it.', 'ရှာဖွေမှုကို ရိုးရိုး ရေးထားခြင်း: row တစ်ခုလျှင် queen တစ်ခု၊ နေရာတစ်ခုစီကို အပေါ်ရှိ queen များနှင့် စစ်သည်။') },
     sets: { approach: APPROACH.sets,
-      desc: t('The version worth writing: r − c and r + c name the diagonals, so a square is checked in three lookups. Clear the flags when you lift the queen.',
-              'ရေးသင့်သည့် version — r − c နှင့် r + c က diagonal များကို အမည်ပေးသဖြင့် နေရာတစ်ခုကို lookup သုံးကြိမ်ဖြင့် စစ်သည်။ queen ကို ဖယ်သည့်အခါ flag များကို ရှင်းပါ။') },
+      desc: t('The one to submit: r − c and r + c name the diagonals, so a square is checked in three lookups. Clear the flags when you lift the queen.',
+              'တင်သင့်သည့် ဗားရှင်း: r − c နှင့် r + c က diagonal များကို အမည်ပေးသဖြင့် နေရာတစ်ခုကို lookup သုံးကြိမ်ဖြင့် စစ်သည်။ queen ကို ဖယ်သည့်အခါ flag များကို ရှင်းပါ။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The constraint allows n = 1 to 9, so the corpus is all nine, checked
@@ -601,7 +601,7 @@ mountLesson({
     go: 'ran here · every n from 1 to 9 · Go 1.23',
     rust: 'ran here · every n from 1 to 9 · rustc 1.98',
   },
-  stripLabel: t('cols — the column of each row\'s queen', 'cols — row တစ်ခုစီ၏ queen ရှိ column'),
+  stripLabel: t('cols: the column of each row\'s queen', 'cols: row တစ်ခုစီ၏ queen ရှိ column'),
   strip,
   draw,
   answer,

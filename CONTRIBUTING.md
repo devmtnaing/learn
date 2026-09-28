@@ -141,8 +141,8 @@ problem's row on the home page to your page. `playHint` is the line under the
 player in 2·2: the keys, what the reader can edit above it and within what
 limits, and what rebuilds.
 
-Traps are "ways the statement bites": each one names what the wrong code
-returns, and you ran it to find out. Notes are questions a reader would ask
+Traps are the places the statement trips people up: each one names what the
+wrong code returns, and you ran it to find out. Notes are questions a reader would ask
 ("Why check for the partner *before* storing?"), answered in a paragraph.
 
 ### 6. Verify

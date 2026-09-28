@@ -612,29 +612,29 @@ function mountArrowWidget(host) {
 const APPROACH = {
   dfs: {
     idea: t('Follow the arrows depth-first, remembering which courses are on the path you are following right now. Reaching one of them again means the arrows loop; reaching a course already finished means nothing.',
-            'မြှားများကို depth-first လိုက်ပြီး ယခု လိုက်နေသော လမ်းကြောင်းပေါ်ရှိ course များကို မှတ်ထားသည်။ ၎င်းတို့ထဲမှ တစ်ခုကို ပြန်ရောက်လျှင် မြှားများ ကွင်းပတ်သည် — ပြီးပြီးသား course ကို ရောက်လျှင် ဘာမှ မဆိုလိုပါ။'),
+            'မြှားများကို depth-first လိုက်ပြီး ယခု လိုက်နေသော လမ်းကြောင်းပေါ်ရှိ course များကို မှတ်ထားသည်။ ၎င်းတို့ထဲမှ တစ်ခုကို ပြန်ရောက်လျှင် မြှားများ ကွင်းပတ်သည်။ ပြီးပြီးသား course ကို ရောက်လျှင် ဘာမှ မဆိုလိုပါ။'),
     steps: [
       t('Build <code>after[b]</code> from every pair [a, b]; set every <code>state</code> to 0.', 'pair [a, b] တိုင်းမှ <code>after[b]</code> ကို တည်ဆောက်ပြီး <code>state</code> တိုင်းကို 0 ထားသည်။'),
       t('<code>cycle(u)</code>: 1 means a loop, 2 means already cleared; otherwise mark it 1 and try every <code>v</code> in <code>after[u]</code>.',
-        '<code>cycle(u)</code> — 1 ဆိုလျှင် ကွင်း၊ 2 ဆိုလျှင် ရှင်းပြီးသား — မဟုတ်လျှင် 1 မှတ်ပြီး <code>after[u]</code> ထဲရှိ <code>v</code> တိုင်းကို စမ်းသည်။'),
-      t('No loop below it: mark <code>u</code> 2 on the way out.', 'အောက်တွင် ကွင်းမရှိ — ထွက်ချိန်တွင် <code>u</code> ကို 2 မှတ်သည်။'),
-      t('Run <code>cycle</code> from every course; any loop means false.', 'course တိုင်းမှ <code>cycle</code> run သည် — ကွင်း တစ်ခုခုရှိလျှင် false။'),
+        '<code>cycle(u)</code>: 1 ဆိုလျှင် ကွင်း၊ 2 ဆိုလျှင် ရှင်းပြီးသား။ မဟုတ်လျှင် 1 မှတ်ပြီး <code>after[u]</code> ထဲရှိ <code>v</code> တိုင်းကို စမ်းသည်။'),
+      t('No loop below it: mark <code>u</code> 2 on the way out.', 'အောက်တွင် ကွင်းမရှိပါ။ ထွက်ချိန်တွင် <code>u</code> ကို 2 မှတ်သည်။'),
+      t('Run <code>cycle</code> from every course; any loop means false.', 'course တိုင်းမှ <code>cycle</code> run သည်။ ကွင်း တစ်ခုခုရှိလျှင် false။'),
     ],
-    cost: t('Each course is entered once and each arrow followed once: O(V + E). The recursion can be as deep as the longest chain — 2,000 courses at the constraint.',
-            'course တစ်ခုစီကို တစ်ကြိမ် ဝင်ပြီး မြှားတစ်ခုစီကို တစ်ကြိမ် လိုက်သည် — O(V + E)။ recursion သည် အရှည်ဆုံး ကွင်းဆက်အထိ နက်နိုင်သည် — ကန့်သတ်ချက်တွင် course 2,000။'),
+    cost: t('Each course is entered once and each arrow followed once: O(V + E). The recursion can be as deep as the longest chain, 2,000 courses at the constraint.',
+            'course တစ်ခုစီကို တစ်ကြိမ် ဝင်ပြီး မြှားတစ်ခုစီကို တစ်ကြိမ် လိုက်သည်: O(V + E)။ recursion သည် အရှည်ဆုံး ကွင်းဆက်အထိ နက်နိုင်သည် (ကန့်သတ်ချက်တွင် course 2,000)။'),
   },
   kahn: {
     idea: t('Keep taking courses that wait on nothing. Taking one frees up whatever was waiting only on it. If the free courses run out before all are taken, the rest wait on each other: a loop.',
-            'ဘာကိုမျှ မစောင့်သော course များကို ဆက်ယူသည်။ တစ်ခုယူလျှင် ၎င်းကိုသာ စောင့်နေသော course များ လွတ်သည်။ အားလုံး မယူမီ လွတ်သော course ကုန်သွားလျှင် ကျန်သည်များ အချင်းချင်း စောင့်နေသည် — ကွင်း။'),
+            'ဘာကိုမျှ မစောင့်သော course များကို ဆက်ယူသည်။ တစ်ခုယူလျှင် ၎င်းကိုသာ စောင့်နေသော course များ လွတ်သည်။ အားလုံး မယူမီ လွတ်သော course ကုန်သွားလျှင် ကျန်သည်များ အချင်းချင်း စောင့်နေသဖြင့် ကွင်း ဖြစ်သည်။'),
     steps: [
       t('Build <code>after</code>, and count in <code>need[a]</code> how many courses a waits on.', '<code>after</code> တည်ဆောက်ပြီး a စောင့်နေသော course အရေအတွက်ကို <code>need[a]</code> တွင် ရေတွက်သည်။'),
       t('Queue every course with <code>need</code> 0.', '<code>need</code> 0 ရှိသော course တိုင်းကို queue ထဲ ထည့်သည်။'),
       t('Pop <code>u</code>, <code>taken += 1</code>; for each <code>v</code> in <code>after[u]</code>, lower <code>need[v]</code> and queue it at 0.',
-        '<code>u</code> ထုတ်၊ <code>taken += 1</code> — <code>after[u]</code> ထဲရှိ <code>v</code> တစ်ခုစီအတွက် <code>need[v]</code> လျှော့ပြီး 0 ရောက်လျှင် queue ထဲ ထည့်သည်။'),
+        '<code>u</code> ထုတ်၊ <code>taken += 1</code>။ <code>after[u]</code> ထဲရှိ <code>v</code> တစ်ခုစီအတွက် <code>need[v]</code> လျှော့ပြီး 0 ရောက်လျှင် queue ထဲ ထည့်သည်။'),
       t('Return <code>taken == numCourses</code>.', '<code>taken == numCourses</code> ကို ပြန်ပေးသည်။'),
     ],
     cost: t('Each course is queued at most once and each arrow lowers one count once: O(V + E), with no recursion at all.',
-            'course တစ်ခုစီကို အများဆုံး တစ်ကြိမ် queue ထဲ ထည့်ပြီး မြှားတစ်ခုစီက count တစ်ခုကို တစ်ကြိမ် လျှော့သည် — O(V + E)၊ recursion လုံးဝ မပါ။'),
+            'course တစ်ခုစီကို အများဆုံး တစ်ကြိမ် queue ထဲ ထည့်ပြီး မြှားတစ်ခုစီက count တစ်ခုကို တစ်ကြိမ် လျှော့သည်: O(V + E)၊ recursion လုံးဝ မပါ။'),
   },
 };
 
@@ -654,20 +654,20 @@ mountLesson({
   ],
   examples: [
     { title: exampleTitle(1), inputHtml: '<code>numCourses = 2, prerequisites = [[1,0]]</code>', output: 'true',
-      why: [t('To take course 1 you must have finished course 0: take 0, then 1.', 'course 1 ကို ယူရန် course 0 ကို ပြီးထားရမည် — 0 ကို ယူ၊ ပြီးမှ 1။')],
+      why: [t('To take course 1 you must have finished course 0: take 0, then 1.', 'course 1 ကို ယူရန် course 0 ကို ပြီးထားရမည်။ 0 ကို ယူ၊ ပြီးမှ 1။')],
       load: { numCourses: 2, prerequisites: [[1, 0]] } },
     { title: exampleTitle(2), inputHtml: '<code>numCourses = 2, prerequisites = [[1,0],[0,1]]</code>', output: 'false',
-      why: [t('1 needs 0 and 0 needs 1: each waits on the other, so neither can go first.', '1 သည် 0 ကို လိုပြီး 0 သည် 1 ကို လိုသည် — တစ်ခုက တစ်ခုကို စောင့်နေသဖြင့် မည်သည့်တစ်ခုမျှ အရင် မသွားနိုင်။')],
+      why: [t('1 needs 0 and 0 needs 1: each waits on the other, so neither can go first.', '1 သည် 0 ကို လိုပြီး 0 သည် 1 ကို လိုသည်။ တစ်ခုက တစ်ခုကို စောင့်နေသဖြင့် မည်သည့်တစ်ခုမျှ အရင် မသွားနိုင်။')],
       load: { numCourses: 2, prerequisites: [[1, 0], [0, 1]] } },
   ],
   modes: [
     { id: 'dfs', name: 'Three-colour DFS',
       sub: t('recursive', 'recursive'),
-      desc: t('Follow the arrows; meeting the current path again is a cycle.', 'မြှားများကို လိုက် — လက်ရှိ လမ်းကြောင်းကို ပြန်တွေ့လျှင် cycle။'),
+      desc: t('Follow the arrows; meeting the current path again is a cycle.', 'မြှားများကို လိုက်ပါ။ လက်ရှိ လမ်းကြောင်းကို ပြန်တွေ့လျှင် cycle ဖြစ်သည်။'),
       cost: 'O(V + E) time · O(V) stack', build: buildDfs },
     { id: 'kahn', name: "Kahn's algorithm",
       sub: t('a queue', 'queue'),
-      desc: t('Keep taking courses that wait on nothing; see if you run out.', 'ဘာမှ မစောင့်သော course များကို ဆက်ယူ — ကုန်သွားသလား ကြည့်။'),
+      desc: t('Keep taking courses that wait on nothing; see if you run out.', 'ဘာမှ မစောင့်သော course များကို ဆက်ယူပြီး ကုန်သွားသလား ကြည့်ပါ။'),
       cost: 'O(V + E) time · O(V) space', build: buildKahn },
   ],
   languages: LANGUAGES,
@@ -676,10 +676,10 @@ mountLesson({
   solutions: {
     dfs: { approach: APPROACH.dfs,
       desc: t('Three states, not two: "on the path" is what makes a loop, "done" is what makes a course safe to skip. Python needs its recursion limit raised for a 2,000-course chain.',
-              'state နှစ်ခုမဟုတ်၊ သုံးခု — "လမ်းပေါ်" က ကွင်းကို ဖြစ်စေပြီး "ပြီး" က course ကို ကျော်ရန် ဘေးကင်းစေသည်။ course 2,000 ကွင်းဆက်အတွက် Python ၏ recursion ကန့်သတ်ချက်ကို မြှင့်ရမည်။') },
+              'state နှစ်ခုမဟုတ်၊ သုံးခု ဖြစ်သည်။ "လမ်းပေါ်" က ကွင်းကို ဖြစ်စေပြီး "ပြီး" က course ကို ကျော်ရန် ဘေးကင်းစေသည်။ course 2,000 ကွင်းဆက်အတွက် Python ၏ recursion ကန့်သတ်ချက်ကို မြှင့်ရမည်။') },
     kahn: { approach: APPROACH.kahn,
-      desc: t('The one worth writing: no recursion, one count per course, and the order it takes courses in is a real schedule if you ever need one (Course Schedule II).',
-              'ရေးသင့်သည့် version — recursion မပါ၊ course တစ်ခုလျှင် count တစ်ခု၊ ယူသော အစီအစဉ်သည် လိုအပ်လျှင် တကယ့် အချိန်ဇယား ဖြစ်သည် (Course Schedule II)။') },
+      desc: t('The one to submit: no recursion, one count per course, and the order it takes courses in is a real schedule if you ever need one (Course Schedule II).',
+              'တင်သင့်သည့် ဗားရှင်း ဖြစ်သည်။ recursion မပါ၊ course တစ်ခုလျှင် count တစ်ခု၊ ယူသော အစီအစဉ်သည် လိုအပ်လျှင် တကယ့် အချိန်ဇယား ဖြစ်သည် (Course Schedule II)။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the 2 examples, 8 edges, 15,000 random graphs up to 8
@@ -698,7 +698,7 @@ mountLesson({
   caveats: {
     dfs: {
       python: t('The <code>setrecursionlimit</code> line is part of the answer: at Python\'s default of 1,000, a chain of 1,000 courses already fails with <code>RecursionError</code> (checked here), and the constraints allow 2,000.',
-                '<code>setrecursionlimit</code> စာကြောင်းသည် အဖြေ၏ အစိတ်အပိုင်း — Python ၏ default 1,000 တွင် course 1,000 ကွင်းဆက်ပင် <code>RecursionError</code> ဖြင့် ကျရှုံးသည် (ဤနေရာတွင် စစ်ထားသည်)၊ ကန့်သတ်ချက်က 2,000 ကို ခွင့်ပြုသည်။'),
+                '<code>setrecursionlimit</code> စာကြောင်းသည် အဖြေ၏ အစိတ်အပိုင်း ဖြစ်သည်။ Python ၏ default 1,000 တွင် course 1,000 ကွင်းဆက်ပင် <code>RecursionError</code> ဖြင့် ကျရှုံးသည် (ဤနေရာတွင် စစ်ထားသည်)၊ ကန့်သတ်ချက်က 2,000 ကို ခွင့်ပြုသည်။'),
     },
   },
   stripLabel: t('One number per course', 'course တစ်ခုလျှင် ဂဏန်းတစ်ခု'),

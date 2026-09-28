@@ -389,24 +389,24 @@ function mountRankWidget(host) {
 
 const APPROACH = {
   sort: {
-    idea: t('Sort everything; the kth largest is k places from the end.', 'အားလုံးကို sort လုပ်သည် — k ခုမြောက် အကြီးဆုံးသည် အဆုံးမှ နေရာ k တွင် ရှိသည်။'),
+    idea: t('Sort everything; the kth largest is k places from the end.', 'အားလုံးကို sort လုပ်သည်။ k ခုမြောက် အကြီးဆုံးသည် အဆုံးမှ နေရာ k တွင် ရှိသည်။'),
     steps: [
       t('Sort <code>nums</code> ascending.', '<code>nums</code> ကို ငယ်စဉ်ကြီးလိုက် sort လုပ်သည်။'),
       t('Return the value at index <code>n − k</code>.', 'index <code>n − k</code> ရှိ value ကို ပြန်ပေးသည်။'),
     ],
-    cost: t('the sort orders all n values — about 1.7 × 10⁶ comparisons at n = 10⁵ — to use one of them.',
-            'sort သည် value n ခုလုံးကို စီသည် — n = 10⁵ တွင် နှိုင်းယှဉ်ခြင်း 1.7 × 10⁶ ခန့် — တစ်ခုကို သုံးရန်။'),
+    cost: t('The sort orders all n values (about 1.7 × 10⁶ comparisons at n = 10⁵) to use one of them.',
+            'sort သည် တစ်ခုကို သုံးရန် value n ခုလုံးကို စီသည် (n = 10⁵ တွင် နှိုင်းယှဉ်ခြင်း 1.7 × 10⁶ ခန့်)။'),
   },
   heap: {
-    idea: t('Keep only the k largest seen so far, in a min-heap. The smallest of them sits at the root, so it is the one to throw out when a new value arrives — and at the end it is the answer.',
+    idea: t('Keep only the k largest seen so far, in a min-heap. The smallest of them sits at the root, so it is the one to throw out when a new value arrives, and at the end it is the answer.',
             'ယခုထိ တွေ့သမျှထဲက အကြီးဆုံး k ခုကိုသာ min-heap တွင် ထားသည်။ ၎င်းတို့ထဲက အငယ်ဆုံးသည် root တွင် ရှိသဖြင့် value အသစ် ရောက်လာသည့်အခါ ပစ်ရမည့်တစ်ခု ဖြစ်ပြီး အဆုံးတွင် အဖြေ ဖြစ်သည်။'),
     steps: [
       t('For each <code>x</code>, push it onto the min-heap.', '<code>x</code> တစ်ခုစီကို min-heap ပေါ် push လုပ်သည်။'),
       t('If the heap holds more than <code>k</code>, pop the smallest.', 'heap တွင် <code>k</code> ထက် ပိုရှိလျှင် အငယ်ဆုံးကို pop လုပ်သည်။'),
       t('Return the root.', 'root ကို ပြန်ပေးသည်။'),
     ],
-    cost: t('each value costs one push and at most one pop on a heap of k + 1: O(n log k), and only k values held.',
-            'value တစ်ခုစီသည် k + 1 heap ပေါ်တွင် push တစ်ကြိမ်နှင့် pop အများဆုံး တစ်ကြိမ် ကုန်သည် — O(n log k)၊ value k ခုသာ ထားသည်။'),
+    cost: t('Each value costs one push and at most one pop on a heap of k + 1: O(n log k), and only k values held.',
+            'value တစ်ခုစီသည် k + 1 heap ပေါ်တွင် push တစ်ကြိမ်နှင့် pop အများဆုံး တစ်ကြိမ် ကုန်သည်: O(n log k)၊ value k ခုသာ ထားသည်။'),
   },
 };
 
@@ -426,10 +426,10 @@ mountLesson({
   ],
   examples: [
     { title: exampleTitle(1), inputHtml: '<code>nums = [3,2,1,5,6,4]</code>, <code>k = 2</code>', output: '5',
-      why: [t('Largest first: 6, 5, … — the 2nd is 5.', 'အကြီးဆုံးမှ စ၍ — 6, 5, … — ဒုတိယမှာ 5။')],
+      why: [t('Largest first: 6, 5, … and the 2nd is 5.', 'အကြီးဆုံးမှ စ၍ 6, 5, … ဖြစ်ပြီး ဒုတိယမှာ 5။')],
       load: { nums: [3, 2, 1, 5, 6, 4], k: 2 } },
     { title: exampleTitle(2), inputHtml: '<code>nums = [3,2,3,1,2,4,5,5,6]</code>, <code>k = 4</code>', output: '4',
-      why: [t('Largest first: 6, 5, 5, 4 — both 5s count, so the 4th is 4, not 3.', 'အကြီးဆုံးမှ စ၍ — 6, 5, 5, 4 — 5 နှစ်ခုလုံး ရေတွက်သဖြင့် စတုတ္ထမှာ 4၊ 3 မဟုတ်ပါ။')],
+      why: [t('Largest first: 6, 5, 5, 4. Both 5s count, so the 4th is 4, not 3.', 'အကြီးဆုံးမှ စ၍ 6, 5, 5, 4 ဖြစ်သည်။ 5 နှစ်ခုလုံး ရေတွက်သဖြင့် စတုတ္ထမှာ 4၊ 3 မဟုတ်ပါ။')],
       load: { nums: [3, 2, 3, 1, 2, 4, 5, 5, 6], k: 4 } },
   ],
   modes: [
@@ -437,7 +437,7 @@ mountLesson({
       desc: t('Sort it all; count k from the end.', 'အားလုံး sort၊ အဆုံးမှ k ရေတွက်။'),
       cost: 'O(n log n) time · O(n) or O(1) space', build: buildSort },
     { id: 'heap', name: 'Min-heap of size k',
-      desc: t('Keep the k largest; the root is the answer.', 'အကြီးဆုံး k ခုကို ထား — root က အဖြေ။'),
+      desc: t('Keep the k largest; the root is the answer.', 'အကြီးဆုံး k ခုကို ထားပါ။ root က အဖြေ ဖြစ်သည်။'),
       cost: 'O(n log k) time · O(k) space', build: buildHeap },
   ],
   languages: LANGUAGES,
@@ -447,8 +447,8 @@ mountLesson({
       desc: t('One line of real work. It passes, but the statement asks whether you can do it without sorting.',
               'တကယ့်အလုပ် တစ်ကြောင်းတည်း။ အောင်သော်လည်း မေးခွန်းက sort မလုပ်ဘဲ လုပ်နိုင်သလား မေးထားသည်။') },
     heap: { approach: APPROACH.heap,
-      desc: t('The submission worth writing: a min-heap capped at k. Ruby and JavaScript have no heap built in, so theirs is written out — the push and pop are the same few lines everywhere.',
-              'ရေးသင့်သည့် submission — k ဖြင့် ကန့်သတ်ထားသော min-heap။ Ruby နှင့် JavaScript တွင် heap built-in မပါသဖြင့် ရေးထားသည် — push နှင့် pop သည် နေရာတိုင်းတွင် စာကြောင်း အနည်းငယ်သာ ဖြစ်သည်။') },
+      desc: t('The one to submit: a min-heap capped at k. Ruby and JavaScript have no heap built in, so theirs is written out. The push and pop are the same few lines everywhere.',
+              'တင်သင့်သည့် ဗားရှင်း: k ဖြင့် ကန့်သတ်ထားသော min-heap။ Ruby နှင့် JavaScript တွင် heap built-in မပါသဖြင့် ရေးထားသည်။ push နှင့် pop သည် နေရာတိုင်းတွင် စာကြောင်း အနည်းငယ်သာ ဖြစ်သည်။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the 2 examples, 5 edges, 15,000 random arrays of 1–9 values

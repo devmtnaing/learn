@@ -670,22 +670,22 @@ const APPROACH = {
     idea: t('The longest path starting at a cell is 1 plus the longest starting at its best larger neighbour. That never changes, so work it out once per cell with a DFS and keep it in a memo table.',
             'cell တစ်ခုမှ စသော အရှည်ဆုံး path သည် 1 နှင့် ၎င်း၏ အကောင်းဆုံး ပိုကြီးသော အိမ်နီးမှ စသော အရှည်ဆုံး ပေါင်းလဒ်။ ၎င်း ဘယ်တော့မှ မပြောင်းသဖြင့် DFS ဖြင့် cell တစ်ခုလျှင် တစ်ကြိမ် တွက်ပြီး memo table ထဲ ထားသည်။'),
     steps: [
-      t('<code>climb(r, c)</code>: if <code>memo[r][c]</code> is set, return it.', '<code>climb(r, c)</code> — <code>memo[r][c]</code> ရှိပြီးလျှင် ၎င်းကို ပြန်ပေး။'),
+      t('<code>climb(r, c)</code>: if <code>memo[r][c]</code> is set, return it.', '<code>climb(r, c)</code>: <code>memo[r][c]</code> ရှိပြီးလျှင် ၎င်းကို ပြန်ပေးသည်။'),
       t('Otherwise <code>best = 1</code>, and for each neighbour strictly larger, <code>best = max(best, 1 + climb(x, y))</code>.', 'မဟုတ်လျှင် <code>best = 1</code>၊ တင်းကျပ်စွာ ပိုကြီးသော အိမ်နီးတိုင်းအတွက် <code>best = max(best, 1 + climb(x, y))</code>။'),
-      t('Save <code>best</code> in <code>memo[r][c]</code>; the answer is the largest <code>climb</code> over every cell.', '<code>best</code> ကို <code>memo[r][c]</code> ထဲ သိမ်း — အဖြေမှာ cell တိုင်းပေါ်ရှိ အကြီးဆုံး <code>climb</code>။'),
+      t('Save <code>best</code> in <code>memo[r][c]</code>; the answer is the largest <code>climb</code> over every cell.', '<code>best</code> ကို <code>memo[r][c]</code> ထဲ သိမ်းသည်။ အဖြေမှာ cell တိုင်းပေါ်ရှိ အကြီးဆုံး <code>climb</code>။'),
     ],
-    cost: t('Each cell is worked out once and looks at four neighbours: O(m·n). The calls go as deep as the longest path they follow — 20,099 on a 200 × 200 grid built for it.',
-            'cell တစ်ခုစီကို တစ်ကြိမ် တွက်ပြီး အိမ်နီး လေးခုကို ကြည့်သည် — O(m·n)။ call များသည် လိုက်သော အရှည်ဆုံး path အထိ နက်သည် — ထိုအတွက် တည်ဆောက်ထားသော 200 × 200 grid တွင် 20,099။'),
+    cost: t('Each cell is worked out once and looks at four neighbours: O(m·n). The calls go as deep as the longest path they follow, which is 20,099 on a 200 × 200 grid built for it.',
+            'cell တစ်ခုစီကို တစ်ကြိမ် တွက်ပြီး အိမ်နီး လေးခုကို ကြည့်သည်: O(m·n)။ call များသည် လိုက်သော အရှည်ဆုံး path အထိ နက်သည်။ ထိုအတွက် တည်ဆောက်ထားသော 200 × 200 grid တွင် 20,099။'),
   },
   peel: {
-    idea: t('Peaks — cells with no larger neighbour — end every path. Peel them off, then every cell left with no larger neighbour, layer by layer. The number of layers is the answer.',
-            'peak များ — ပိုကြီးသော အိမ်နီး မရှိသော cell များ — သည် path တိုင်းကို အဆုံးသတ်သည်။ ၎င်းတို့ကို ခွာပြီး ပိုကြီးသော အိမ်နီး မကျန်တော့သော cell တိုင်းကို layer အလိုက် ခွာသည်။ layer အရေအတွက်သည် အဖြေ။'),
+    idea: t('Peaks (cells with no larger neighbour) end every path. Peel them off, then every cell left with no larger neighbour, layer by layer. The number of layers is the answer.',
+            'peak များ (ပိုကြီးသော အိမ်နီး မရှိသော cell များ) သည် path တိုင်းကို အဆုံးသတ်သည်။ ၎င်းတို့ကို ခွာပြီး ပိုကြီးသော အိမ်နီး မကျန်တော့သော cell တိုင်းကို layer အလိုက် ခွာသည်။ layer အရေအတွက်သည် အဖြေ။'),
     steps: [
-      t('<code>higher[r][c]</code> = how many neighbours are larger; the cells at 0 are the first layer.', '<code>higher[r][c]</code> = ပိုကြီးသော အိမ်နီး အရေအတွက် — 0 ရှိသော cell များသည် ပထမ layer။'),
-      t('For each cell in the layer, every smaller neighbour loses one from <code>higher</code>; one that reaches 0 joins the next layer.', 'layer ထဲရှိ cell တစ်ခုစီအတွက် ပိုငယ်သော အိမ်နီးတိုင်း၏ <code>higher</code> တစ်ခု လျော့သည် — 0 ရောက်သည့်အရာ နောက် layer ထဲ ဝင်သည်။'),
+      t('<code>higher[r][c]</code> = how many neighbours are larger; the cells at 0 are the first layer.', '<code>higher[r][c]</code> = ပိုကြီးသော အိမ်နီး အရေအတွက်။ 0 ရှိသော cell များသည် ပထမ layer။'),
+      t('For each cell in the layer, every smaller neighbour loses one from <code>higher</code>; one that reaches 0 joins the next layer.', 'layer ထဲရှိ cell တစ်ခုစီအတွက် ပိုငယ်သော အိမ်နီးတိုင်း၏ <code>higher</code> တစ်ခု လျော့သည်။ 0 ရောက်သည့်အရာ နောက် layer ထဲ ဝင်သည်။'),
       t('Count the layers until none is left.', 'layer မကျန်တော့သည်အထိ ရေတွက်သည်။'),
     ],
-    cost: t('Every cell is peeled once and its four neighbours touched: O(m·n) time, O(m·n) space, and no recursion.', 'cell တိုင်းကို တစ်ကြိမ် ခွာပြီး အိမ်နီး လေးခုကို ထိသည် — O(m·n) အချိန်၊ O(m·n) memory၊ recursion မပါ။'),
+    cost: t('Every cell is peeled once and its four neighbours touched: O(m·n) time, O(m·n) space, and no recursion.', 'cell တိုင်းကို တစ်ကြိမ် ခွာပြီး အိမ်နီး လေးခုကို ထိသည်: O(m·n) အချိန်၊ O(m·n) memory၊ recursion မပါ။'),
   },
 };
 
@@ -716,7 +716,7 @@ mountLesson({
   modes: [
     { id: 'memo', name: 'DFS with a memo',
       sub: t('recursive', 'recursive'),
-      desc: t('Work out each cell\'s longest path once, recursing into larger neighbours.', 'cell တစ်ခုစီ၏ အရှည်ဆုံး path ကို တစ်ကြိမ် တွက်သည် — ပိုကြီးသော အိမ်နီးများထဲ recurse ဝင်သည်။'),
+      desc: t('Work out each cell\'s longest path once, recursing into larger neighbours.', 'cell တစ်ခုစီ၏ အရှည်ဆုံး path ကို တစ်ကြိမ် တွက်ပြီး ပိုကြီးသော အိမ်နီးများထဲ recurse ဝင်သည်။'),
       cost: 'O(m·n) time · O(m·n) memo and stack', build: buildMemo },
     { id: 'peel', name: 'Peel the peaks',
       sub: t('layer by layer', 'layer အလိုက်'),
@@ -727,11 +727,11 @@ mountLesson({
   code: CODE,
   solutions: {
     memo: { approach: APPROACH.memo,
-      desc: t('The answer most people write: short, and fast once the memo is there. Its depth is the catch — a grid built as one long winding path takes the calls past 20,000 deep, beyond the default stack of Ruby and Node.',
-              'လူအများစု ရေးသော အဖြေ — တိုပြီး memo ရှိလျှင် မြန်သည်။ ပြဿနာမှာ အနက် — ရှည်လျားကွေ့ကောက်သော path တစ်ခုအဖြစ် တည်ဆောက်ထားသော grid က call များကို 20,000 ဆင့်ကျော် နက်စေပြီး Ruby နှင့် Node ၏ default stack ကို ကျော်သည်။') },
+      desc: t('The answer most people write: short, and fast once the memo is there. Its depth is the catch. A grid built as one long winding path takes the calls past 20,000 deep, beyond the default stack of Ruby and Node.',
+              'လူအများစု ရေးသော အဖြေ: တိုပြီး memo ရှိလျှင် မြန်သည်။ ပြဿနာမှာ အနက် ဖြစ်သည်။ ရှည်လျားကွေ့ကောက်သော path တစ်ခုအဖြစ် တည်ဆောက်ထားသော grid က call များကို 20,000 ဆင့်ကျော် နက်စေပြီး Ruby နှင့် Node ၏ default stack ကို ကျော်သည်။') },
     peel: { approach: APPROACH.peel,
       desc: t('The same O(m·n) with no recursion: a topological sort of the cells, from the peaks down. Nothing to worry about on any stack.',
-              'recursion မပါသော O(m·n) အတူတူ — cell များကို peak မှ အောက်သို့ topological sort လုပ်ခြင်း။ မည်သည့် stack တွင်မဆို စိုးရိမ်စရာ မရှိ။') },
+              'recursion မပါသော O(m·n) အတူတူ ဖြစ်သည်: cell များကို peak မှ အောက်သို့ topological sort လုပ်ခြင်း။ မည်သည့် stack တွင်မဆို စိုးရိမ်စရာ မရှိ။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the 3 examples, 6 edges, 15,000 random grids up to 5 × 6 over
@@ -750,12 +750,12 @@ mountLesson({
   },
   caveats: {
     memo: {
-      ruby: t('Correct on all 20,016 cases with a larger stack, but on Ruby 3.1\'s default stack a path that forces more than 2,846 nested calls overflows it (<code>SystemStackError</code>) — measured here — and a 200 × 200 grid can force 20,099. Use the peeling version.',
-              'stack ပိုကြီးလျှင် case 20,016 ခုလုံးတွင် မှန်သည်၊ သို့သော် Ruby 3.1 ၏ default stack ပေါ်တွင် nested call 2,846 ထက် များစေသော path က overflow (<code>SystemStackError</code>) ဖြစ်စေသည် — ဤနေရာတွင် တိုင်းတာထားသည် — 200 × 200 grid က 20,099 အထိ ဖြစ်စေနိုင်သည်။ ခွာသည့် version ကို သုံးပါ။'),
-      javascript: t('Correct on all 20,016 cases with a larger stack, but on Node 24\'s default stack, run cold, more than 4,609 nested calls overflow it (<code>RangeError</code>) — measured here — and a 200 × 200 grid can force 20,099. Use the peeling version.',
-                    'stack ပိုကြီးလျှင် case 20,016 ခုလုံးတွင် မှန်သည်၊ သို့သော် Node 24 ၏ default stack ပေါ်တွင် cold run လုပ်လျှင် nested call 4,609 ထက် များလျှင် overflow (<code>RangeError</code>) ဖြစ်သည် — ဤနေရာတွင် တိုင်းတာထားသည် — 200 × 200 grid က 20,099 အထိ ဖြစ်စေနိုင်သည်။ ခွာသည့် version ကို သုံးပါ။'),
+      ruby: t('Correct on all 20,016 cases with a larger stack, but on Ruby 3.1\'s default stack a path that forces more than 2,846 nested calls overflows it (<code>SystemStackError</code>, measured here), and a 200 × 200 grid can force 20,099. Use the peeling version.',
+              'stack ပိုကြီးလျှင် case 20,016 ခုလုံးတွင် မှန်သည်၊ သို့သော် Ruby 3.1 ၏ default stack ပေါ်တွင် nested call 2,846 ထက် များစေသော path က overflow (<code>SystemStackError</code>) ဖြစ်စေသည် (ဤနေရာတွင် တိုင်းတာထားသည်)။ 200 × 200 grid က 20,099 အထိ ဖြစ်စေနိုင်သည်။ ခွာသည့် version ကို သုံးပါ။'),
+      javascript: t('Correct on all 20,016 cases with a larger stack, but on Node 24\'s default stack, run cold, more than 4,609 nested calls overflow it (<code>RangeError</code>, measured here), and a 200 × 200 grid can force 20,099. Use the peeling version.',
+                    'stack ပိုကြီးလျှင် case 20,016 ခုလုံးတွင် မှန်သည်၊ သို့သော် Node 24 ၏ default stack ပေါ်တွင် cold run လုပ်လျှင် nested call 4,609 ထက် များလျှင် overflow (<code>RangeError</code>) ဖြစ်သည် (ဤနေရာတွင် တိုင်းတာထားသည်)။ 200 × 200 grid က 20,099 အထိ ဖြစ်စေနိုင်သည်။ ခွာသည့် version ကို သုံးပါ။'),
       python: t('The <code>setrecursionlimit</code> line is part of the answer: Python\'s default of 1,000 is far below the 20,099 calls a 200 × 200 grid can force.',
-                '<code>setrecursionlimit</code> စာကြောင်းသည် အဖြေ၏ အစိတ်အပိုင်း — Python ၏ default 1,000 သည် 200 × 200 grid ဖြစ်စေနိုင်သော call 20,099 ထက် အများကြီး နိမ့်သည်။'),
+                '<code>setrecursionlimit</code> စာကြောင်းသည် အဖြေ၏ အစိတ်အပိုင်း ဖြစ်သည်။ Python ၏ default 1,000 သည် 200 × 200 grid ဖြစ်စေနိုင်သော call 20,099 ထက် အများကြီး နိမ့်သည်။'),
     },
   },
   stripLabel: t('matrix', 'matrix'),

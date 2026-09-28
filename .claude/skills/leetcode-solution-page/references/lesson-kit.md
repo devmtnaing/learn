@@ -28,9 +28,10 @@ bespoke stage, `x-sum`.
 `node scripts/check-lessons.mjs` fails a lesson that is missing any part
 marked ✓.
 
-**Header** — eyebrow (`LeetCode 1 · Easy`), title, lede, the three jump chips
-and a "View on LeetCode ↗" chip per problem in `links`, English/မြန်မာ switch
-top right.
+**Header** — eyebrow (`LeetCode 1 · Easy`), title, lede, the three jump chips,
+then a plain "View on LeetCode ↗" link per problem in `links` past a divider
+(a link that leaves the page, so it isn't a chip), English/မြန်မာ switch top
+right.
 
 **1 · The question**
 - Statement card: LeetCode's prose verbatim (`statement.html`), constraints as
@@ -44,7 +45,9 @@ top right.
   `<input type=range>` and `<output>`, `.q-presets` chips, an amber `.q-tie`
   line for the sentence, and a `.ledger` whose `.expr` holds a **formula** (it
   renders mono) and whose `.total` holds one big number with a `<small>`
-  label. Set the panel's right-hand note via `#q-label`.
+  label. Set the panel's right-hand note via `#q-label`. The kit's chips and
+  buttons grow to 40px on a touch screen; a clickable element the widget
+  draws itself (a board square) is at least 40px tall there too.
 - ✓ Example cards: input, output, a `why` list explaining the answer, and a
   "Load into the stepper" button.
 - The traps disclosure, phrased as "N ways the statement bites".
@@ -60,7 +63,9 @@ top right.
   array strip (`cfg.strip`; `noStrip: true` only when the input is genuinely
   not a row), transport with the narration under it, then the stage and ✓ the
   answer beside "The code, live" with hoverable variables and any `caveats`
-  note under it. Don't add boxes inside the player. ✓ Under the player, the
+  note under it. Don't add boxes inside the player. The transport and
+  narration stay under the masthead while the reader scrolls the stage and
+  code, and the strip wraps onto more rows on a narrow screen. ✓ Under the player, the
   `playHint` line from `page.js`: the keys (`←` `→` step · `space`
   play/pause), what the reader can edit "above" and any limits ("up to 12
   values"), and what rebuilds. The layout renders it after `#lesson` and the
@@ -70,9 +75,12 @@ top right.
   storing?"). A takeaway goes in the notes — never as a part of its own.
   Label anything computed rather than measured.
 
-**3 · The whole solution** — language tabs, then one block per approach with a
-✓ caption (`solutions[mode].desc`, optional `tag` such as `3321`), a
-verification badge and a Copy button.
+**3 · The whole solution** — language tabs that stay in reach while it
+scrolls, then one block per approach with a ✓ caption (`solutions[mode].desc`,
+optional `tag` such as `3321`), a verification badge and a Copy button. The
+approach chosen in 2·1 is open and the rest fold to their heading. `modes[0]`
+is the one a page opens on, in 2·2 and here, so list first the approach a
+reader should meet first.
 
 ## The folder a lesson writes
 
@@ -101,8 +109,17 @@ is empty ("root = null"), `labelledRows` for a strip card with two inputs
 (`labelledRows(rows, { grid: true })` for a board or matrix, its columns
 lined up; the widget's board is a `.q-grid` of `.q-arr` rows). Controls parse with `intList({ min, max, lo, hi, distinct, check })`
 and `intValue({ lo, hi })` — they reject rather than trim, and `check` takes
-the lesson's own rule (sorted, a majority exists). A control shows a list back
-as `1, 2, 3` by itself; give it a `format` only for another shape. The part 1 widget uses `presetChips(sets, active)` for its chips
+the lesson's own rule (sorted, a majority exists). A rejection's message is a
+short phrase ("integers, separated by commas"): the kit marks the field and
+follows it with "the walkthrough below still shows the last input that
+worked". A control shows a list back as `1, 2, 3` by itself; give it a
+`format` only for another shape.
+
+**Ids and keys are addresses.** The walkthrough's place lives in the query
+string — `?approach=heap&step=7&lang=python&nums=1,2,3` — so a mode's `id`
+and a control's `key` are part of every link a reader shares. Keep them
+short and stable once published, and make `parse(format(v))` give back `v`
+for every control, so a shared link reopens the same input. The part 1 widget uses `presetChips(sets, active)` for its chips
 (the active one is `aria-pressed`, which lesson.css draws as selected; a
 widget's own toggle chips should set it too) and `widgetLabel(text)` for the
 note beside its heading. Anything a lesson draws uses a class from `lesson.css`, `kit.css`
@@ -168,7 +185,7 @@ fails a lesson whose `page.js` leaves one out.
 | Function | Draws |
 | --- | --- |
 | `cells(items, o)` | the strip's cells — for `cfg.strip` |
-| `slots(values, o)` | the answer card's slots — for `cfg.answer` |
+| `slots(values, o)` | the answer card's slots — for `cfg.answer`; an unfilled one shows `?` and reads "not yet" |
 | `stagePanel(title, note, inner)` | a titled block inside the stage |
 | `kv` `stack` `chain` `tree` `bars` `readout` `strip` `panels` | the auxiliary shapes |
 | `trieOutline({ nodes, ends, at, made, miss })` | a trie, one row per node named by its prefix |
@@ -180,7 +197,15 @@ matched), `leaving` (red dashed, dropped or failed), `done` (faded, settled).
 
 A stage the primitives can't draw (x-sum's shelves and heaps) is the lesson's
 own markup, styled by its `style.css` or, if another lesson would use it, by
-`kit.css`.
+`kit.css`. Its headings sit under `stagePanel`'s `<h4>`, so they are
+`<h5 class="as-h3">` (x-sum's brute-force steps), keeping the page outline
+unbroken while looking like any other small heading.
+
+**Empty says what it is waiting for.** Before a value exists, show words — a
+`stageEmpty('root = null')`, an `<span class="empty">not counted yet</span>` —
+or a slot from `slots()`; a slot the lesson builds by hand takes `blank()`
+from `stage.js`. A `·` belongs where it is notation: an empty board square, a
+table cell not yet computed, an unknown bit.
 
 ## Traps
 

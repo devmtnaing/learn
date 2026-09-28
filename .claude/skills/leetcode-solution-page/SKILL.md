@@ -93,6 +93,13 @@ Gotchas and proofs go in collapsed notes phrased as questions.
 **Snapshots copy state.** A step that shares a mutable array with the next
 draws the final state on every frame.
 
+**A kit change is measured on every lesson.** A change to `stepper.js`,
+`stage.js` or the shared CSS lands on all pages, so judge it across all of
+them before choosing: Part 1 looked lopsided on x-sum, but measured on all 46
+lessons the taller column went either way, and the fix that suited x-sum
+made most pages worse. Script the measurement in a browser, and when the
+choice changes how pages look, show a before and after.
+
 ## Burmese
 
 English-only is acceptable, because a missing Burmese side falls back to

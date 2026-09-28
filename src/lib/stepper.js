@@ -282,6 +282,7 @@ export function mountLesson(cfg) {
     const where = pick(UI.stepOf).replace('{i}', state.i + 1).replace('{n}', state.steps.length);
     scrub.setAttribute('aria-valuetext', pick(s.tag) ? `${where}: ${pick(s.tag)}` : where);
     $('[data-count]', root).textContent = `${state.i + 1} / ${state.steps.length}`;
+    writeAddress();
   }
 
   function listing() {
@@ -443,6 +444,71 @@ export function mountLesson(cfg) {
     if (name) { e.preventDefault(); act(name); }
   });
 
+  /* ---------------- the address ---------------- */
+
+  // The reader's place — approach, step, code language and any input they
+  // typed — lives in the query string, so a copied link reopens that exact
+  // step: ?approach=heap&step=7&lang=python&nums=1,2,3. Values still at their
+  // defaults are left out, so an untouched page keeps its plain address.
+  const start = { mode: state.mode, lang: state.lang, input: structuredClone(cfg.input) };
+  const fieldText = (c, input) => format(c, input[c.key]);
+
+  function readAddress() {
+    const q = new URLSearchParams(location.search);
+    if (cfg.modes.some((m) => m.id === q.get('approach'))) state.mode = q.get('approach');
+    if (langs.some((l) => l.id === q.get('lang'))) state.lang = q.get('lang');
+    for (const c of cfg.controls || []) {
+      if (!q.has(c.key)) continue;
+      try { state.input[c.key] = c.parse ? c.parse(q.get(c.key)) : q.get(c.key); } catch { /* keep the default */ }
+    }
+    const step = Number(q.get('step'));
+    state.i = Number.isInteger(step) && step > 0 ? step - 1 : 0;
+    return ['approach', 'lang', 'step', ...(cfg.controls || []).map((c) => c.key)].some((k) => q.has(k));
+  }
+
+  // Readable in the address bar: commas, brackets and colons stay as typed.
+  const enc = (v) => encodeURIComponent(v).replace(/%20/g, '+').replace(/%2C/g, ',').replace(/%5B/g, '[').replace(/%5D/g, ']').replace(/%3A/g, ':');
+  // "1, 2, 3" travels as "1,2,3" — but only when the field reads it back the
+  // same, so a sentence like "A man, a plan" keeps its spaces.
+  function compact(c, v) {
+    const tight = v.replace(/,\s+/g, ',');
+    if (tight === v || !c.parse) return v;
+    try { return fieldText(c, { [c.key]: c.parse(tight) }) === v ? tight : v; } catch { return v; }
+  }
+  function query() {
+    const q = [];
+    if (state.mode !== start.mode) q.push(['approach', state.mode]);
+    if (state.i > 0) q.push(['step', state.i + 1]);
+    if (state.lang !== start.lang) q.push(['lang', state.lang]);
+    for (const c of cfg.controls || []) {
+      const v = fieldText(c, state.input);
+      if (v !== fieldText(c, start.input)) q.push([c.key, compact(c, v)]);
+    }
+    return q.map(([k, v]) => `${k}=${enc(v)}`).join('&');
+  }
+
+  // Debounced: a scrubber drag paints dozens of steps a second, and Safari
+  // throws once a page calls replaceState too often.
+  let addressTimer = null;
+  function writeAddress() {
+    clearTimeout(addressTimer);
+    addressTimer = setTimeout(() => {
+      const q = query();
+      const url = `${location.pathname}${q ? `?${q}` : ''}${location.hash}`;
+      try { if (url !== location.pathname + location.search + location.hash) history.replaceState(history.state, '', url); } catch { /* rate-limited */ }
+      // "Report an issue" names the page with the same state, so a report
+      // lands on the step it is about.
+      const report = document.querySelector('.report a[href*="/issues/new"]');
+      if (report) {
+        const u = new URL(report.href);
+        const page = new URL(u.searchParams.get('page'));
+        page.search = q;
+        u.searchParams.set('page', page.href);
+        report.href = u.href;
+      }
+    }, 150);
+  }
+
   /* ---------------- hover to inspect ---------------- */
 
   const tip = document.createElement('div');
@@ -488,7 +554,12 @@ export function mountLesson(cfg) {
     rebuild(state.i);
   }
 
+  const shared = readAddress();
   paintAll();
+  // Arriving from a shared link, not a reload or Back: open on the player.
+  if (shared && !location.hash && performance.getEntriesByType('navigation')[0]?.type === 'navigate') {
+    $('[data-run]', root)?.scrollIntoView({ block: 'start' });
+  }
   if (cfg.widget) {
     const host = document.getElementById('q-widget');
     if (host) cfg.widget(host);

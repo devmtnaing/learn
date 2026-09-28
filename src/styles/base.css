@@ -26,6 +26,8 @@ h1{font-size:clamp(28px,4.6vw,42px);letter-spacing:-.022em;line-height:1.05}
 h2,.as-h2{font-size:19px;letter-spacing:-.01em}
 h3,.as-h3{font-size:14px;letter-spacing:-.005em;font-weight:600}
 p{margin:0}
+/* Read by a screen reader, not shown. */
+.vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 code,.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
 .eyebrow{
   font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.14em;

@@ -8,7 +8,7 @@
  */
 import { mountLesson } from '../../lib/stepper.js';
 import { pick, onLangChange } from '../../lib/i18n.js';
-import { cells, slots, stagePanel, readout } from '../../lib/stage.js';
+import { blank, cells, slots, stagePanel, readout } from '../../lib/stage.js';
 import { t, exampleTitle, LANGUAGES, k, c, labelledRows, stageGap, presetChips, widgetLabel } from '../../lib/kit.js';
 
 const MAX_N = 5;
@@ -135,7 +135,7 @@ function draw(s, { matrix: input }) {
 
 function answer(s) {
   return {
-    html: s.finished ? slots(s.matrix.map((r) => `[${r.join(',')}]`), { total: s.matrix.length }) : '<span class="slot">·</span>',
+    html: s.finished ? slots(s.matrix.map((r) => `[${r.join(',')}]`), { total: s.matrix.length }) : `<span class="slot">${blank()}</span>`,
     note: s.finished ? t('matrix, turned in place', 'နေရာတွင်ပင် လှည့်ထားသော matrix') : t('nothing to return — the matrix is the answer', 'ပြန်ပေးစရာ မရှိ — matrix ကိုယ်တိုင် အဖြေ'),
   };
 }

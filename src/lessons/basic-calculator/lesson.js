@@ -177,7 +177,7 @@ function draw(s) {
   const items = s.frames.map((f) => `expr() · total ${f.total} · sign ${sgn(f.sign)} · num ${f.num}`);
   return stagePanel(pick(t('The call stack — one expr() per open bracket', 'call stack — ဖွင့်ထားသော ကွင်းတစ်ခုလျှင် expr() တစ်ခု')),
     pick(t(`${s.frames.length} deep`, `${s.frames.length} ဆင့်`)), stack(items))
-    + stageGap + stagePanel(pick(t('The running call', 'run နေသော call')), '', s.frames.length ? now : stageEmpty('—'));
+    + stageGap + stagePanel(pick(t('The running call', 'run နေသော call')), '', s.frames.length ? now : stageEmpty(pick(t('no call running', 'run နေသော call မရှိ'))));
 }
 
 function answer(s) {

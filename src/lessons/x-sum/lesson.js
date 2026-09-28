@@ -119,6 +119,7 @@ const L = {
   notCounted: t('not counted yet', 'မရေတွက်ရသေး'),
   rankHead: (n) => t(`rank by [count, value], keep ${n}`, `[count, value] ဖြင့် အဆင့်ခွဲပြီး ${n} ခု ထားသည်`),
   notRanked: t('not ranked yet', 'အဆင့် မခွဲရသေး'),
+  notSummed: t('not summed yet', 'မပေါင်းရသေး'),
   sumHead: t('sum the survivors', 'ကျန်ရစ်သူများကို ပေါင်းသည်'),
   cutKeep: (n) => t(`cut · keep ${n}`, `ဖြတ်မျဉ်း · ${n} ခု ထားသည်`),
   qNothing: t('nothing kept', 'ဘာမှ မကျန်'),
@@ -425,8 +426,9 @@ function drawBrute(s, { k }) {
     + `<div class="bf-step ${cls(2)}"><h5 class="as-h3"><span class="n">2</span>${pick(L.rankHead(s.keep))}</h5>`
     + `<div class="rank">${s.stage >= 2 ? rankHTML : `<span class="empty">${pick(L.notRanked)}</span>`}</div></div>`
     + `<div class="bf-step ${cls(3)}"><h5 class="as-h3"><span class="n">3</span>${pick(L.sumHead)}</h5>`
-    + `<div class="ledger bare"><span class="expr">${s.stage >= 3 ? kept.map((e) => `${e.v}×${e.c}`).join('  +  ') : '—'}</span>`
-    + `<span class="total">${s.stage >= 3 ? s.sum : '·'}<small>X-SUM</small></span></div></div>`
+    + (s.stage >= 3
+      ? `<div class="ledger bare"><span class="expr">${kept.map((e) => `${e.v}×${e.c}`).join('  +  ')}</span><span class="total">${s.sum}<small>X-SUM</small></span></div>`
+      : `<span class="empty">${pick(L.notSummed)}</span>`) + '</div>'
     + '</div>';
 }
 

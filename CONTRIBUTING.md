@@ -187,7 +187,8 @@ chromium`): every approach × language highlights a line on every step, every
 preset loads, nothing throws, nothing scrolls sideways at 400px or 320px in
 either language, headings never skip a level, an empty answer says "?" or
 words rather than a bare dot, space and the arrow keys do what a focused
-control expects, and a shared link reopens the same step. What it cannot
+control expects, a shared link reopens the same step, and the ⌘K site search
+finds and opens a page. What it cannot
 tell you is whether the page reads well — open it
 beside another one and look.
 

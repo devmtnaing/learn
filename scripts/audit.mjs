@@ -20,6 +20,9 @@
 //   · a toned row in a key/value table is actually coloured (a later CSS
 //     rule once turned every highlighted row grey)
 //   · the home page loads, lists every lesson, and fits at 400px
+//   · site search: Ctrl+K opens it from a lesson with focus in the field, it
+//     lists every lesson, "two sum" puts Two Sum first, Enter opens it, Esc
+//     gives focus back, and the masthead stays one line at 320px
 //   · axe-core finds no WCAG 2 A/AA violation (contrast, labels, keyboard
 //     access) on any page, in the light and the dark theme, at the first
 //     step and partway through
@@ -41,6 +44,42 @@ async function accessibility(page, where) {
   const found = await page.evaluate(async () => (await window.axe.run(document, { runOnly: ['wcag2a', 'wcag2aa'] }))
     .violations.map((v) => `${v.id}: ${v.help} — ${v.nodes.length}× e.g. ${v.nodes[0].target.join(' ')}`));
   return found.map((x) => `a11y (${where}) ${x}`);
+}
+
+/* The masthead's search dialog (SiteSearch.astro), driven from a lesson. */
+async function siteSearch(page, base, slugs) {
+  const found = [];
+  const open = () => page.$eval('#search-dlg', (d) => d.open);
+  const first = () => page.$eval('#k-list .k-opt', (a) => a.getAttribute('href')).catch(() => null);
+  await page.setViewportSize({ width: 1100, height: 800 });
+  await page.goto(`${base}/leetcode/${slugs[0]}`);
+  await page.waitForSelector('#lesson .atab');
+  await page.focus('#lesson [data-act="next"]');
+  await page.keyboard.press('Control+k');
+  if (!(await open())) return ['Ctrl+K did not open the search'];
+  if (await page.evaluate(() => document.activeElement.getAttribute('role')) !== 'combobox') found.push('Ctrl+K: focus is not in the search field');
+  await page.waitForSelector('#k-list .k-opt');
+  const listed = await page.$$eval('#k-list .k-opt', (as) => as.map((a) => a.getAttribute('href')));
+  found.push(...slugs.filter((s) => !listed.includes(`/leetcode/${s}`)).map((s) => `the empty search does not list /leetcode/${s}`));
+  await page.keyboard.type('two sum');
+  if (await first() !== '/leetcode/two-sum') found.push(`"two sum" puts ${await first()} first`);
+  for (const scheme of ['light', 'dark']) {
+    await page.emulateMedia({ colorScheme: scheme });
+    found.push(...await accessibility(page, `search, ${scheme}`));
+  }
+  await page.emulateMedia({ colorScheme: 'light' });
+  await page.keyboard.press('Escape');
+  if (await open()) found.push('Esc did not close the search');
+  else if (await page.evaluate(() => document.activeElement.dataset.act) !== 'next') found.push('closing the search did not give focus back');
+  await page.keyboard.press('Control+k');
+  await page.keyboard.type('two sum');
+  await page.waitForSelector('#k-list .k-opt');
+  await page.keyboard.press('Enter');
+  await page.waitForURL('**/leetcode/two-sum', { timeout: 5000 }).catch(() => found.push('Enter on "two sum" did not open /leetcode/two-sum'));
+  await page.setViewportSize({ width: 320, height: 700 });
+  const bar = await page.$eval('.masthead', (m) => m.offsetHeight);
+  if (bar > 60) found.push(`the masthead wraps at 320px (${bar}px tall)`);
+  return found;
 }
 
 async function scrubTo(page, fraction) {
@@ -301,8 +340,10 @@ async function main() {
       await page.goto(BASE);
       a11y.push(...await accessibility(page, scheme));
     }
+    const search = await siteSearch(page, BASE, slugs);
     report('home page', [
       ...errors,
+      ...search,
       ...(home.over > 0 ? [`${home.over}px too wide at 400px`] : []),
       ...missing.map((s) => `no link to /leetcode/${s}`),
       ...a11y,

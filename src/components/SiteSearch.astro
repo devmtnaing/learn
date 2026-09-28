@@ -1,0 +1,158 @@
+---
+/* Site search: a masthead button and ⌘K / Ctrl+K on every page open a dialog
+ * that finds a problem by name, number, pattern or tag and goes to its
+ * solution page, or to LeetCode when it has none yet. The index is
+ * /search.json (src/pages/search.json.ts), fetched on first open.
+ *
+ * The dialog is a combobox: focus stays in the field, ↑ ↓ move the active
+ * result (aria-activedescendant), Enter opens it, Esc closes and focus goes
+ * back to where it was. Without JavaScript the button stays hidden and the
+ * home page's own search box does the job. */
+---
+<button class="search-btn" id="search-btn" type="button" aria-haspopup="dialog"
+        aria-keyshortcuts="Meta+K Control+K" hidden>
+  <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5 14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+  <span class="sb-label">Search</span>
+  <kbd class="sb-key" data-key aria-hidden="true"></kbd>
+</button>
+
+<dialog class="kdlg" id="search-dlg" aria-label="Search problems">
+  <div class="k-field">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5 14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <input type="text" role="combobox" enterkeyhint="go" aria-expanded="true" aria-controls="k-list" aria-autocomplete="list"
+           aria-label="Search problems" placeholder="Search by name, number or pattern"
+           autocomplete="off" spellcheck="false">
+  </div>
+  <p class="k-head" data-head></p>
+  <div class="k-list" id="k-list" role="listbox" aria-label="Problems"></div>
+  <p class="k-status" data-status aria-live="polite"></p>
+</dialog>
+
+<script>
+  interface Row { id: number; title: string; difficulty: string; category: string; href: string; page: boolean; text: string }
+
+  const btn = document.getElementById('search-btn') as HTMLButtonElement;
+  const dlg = document.getElementById('search-dlg') as HTMLDialogElement;
+  const field = dlg.querySelector('input')!;
+  const list = dlg.querySelector<HTMLElement>('[role="listbox"]')!;
+  const head = dlg.querySelector<HTMLElement>('[data-head]')!;
+  const status = dlg.querySelector<HTMLElement>('[data-status]')!;
+
+  const mac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+  btn.querySelector('[data-key]')!.textContent = mac ? '⌘K' : 'Ctrl K';
+  btn.hidden = false;
+
+  let rows: Row[] | null = null;
+  let loading: Promise<void> | null = null;
+  const load = () => (loading ??= fetch('/search.json')
+    .then((r) => r.json())
+    .then((data: Row[]) => { rows = data; })
+    .catch(() => { loading = null; }));
+
+  let shown: Row[] = [];
+  let active = 0;
+  let opener: HTMLElement | null = null;
+
+  /* An empty field lists the solution pages. Otherwise every term must match;
+   * an exact number comes first, then titles that start with what was typed,
+   * then problems with a page, each group in the home page's order. */
+  function find(q: string): Row[] {
+    if (!rows) return [];
+    const typed = q.trim().toLowerCase();
+    const terms = typed.split(/\s+/).filter(Boolean);
+    if (!terms.length) return rows.filter((r) => r.page);
+    const rank = (r: Row) => (String(r.id) === typed ? 0 : r.title.toLowerCase().startsWith(typed) ? 2 : 4) + (r.page ? 0 : 1);
+    return rows
+      .filter((r) => terms.every((t) => r.text.includes(t)))
+      .map((r, i) => ({ r, i, k: rank(r) }))
+      .sort((a, b) => a.k - b.k || a.i - b.i)
+      .map((x) => x.r);
+  }
+
+  function option(r: Row, i: number) {
+    const a = document.createElement('a');
+    a.className = 'k-opt';
+    a.id = `k-opt-${i}`;
+    a.href = r.href;
+    a.setAttribute('role', 'option');
+    a.tabIndex = -1;
+    if (!r.page) { a.target = '_blank'; a.rel = 'noopener'; }
+    const part = (cls: string, text: string) => {
+      const s = document.createElement('span');
+      s.className = cls;
+      s.textContent = text;
+      a.append(s);
+    };
+    part('k-num', String(r.id));
+    part('k-title', r.title);
+    part('k-sub', r.page ? r.category : 'LeetCode ↗');
+    part(`diff ${r.difficulty.toLowerCase()}`, r.difficulty);
+    return a;
+  }
+
+  function update() {
+    shown = find(field.value);
+    active = 0;
+    list.replaceChildren(...shown.map(option));
+    const typed = field.value.trim();
+    head.textContent = typed ? '' : 'Problems with a solution page';
+    head.hidden = !!typed;
+    status.textContent = !rows
+      ? (loading ? 'Loading…' : 'Could not load the problem list.')
+      : shown.length
+        ? `${shown.length} ${shown.length === 1 ? 'problem' : 'problems'} · ↑ ↓ to move, Enter to open, Esc to close`
+        : 'No problems match.';
+    mark();
+  }
+
+  // `scroll` is off for the pointer: the list must not move under it
+  function mark(scroll = true) {
+    list.querySelectorAll('[aria-selected]').forEach((el) => el.removeAttribute('aria-selected'));
+    const el = shown.length ? document.getElementById(`k-opt-${active}`) : null;
+    if (el) { el.setAttribute('aria-selected', 'true'); if (scroll) el.scrollIntoView({ block: 'nearest' }); }
+    if (el) field.setAttribute('aria-activedescendant', el.id);
+    else field.removeAttribute('aria-activedescendant');
+  }
+
+  function open() {
+    if (dlg.open) return;
+    opener = document.activeElement as HTMLElement | null;
+    field.value = '';
+    dlg.showModal();
+    field.focus();
+    const ready = load();
+    update();
+    if (!rows) ready.then(update);
+  }
+  dlg.addEventListener('close', () => { opener?.focus?.(); opener = null; });
+  // a click on the backdrop lands on the dialog itself
+  dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+
+  btn.addEventListener('click', open);
+  btn.addEventListener('pointerenter', load, { once: true });
+  field.addEventListener('input', update);
+  field.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (shown.length) { active = (active + (e.key === 'ArrowDown' ? 1 : -1) + shown.length) % shown.length; mark(); }
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      const el = document.getElementById(`k-opt-${active}`);
+      if (!el) return;
+      if (el.getAttribute('target') === '_blank') dlg.close();
+      el.click();
+    }
+  });
+  list.addEventListener('pointermove', (e) => {
+    const el = (e.target as Element).closest<HTMLElement>('.k-opt');
+    const i = el ? Number(el.id.slice(6)) : -1;
+    if (i >= 0 && i !== active) { active = i; mark(false); }
+  });
+
+  // ⌘K / Ctrl+K anywhere, over the browser's own use of it, and again to close.
+  document.addEventListener('keydown', (e) => {
+    if (e.key?.toLowerCase() !== 'k' || !(e.metaKey || e.ctrlKey) || e.altKey || e.shiftKey) return;
+    e.preventDefault();
+    if (dlg.open) dlg.close(); else open();
+  });
+</script>

@@ -1,48 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
 import { SITE_NAME } from '../data/site';
-import problems from '../data/problems.json';
 import { asOf } from '../data/problems-meta.json';
+import { all, groups, haystack, leetcodeUrl, PAGE as WALKTHROUGH } from '../data/catalog';
 
-interface Problem {
-  id: number; title: string; slug: string; difficulty: 'Easy' | 'Medium' | 'Hard';
-  paid: boolean; acRate: string; tags: string[]; category: string; extra?: boolean;
-}
-
-// A problem gets a solution page when a lesson folder names it: every
-// lesson's page.js lists the LeetCode problems it covers.
-const pages = import.meta.glob('../lessons/*/page.js', { eager: true, import: 'default' }) as
-  Record<string, { links: { id: number }[] }>;
-const WALKTHROUGH: Record<number, string> = {};
-for (const [path, page] of Object.entries(pages)) {
-  const slug = path.split('/').at(-2);
-  for (const { id } of page.links) WALKTHROUGH[id] = `/leetcode/${slug}`;
-}
-
-// The patterns, in the order they build on each other. Every problem in
-// problems.json names one of these as its category.
-const CATEGORIES = [
-  'Arrays & Hashing', 'Two Pointers', 'Sliding Window', 'Stack', 'Binary Search',
-  'Linked List', 'Trees', 'Tries', 'Heap', 'Backtracking', 'Graphs',
-  'Dynamic Programming', 'Intervals', 'Math & Geometry', 'Bit Manipulation',
-];
-const LEVEL = { Easy: 0, Medium: 1, Hard: 2 };
-
-const all = Object.values(problems as Record<string, Problem[]>).flat();
 const core = all.filter((p) => !p.extra).length;
 const worked = all.filter((p) => WALKTHROUGH[p.id]).length;
-for (const p of all) {
-  if (!CATEGORIES.includes(p.category)) throw new Error(`problems.json: ${p.id} has unknown category "${p.category}"`);
-}
-
-const id = (name: string) => name.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-');
-const groups = CATEGORIES.map((name) => ({
-  name,
-  id: id(name),
-  rows: all.filter((p) => p.category === name).sort((a, b) => LEVEL[a.difficulty] - LEVEL[b.difficulty]),
-}));
-// What the search box matches against: name, number, pattern and tags.
-const haystack = (p: Problem) => [p.id, p.title, p.category, ...p.tags].join(' ').toLowerCase();
 ---
 <Base
   title={`LeetCode · ${SITE_NAME}`}
@@ -117,7 +80,7 @@ const haystack = (p: Problem) => [p.id, p.title, p.category, ...p.tags].join(' '
                     <span class="psub">
                       {!WALKTHROUGH[p.id] && <span class="soon">Solution coming soon</span>}
                       {p.extra && <span>Outside the core list</span>}
-                      <a class="lc" href={`https://leetcode.com/problems/${p.slug}/`} target="_blank" rel="noopener">View on LeetCode ↗</a>
+                      <a class="lc" href={leetcodeUrl(p.slug)} target="_blank" rel="noopener">View on LeetCode ↗</a>
                     </span>
                   </div>
                   <span class="ptags">{p.tags.slice(0, 3).join(' · ')}</span>

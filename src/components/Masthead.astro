@@ -1,6 +1,7 @@
 ---
 import { SITE_NAME, REPO } from '../data/site';
 import ThemeToggle from './ThemeToggle.astro';
+import SiteSearch from './SiteSearch.astro';
 
 ---
 <header class="masthead">
@@ -10,6 +11,7 @@ import ThemeToggle from './ThemeToggle.astro';
       <a href="/">LeetCode</a>
       <a href={REPO} target="_blank" rel="noopener">GitHub ↗</a>
     </nav>
+    <SiteSearch />
     <ThemeToggle />
   </div>
 </header>

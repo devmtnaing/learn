@@ -471,7 +471,7 @@ mountLesson({
   // The corpus: the 3 examples, 6 edges, 15,000 random rotated arrays of 1–9
   // distinct values with targets often absent, 5,000 of up to 200 across
   // ±10⁴, and five at n = 5000 — against a value → index dictionary. Go and
-  // Rust ran in Docker (golang:1.23-alpine, rust:1-slim).
+  // Rust ran in Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 20,014 cases',
     python: 'ran here · 20,014 cases',

@@ -453,7 +453,7 @@ mountLesson({
   // values from -3..3, 5,000 of up to 300 across the full range, and five of
   // 10⁵ values — against a block prefix/suffix-maximum oracle. The brute force
   // skips the five at 10⁵. Go and Rust ran in Docker (golang:1.23-alpine,
-  // rust:1-slim).
+  // rust:1.98-slim).
   verification: {
     ruby: { brute: 'ran here · 20,008 cases, not the five at n = 10⁵', deque: 'ran here · 20,013 cases' },
     python: { brute: 'ran here · 20,008 cases, not the five at n = 10⁵', deque: 'ran here · 20,013 cases' },

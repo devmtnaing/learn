@@ -537,7 +537,7 @@ mountLesson({
   // listing in part 3. The corpus: the 3 examples, 4 edges, 15,000 arrays of
   // up to 13 values drawn from -4..4, 5,000 of up to 41 values over the full
   // ±3 × 10⁴ range, and three at n = 29,999 — checked against a Counter in
-  // Python. Go and Rust ran in Docker (golang:1.23-alpine, rust:1-slim).
+  // Python. Go and Rust ran in Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 20,010 cases vs a Counter',
     python: 'ran here · 20,010 cases vs a Counter',

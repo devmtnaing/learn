@@ -530,7 +530,7 @@ mountLesson({
   // 5,000 of up to 300, and four at the 10⁴-node constraint (all-left,
   // all-right, zigzag chains and one random tree) — against an iterative
   // reference with an explicit stack. Go and Rust ran in Docker
-  // (golang:1.23-alpine, rust:1-slim). Recursive Ruby is correct on all of
+  // (golang:1.23-alpine, rust:1.98-slim). Recursive Ruby is correct on all of
   // them with a larger VM stack (RUBY_THREAD_VM_STACK_SIZE=8MB), but on Ruby
   // 3.1's default stack it overflows on the three 10⁴-deep chains; measured,
   // it survives chains up to 8,733 nodes. Recursive JavaScript passed the

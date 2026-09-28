@@ -651,7 +651,7 @@ mountLesson({
   // lists up to 6 long over -3..3 (so ties are everywhere), 5,000 pairs up to
   // the 50-node constraint over -100..100, and two disjoint 50-node pairs —
   // checked against concatenate-and-sort. Go and Rust ran in Docker
-  // (golang:1.23-alpine, rust:1-slim).
+  // (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 20,008 cases vs sort',
     python: 'ran here · 20,008 cases vs sort',

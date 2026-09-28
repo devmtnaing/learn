@@ -660,7 +660,7 @@ mountLesson({
   // over two or three letters, 5,000 of up to 300 calls, and four of 3 × 10⁴
   // calls (2,000-letter words, random words, 20,000 prefix queries that miss
   // 10,000 words) — against a sorted-list oracle. Go and Rust ran in Docker
-  // (golang:1.23-alpine, rust:1-slim).
+  // (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 20,011 cases',
     python: 'ran here · 20,011 cases',

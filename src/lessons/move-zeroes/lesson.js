@@ -598,7 +598,7 @@ mountLesson({
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: 5 edges, 15,000 short arrays heavy in zeros, 5,000 up to 80 values over the full 32-bit range, two at n = 10⁴ — against filter-and-append.
-  // Go and Rust ran in Docker (golang:1.23-alpine, rust:1-slim).
+  // Go and Rust ran in Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 20,007 cases',
     python: 'ran here · 20,007 cases',

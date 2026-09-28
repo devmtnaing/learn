@@ -633,7 +633,7 @@ mountLesson({
   // The corpus: the example, 6 edges, 15,000 random runs of up to 20 calls
   // over -5..5, 5,000 of up to 500 over ±10⁵, and six of 5 × 10⁴ calls —
   // against a Fenwick tree over every value. Go and Rust ran in Docker
-  // (golang:1.23-alpine, rust:1-slim).
+  // (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 20,013 cases',
     python: 'ran here · 20,013 cases',

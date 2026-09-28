@@ -435,7 +435,7 @@ mountLesson({
   // and 5,000 up to 20 × 20 across ±1000 — against an oracle that reads each
   // new row off a column, bottom to top. Each driver prints the matrix it
   // passed in, so a rotation that did not reach the caller fails. Go and Rust
-  // ran in Docker (golang:1.23-alpine, rust:1-slim).
+  // ran in Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 20,005 cases',
     python: 'ran here · 20,005 cases',

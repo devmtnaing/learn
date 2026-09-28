@@ -26,7 +26,7 @@ What it does, in order:
    lesson's lesson.js — the text a reader copies, not a draft.
 3. Runs each approach x language and compares line by line. Ruby, Python and
    JavaScript run locally; Go and Rust run in Docker (golang:1.23-alpine,
-   rust:1-slim), so Docker must be running.
+   rust:1.98-slim), so Docker must be running.
 4. Runs the walkthrough check (steps.mjs) over the same corpus.
 
 A language that could not run is reported as SKIPPED, never as passing.
@@ -37,9 +37,12 @@ from concurrent.futures import ThreadPoolExecutor
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
 EXT = {'ruby': 'rb', 'python': 'py', 'javascript': 'js', 'go': 'go', 'rust': 'rs'}
+# One approach x language, compile included. A listing that never finishes
+# fails here instead of holding the CI job to its 40-minute limit.
+TIMEOUT = 20 * 60
 
 
-def command(lang, work, big_stack=False):
+def command(lang, work, big_stack=False, name=None):
     if lang == 'ruby':
         return ['ruby', f'{work}/main.rb']
     if lang == 'python':
@@ -47,11 +50,11 @@ def command(lang, work, big_stack=False):
     if lang == 'javascript':
         return ['node'] + (['--stack-size=16000'] if big_stack else []) + [f'{work}/main.cjs']
     if lang == 'go':   # the build cache outlives the container, so the standard library compiles once
-        return ['docker', 'run', '--rm', '-i', '-v', f'{work}:/w', '-v', 'leetcode-go-build:/root/.cache/go-build',
+        return ['docker', 'run', '--rm', '-i', '--name', name, '-v', f'{work}:/w', '-v', 'leetcode-go-build:/root/.cache/go-build',
                 '-w', '/w', 'golang:1.23-alpine',
                 'sh', '-c', 'go build -o m main.go && ./m']
     if lang == 'rust':
-        return ['docker', 'run', '--rm', '-i', '-v', f'{work}:/w', '-w', '/w', 'rust:1-slim',
+        return ['docker', 'run', '--rm', '-i', '--name', name, '-v', f'{work}:/w', '-w', '/w', 'rust:1.98-slim',
                 'sh', '-c', 'rustc -O -o m main.rs 2>&1 >/dev/null | grep -E "^error" ; ./m']
 
 
@@ -123,8 +126,17 @@ def main():
         main_name = 'main.cjs' if lang == 'javascript' else 'main.' + ext
         with open(f'{work}/{main_name}', 'w') as f:
             f.write(S.DRIVERS[lang].replace('{SOL}', solution))
-        r = subprocess.run(command(lang, work, big_stack), input=cases, capture_output=True, text=True, env=env,
-                           preexec_fn=raise_stack if big_stack and lang in ('ruby', 'javascript') else None)
+        # named, so a container that outlives the timeout can be removed: killing
+        # the docker client alone leaves it running
+        name = f'verify-{os.getpid()}-{mode}-{lang}'
+        try:
+            r = subprocess.run(command(lang, work, big_stack, name), input=cases, capture_output=True, text=True,
+                               env=env, timeout=TIMEOUT,
+                               preexec_fn=raise_stack if big_stack and lang in ('ruby', 'javascript') else None)
+        except subprocess.TimeoutExpired:
+            if lang in ('go', 'rust'):
+                subprocess.run(['docker', 'rm', '-f', name], capture_output=True)
+            return True, f'FAIL {mode}/{lang}: still running after {TIMEOUT // 60} minutes'
         got = r.stdout.split('\n')
         bad = [i for i, (_, e) in enumerate(todo) if i >= len(got) or got[i] != e]
         if not bad:

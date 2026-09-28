@@ -205,7 +205,9 @@ const haystack = (p: Problem) => [p.id, p.title, p.category, ...p.tags].join(' '
     if (d.value) next.set('d', d.value);
     if (solved.checked) next.set('solved', '1');
     const url = `${location.pathname}${next.size ? `?${next}` : ''}${cat ? `#${cat}` : ''}`;
-    history.replaceState(null, '', url);
+    // Safari throws once a page calls replaceState too often (a held key in
+    // the search box); the filter has already applied, so only the URL lags.
+    try { history.replaceState(null, '', url); } catch { /* rate-limited */ }
   }
 
   form.addEventListener('input', apply);

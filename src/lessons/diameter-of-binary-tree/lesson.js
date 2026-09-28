@@ -662,7 +662,7 @@ mountLesson({
   // all-right and zigzag chains, a random tree, a complete tree, a deep chain
   // that forks) — against an oracle that treats the tree as a graph and finds
   // the longest shortest path (all pairs, or double BFS when big). Go and Rust
-  // ran in Docker (golang:1.23-alpine, rust:1-slim).
+  // ran in Docker (golang:1.23-alpine, rust:1.98-slim).
   // Measured cold, one 10⁴ chain per process: Ruby 3.1's default stack
   // overflows past 7,705 nodes (brute) and 8,732 (DFS); Node 24's past 6,219
   // and 7,773. Both pass all 20,009 cases with a larger stack

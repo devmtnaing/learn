@@ -472,7 +472,7 @@ mountLesson({
   // from -5..5, 5,000 of 1–60 across ±10⁴, and five at n = 10⁵ — against an
   // oracle taking the best difference of prefix sums. The brute force skips
   // the five at n = 10⁵. Go and Rust ran in Docker (golang:1.23-alpine,
-  // rust:1-slim).
+  // rust:1.98-slim).
   verification: {
     ruby: { brute: 'ran here · 20,008 cases, not the five at n = 10⁵', kadane: 'ran here · 20,013 cases' },
     python: { brute: 'ran here · 20,008 cases, not the five at n = 10⁵', kadane: 'ran here · 20,013 cases' },

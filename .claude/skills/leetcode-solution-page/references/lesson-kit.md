@@ -119,7 +119,13 @@ worked". A control shows a list back as `1, 2, 3` by itself; give it a
 string — `?approach=heap&step=7&lang=python&nums=1,2,3` — so a mode's `id`
 and a control's `key` are part of every link a reader shares. Keep them
 short and stable once published, and make `parse(format(v))` give back `v`
-for every control, so a shared link reopens the same input. The part 1 widget uses `presetChips(sets, active)` for its chips
+for every control, so a shared link reopens the same input. A link is input
+anyone can write, and narration, notes and widget lines are HTML: a value from
+a control that allows `<`, `>` or `&` goes through `esc()` (kit.js) before it is
+spliced into one (stage.js shapes and the hover tip escape on their own). A
+widget redraws on every pick; the stepper puts focus back on the redrawn chip
+or cell with the same `data-*` attributes, so give each clickable one a stable
+`data-*` key (`data-set`, `data-i`). The part 1 widget uses `presetChips(sets, active)` for its chips
 (the active one is `aria-pressed`, which lesson.css draws as selected; a
 widget's own toggle chips should set it too) and `widgetLabel(text)` for the
 note beside its heading. Anything a lesson draws uses a class from `lesson.css`, `kit.css`

@@ -542,7 +542,7 @@ mountLesson({
   // every one with each prefix and suffix product inside 32 bits — against an
   // oracle multiplying Python integers. The brute force skips the five at
   // n = 10⁵ (10¹⁰ multiplications each). Go and Rust ran in Docker
-  // (golang:1.23-alpine, rust:1-slim).
+  // (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: { brute: 'ran here · 20,008 cases, not the five at n = 10⁵', sweep: 'ran here · 20,013 cases' },
     python: { brute: 'ran here · 20,008 cases, not the five at n = 10⁵', sweep: 'ran here · 20,013 cases' },

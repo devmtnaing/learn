@@ -700,7 +700,7 @@ mountLesson({
   // over two or three letters, 5,000 up to 8 × 8, and five at 12 × 12 — against
   // a bitmask search per word. One search per word skips the two inputs with
   // thousands of words. Go and Rust ran in Docker (golang:1.23-alpine,
-  // rust:1-slim).
+  // rust:1.98-slim).
   verification: {
     ruby: { each: 'ran here · 20,011 cases, not the two with thousands of words', trie: 'ran here · 20,013 cases' },
     python: { each: 'ran here · 20,011 cases, not the two with thousands of words', trie: 'ran here · 20,013 cases' },

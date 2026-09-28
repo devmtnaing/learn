@@ -637,7 +637,7 @@ mountLesson({
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: 6 edges, 15,000 strings over "abc", 5,000 permutations (half with one letter changed), three at 5 × 10⁴ — against a Counter.
-  // Go and Rust ran in Docker (golang:1.23-alpine, rust:1-slim).
+  // Go and Rust ran in Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 20,009 cases',
     python: 'ran here · 20,009 cases',

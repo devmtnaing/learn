@@ -706,7 +706,7 @@ mountLesson({
   // long ones (5,000, 5,000 and 999 nodes) — checked against Python's list
   // reversal. The 5,000-node cases are what forced the recursion limit into the
   // recursive Python listing: without it, it raises RecursionError. Go and Rust
-  // ran in Docker (golang:1.23-alpine, rust:1-slim).
+  // ran in Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 19,998 cases up to n = 5,000',
     python: 'ran here · 19,998 cases up to n = 5,000',

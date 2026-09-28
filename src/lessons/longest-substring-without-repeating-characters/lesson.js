@@ -10,7 +10,7 @@
 import { mountLesson } from '../../lib/stepper.js';
 import { pick, onLangChange } from '../../lib/i18n.js';
 import { cells, kv, readout, slots, stagePanel } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, esc, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, presetChips, widgetLabel } from '../../lib/kit.js';
 
 const MAX_LEN = 12;
 
@@ -26,6 +26,9 @@ function parseS(text) {
 // A space is a character like any other; draw it so it can be seen.
 const vis = (ch) => (ch === ' ' ? '␣' : ch);
 const quote = (str) => `"${str}"`;
+// The same, escaped, for narration and widget text, which are HTML: s may hold < > &.
+const visH = (ch) => esc(vis(ch));
+const quoteH = (str) => esc(quote(str));
 
 /* ---------------- step generators ---------------- */
 
@@ -50,15 +53,15 @@ function buildBrute({ s }) {
     while (j < n && !seen.includes(s[j])) {
       seen.push(s[j]);
       steps.push(snap({ i, j, seen: [...seen], line: 'take', tag: t('new', 'အသစ်'),
-        note: t(`'${vis(s[j])}' is not in <code>seen</code>: take it. The run is ${quote(s.slice(i, j + 1))}, length ${j - i + 1}.`,
-                `'${vis(s[j])}' သည် <code>seen</code> ထဲ မရှိ — ယူသည်။ run သည် ${quote(s.slice(i, j + 1))}၊ အရှည် ${j - i + 1}။`) }));
+        note: t(`'${visH(s[j])}' is not in <code>seen</code>: take it. The run is ${quoteH(s.slice(i, j + 1))}, length ${j - i + 1}.`,
+                `'${visH(s[j])}' သည် <code>seen</code> ထဲ မရှိ — ယူသည်။ run သည် ${quoteH(s.slice(i, j + 1))}၊ အရှည် ${j - i + 1}။`) }));
       j += 1;
     }
     const stop = j < n;
     steps.push(snap({ i, j, seen: [...seen], repeat: stop ? s.indexOf(s[j], i) : null, line: 'test', tag: stop ? t('repeat', 'ထပ်') : t('end', 'အဆုံး'),
       note: stop
-        ? t(`'${vis(s[j])}' at index ${j} is already in the run, at index ${s.indexOf(s[j], i)}. Stop.`,
-            `index ${j} ရှိ '${vis(s[j])}' သည် run ထဲ index ${s.indexOf(s[j], i)} တွင် ရှိပြီးသား။ ရပ်သည်။`)
+        ? t(`'${visH(s[j])}' at index ${j} is already in the run, at index ${s.indexOf(s[j], i)}. Stop.`,
+            `index ${j} ရှိ '${visH(s[j])}' သည် run ထဲ index ${s.indexOf(s[j], i)} တွင် ရှိပြီးသား။ ရပ်သည်။`)
         : t('The end of the string. Stop.', 'string ၏ အဆုံး။ ရပ်သည်။') }));
     const was = best;
     best = Math.max(best, j - i);
@@ -89,29 +92,29 @@ function buildWindow({ s }) {
   for (let right = 0; right < n; right++) {
     const ch = s[right];
     steps.push(snap({ right, line: 'read', tag: t(`'${vis(ch)}'`, `'${vis(ch)}'`),
-      note: t(`<code>right</code> = ${right}: '${vis(ch)}' comes in.`, `<code>right</code> = ${right} — '${vis(ch)}' ဝင်လာသည်။`) }));
+      note: t(`<code>right</code> = ${right}: '${visH(ch)}' comes in.`, `<code>right</code> = ${right} — '${visH(ch)}' ဝင်လာသည်။`) }));
     if (ch in last) {
       const prev = last[ch];
       if (prev >= left) {
         const was = left;
         left = prev + 1;
         steps.push(snap({ right, prev, jumped: [was, left], line: 'jump', tag: t('jump', 'ခုန်'),
-          note: t(`'${vis(ch)}' is already in the window, at index ${prev}. Move <code>left</code> from ${was} to <b>${left}</b>, just past it — in one move, not one at a time.`,
-                  `'${vis(ch)}' သည် window ထဲ index ${prev} တွင် ရှိပြီးသား။ <code>left</code> ကို ${was} မှ <b>${left}</b> သို့ — ၎င်း၏ နောက်သို့ — တစ်ကြိမ်တည်း ရွှေ့သည်၊ တစ်ခုချင်း မဟုတ်ပါ။`) }));
+          note: t(`'${visH(ch)}' is already in the window, at index ${prev}. Move <code>left</code> from ${was} to <b>${left}</b>, just past it — in one move, not one at a time.`,
+                  `'${visH(ch)}' သည် window ထဲ index ${prev} တွင် ရှိပြီးသား။ <code>left</code> ကို ${was} မှ <b>${left}</b> သို့ — ၎င်း၏ နောက်သို့ — တစ်ကြိမ်တည်း ရွှေ့သည်၊ တစ်ခုချင်း မဟုတ်ပါ။`) }));
       } else {
         steps.push(snap({ right, prev, stale: true, line: 'jump', tag: t('stale', 'ဟောင်း'),
-          note: t(`'${vis(ch)}' was last seen at index ${prev}, but that is left of <code>left</code> (${left}) — outside the window. Ignore it; moving <code>left</code> back would let a repeat in.`,
-                  `'${vis(ch)}' ကို နောက်ဆုံး index ${prev} တွင် တွေ့ခဲ့သော်လည်း ၎င်းသည် <code>left</code> (${left}) ၏ ဘယ်ဘက် — window အပြင်ဘက်။ လျစ်လျူရှုသည် — <code>left</code> ကို နောက်ပြန်ရွှေ့လျှင် ထပ်နေသော character ဝင်လာမည်။`) }));
+          note: t(`'${visH(ch)}' was last seen at index ${prev}, but that is left of <code>left</code> (${left}) — outside the window. Ignore it; moving <code>left</code> back would let a repeat in.`,
+                  `'${visH(ch)}' ကို နောက်ဆုံး index ${prev} တွင် တွေ့ခဲ့သော်လည်း ၎င်းသည် <code>left</code> (${left}) ၏ ဘယ်ဘက် — window အပြင်ဘက်။ လျစ်လျူရှုသည် — <code>left</code> ကို နောက်ပြန်ရွှေ့လျှင် ထပ်နေသော character ဝင်လာမည်။`) }));
       }
     }
     last[ch] = right;
     steps.push(snap({ right, stored: ch, line: 'store', tag: t('remember', 'မှတ်'),
-      note: t(`Remember '${vis(ch)}' → ${right}.`, `'${vis(ch)}' → ${right} ကို မှတ်သည်။`) }));
+      note: t(`Remember '${visH(ch)}' → ${right}.`, `'${visH(ch)}' → ${right} ကို မှတ်သည်။`) }));
     const was = best;
     best = Math.max(best, right - left + 1);
     steps.push(snap({ right, improved: best > was, line: 'best', tag: t(`best ${best}`, `best ${best}`),
-      note: t(`The window ${quote(s.slice(left, right + 1))} has length ${right - left + 1}${best > was ? `: <code>best</code> = <b>${best}</b>` : `, not more than ${best}`}.`,
-              `window ${quote(s.slice(left, right + 1))} ၏ အရှည် ${right - left + 1}${best > was ? ` — <code>best</code> = <b>${best}</b>` : ` — ${best} ထက် မပို`}။`) }));
+      note: t(`The window ${quoteH(s.slice(left, right + 1))} has length ${right - left + 1}${best > was ? `: <code>best</code> = <b>${best}</b>` : `, not more than ${best}`}.`,
+              `window ${quoteH(s.slice(left, right + 1))} ၏ အရှည် ${right - left + 1}${best > was ? ` — <code>best</code> = <b>${best}</b>` : ` — ${best} ထက် မပို`}။`) }));
   }
   steps.push(snap({ line: 'ret', finished: true, tag: t(`return ${best}`, `${best} ပြန်`),
     note: t(`Return <b>${best}</b>. Each character came in once, and <code>left</code> only ever moved forward.`,
@@ -418,18 +421,18 @@ function mountRunWidget(host) {
       const inRun = x >= from && x <= to;
       const cls = x === dupAt || x === firstAt ? 'cut' : inRun ? 'kept' : '';
       const ends = x === from || x === to;
-      return `<div class="cell ${cls}${ends ? ' picked' : ''}" role="button" tabindex="0" aria-pressed="${ends}" data-i="${x}"><span>${vis(ch)}</span><span class="idx">${x}</span></div>`;
+      return `<div class="cell ${cls}${ends ? ' picked' : ''}" role="button" tabindex="0" aria-pressed="${ends}" data-i="${x}"><span>${visH(ch)}</span><span class="idx">${x}</span></div>`;
     }).join('');
 
     widgetLabel(pick(t(`click the ${state.next === 'from' ? 'start' : 'end'}`, `${state.next === 'from' ? 'အစ' : 'အဆုံး'} ကို နှိပ်ပါ`)));
 
     q('[data-line]').innerHTML = pick(dupAt >= 0
-      ? t(`${quote(run)} repeats '${vis(str[dupAt])}' (indices ${firstAt} and ${dupAt}), so it does not count. A substring cannot skip the second copy — skipping makes a subsequence.`,
-          `${quote(run)} တွင် '${vis(str[dupAt])}' ထပ်သည် (index ${firstAt} နှင့် ${dupAt}) — မရေတွက်ပါ။ substring သည် ဒုတိယ copy ကို ကျော်၍ မရ — ကျော်လျှင် subsequence ဖြစ်သွားသည်။`)
-      : t(`${quote(run)} is ${run.length} characters in a row, none repeated. The longest in this string is ${longestIn(str)}.`,
-          `${quote(run)} သည် ဆက်တိုက် character ${run.length} လုံး၊ တစ်လုံးမျှ မထပ်ပါ။ ဤ string ၏ အရှည်ဆုံးမှာ ${longestIn(str)}။`));
+      ? t(`${quoteH(run)} repeats '${visH(str[dupAt])}' (indices ${firstAt} and ${dupAt}), so it does not count. A substring cannot skip the second copy — skipping makes a subsequence.`,
+          `${quoteH(run)} တွင် '${visH(str[dupAt])}' ထပ်သည် (index ${firstAt} နှင့် ${dupAt}) — မရေတွက်ပါ။ substring သည် ဒုတိယ copy ကို ကျော်၍ မရ — ကျော်လျှင် subsequence ဖြစ်သွားသည်။`)
+      : t(`${quoteH(run)} is ${run.length} characters in a row, none repeated. The longest in this string is ${longestIn(str)}.`,
+          `${quoteH(run)} သည် ဆက်တိုက် character ${run.length} လုံး၊ တစ်လုံးမျှ မထပ်ပါ။ ဤ string ၏ အရှည်ဆုံးမှာ ${longestIn(str)}။`));
 
-    q('[data-expr]').innerHTML = `s[${from}..${to}] = ${quote([...run].map(vis).join(''))} · ${new Set(run).size} distinct of ${run.length}`;
+    q('[data-expr]').innerHTML = `s[${from}..${to}] = ${quoteH([...run].map(vis).join(''))} · ${new Set(run).size} distinct of ${run.length}`;
     q('[data-total]').innerHTML = dupAt >= 0
       ? `✗<small>${pick(t('repeats', 'ထပ်နေ'))}</small>`
       : `${run.length}<small>${pick(t('length', 'အရှည်'))}</small>`;
@@ -542,7 +545,7 @@ mountLesson({
   // characters from "abc", 5,000 of up to 40 from a dozen characters with a
   // space, and five at n = 5 × 10⁴ — against an oracle that shrinks a counted
   // window. Both approaches ran on every case. Go and Rust ran in Docker
-  // (golang:1.23-alpine, rust:1-slim).
+  // (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 20,015 cases',
     python: 'ran here · 20,015 cases',

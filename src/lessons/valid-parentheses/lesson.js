@@ -636,7 +636,7 @@ mountLesson({
   // 12,000 random strings of length 1–10, 8,000 valid strings (half with one
   // character flipped), and six at n = 10⁴ — checked against a separate
   // recursive-descent parser. verify/valid-parentheses/spec.py rebuilds it.
-  // Go and Rust ran in Docker (golang:1.23-alpine, rust:1-slim).
+  // Go and Rust ran in Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 20,020 cases vs a parser',
     python: 'ran here · 20,020 cases vs a parser',

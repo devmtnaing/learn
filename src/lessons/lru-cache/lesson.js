@@ -872,7 +872,7 @@ mountLesson({
   // The corpus: the example, 6 edges, 15,000 random runs of up to 20 calls
   // over a handful of keys, 5,000 of up to 500 calls, and three of 2 × 10⁵
   // calls at capacity 3,000 and 1 — against an OrderedDict oracle. Go and
-  // Rust ran in Docker (golang:1.23-alpine, rust:1-slim).
+  // Rust ran in Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 20,010 cases',
     python: 'ran here · 20,010 cases',

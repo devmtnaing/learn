@@ -453,7 +453,7 @@ mountLesson({
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: 3 examples, 15,000 small arrays with one pair, 5,000 up to ±10⁹, and one at n = 10⁴ — each against all-pairs search.
-  // Go and Rust ran in Docker (golang:1.23-alpine, rust:1-slim).
+  // Go and Rust ran in Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 20,004 cases',
     python: 'ran here · 20,004 cases',

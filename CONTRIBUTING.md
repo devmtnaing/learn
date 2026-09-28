@@ -29,7 +29,7 @@ code they can trust. So three rules are firm:
 
 - Node 20+, Python 3.10+, Ruby 3
 - Docker, for Go and Rust. The verifier runs them in `golang:1.23-alpine` and
-  `rust:1-slim`, and reports them as *skipped*, not passed, when Docker isn't
+  `rust:1.98-slim`, and reports them as *skipped*, not passed, when Docker isn't
   running.
 
 ## Building a page, step by step

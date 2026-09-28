@@ -36,9 +36,9 @@
  */
 
 import { pick, onLangChange } from './i18n.js';
+import { esc } from './kit.js';
 
 const $ = (sel, el = document) => el.querySelector(sel);
-const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const nameOf = (k) => (typeof k === 'string' ? k : k?.en ?? '');
 
 /* A tab's selection attributes. Only the selected tab sits in the Tab order;
@@ -568,7 +568,7 @@ export function mountLesson(cfg) {
   }
   if (cfg.widget) {
     const host = document.getElementById('q-widget');
-    if (host) cfg.widget(host);
+    if (host) { cfg.widget(host); keepFocus(host); }
   }
 
   // Narration is generated per step and the chrome is rendered by this file, so
@@ -577,6 +577,29 @@ export function mountLesson(cfg) {
   onLangChange(() => { stop(); paintAll(); });
 
   return { rebuild, go, stop, state };
+}
+
+/* A widget redraws its chips and cells on every pick, which throws away the
+ * element that had focus and drops a keyboard reader back to the top of the
+ * page. Registered after the widget's own handlers, so it runs after them: if
+ * focus fell out of the widget, it goes to the redrawn element with the same
+ * data-* attributes. A widget that already refocuses is left alone. */
+function keepFocus(host) {
+  let key = null;
+  const before = () => {
+    const el = document.activeElement;
+    const attrs = el && el !== host && host.contains(el)
+      ? el.getAttributeNames().filter((n) => n.startsWith('data-')) : [];
+    key = attrs.length
+      ? el.localName + attrs.map((n) => `[${n}="${CSS.escape(el.getAttribute(n))}"]`).join('') : null;
+  };
+  const after = () => {
+    if (key && !host.contains(document.activeElement)) host.querySelector(key)?.focus();
+  };
+  for (const type of ['click', 'keydown']) {
+    host.addEventListener(type, before, true);
+    host.addEventListener(type, after);
+  }
 }
 
 /* A function that wraps known identifiers in a rendered listing line, never
@@ -713,4 +736,3 @@ function renderSolutions(cfg, state) {
   };
 }
 
-export { esc };

@@ -635,7 +635,7 @@ mountLesson({
   code: CODE,
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: 4 examples, 15,000 short price lists over 0..6, 5,000 up to 10⁴, three of 3,000 — against all-pairs search; the one-pass versions also ran four at n = 10⁵.
-  // Go and Rust ran in Docker (golang:1.23-alpine, rust:1-slim).
+  // Go and Rust ran in Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 20,007 cases',
     python: 'ran here · 20,007 cases',

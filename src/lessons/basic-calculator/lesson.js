@@ -616,7 +616,7 @@ mountLesson({
   // (149,999 nested brackets, nested unary minus, 50,000 numbers, a random
   // expression, numbers near 2³¹ − 1, 75,000 "(1)") — against an oracle that
   // keeps a stack of bracket signs. Go and Rust ran in Docker
-  // (golang:1.23-alpine, rust:1-slim); the recursive listing ran with a
+  // (golang:1.23-alpine, rust:1.98-slim); the recursive listing ran with a
   // larger stack in Ruby, Node and Rust. Default-stack limits were measured
   // cold, one nested expression per process (Rust: a release build, 8 MB main
   // thread).

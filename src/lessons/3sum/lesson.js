@@ -631,7 +631,7 @@ mountLesson({
   // from -3..3, 5,000 of 3–30 from -10..10, and five at n = 3000 — against an
   // oracle that counts values and checks pairs of distinct values. Triplets
   // are compared in sorted order. The brute force skips the five at n = 3000.
-  // Go and Rust ran in Docker (golang:1.23-alpine, rust:1-slim).
+  // Go and Rust ran in Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: { brute: 'ran here · 20,008 cases, not the five at n = 3000', pointers: 'ran here · 20,013 cases' },
     python: { brute: 'ran here · 20,008 cases, not the five at n = 3000', pointers: 'ran here · 20,013 cases' },

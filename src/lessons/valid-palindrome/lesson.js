@@ -5,7 +5,7 @@
  * same question by *skipping* the characters the filter would have removed —
  * same O(n) time, but the only state that survives a step is two integers.
  */
-import { t, plural, exampleTitle, LANGUAGES, k, c, verdictAnswer, stageRow, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, esc, plural, exampleTitle, LANGUAGES, k, c, verdictAnswer, stageRow, presetChips, widgetLabel } from '../../lib/kit.js';
 import { mountLesson } from '../../lib/stepper.js';
 import { pick, onLangChange } from '../../lib/i18n.js';
 import { cells, readout, stagePanel } from '../../lib/stage.js';
@@ -19,10 +19,7 @@ const isAlnum = (ch) => /[a-z0-9]/i.test(ch);
  * problem most needs the reader to actually see. */
 const show = (ch) => (ch === ' ' ? '␣' : ch);
 
-/* Narration is HTML, and `s` comes from a text box the reader controls. */
-const e = (x) => String(x).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
-
-const named = (ch) => (ch === ' ' ? t('a space', 'space တစ်ခု') : t(`<b>'${e(ch)}'</b>`, `<b>'${e(ch)}'</b>`));
+const named = (ch) => (ch === ' ' ? t('a space', 'space တစ်ခု') : t(`<b>'${esc(ch)}'</b>`, `<b>'${esc(ch)}'</b>`));
 
 /* ---------------- step generators ---------------- */
 
@@ -60,10 +57,10 @@ function buildClean({ s }) {
     const pos = cleaned.length - 1;
     steps.push({ line: 'keep', i, cleaned: cleaned.slice(), keepAt: pos, tag: t('keep', 'ထည့်'),
       note: pos === 0
-        ? t(`<b>s[${i}] = '${e(ch)}'</b> is alphanumeric, so it is lowercased to <b>'${e(ch.toLowerCase())}'</b> and appended. Lowercasing here is what lets the comparison at the end be a plain equality.`,
-            `<b>s[${i}] = '${e(ch)}'</b> သည် alphanumeric ဖြစ်သဖြင့် <b>'${e(ch.toLowerCase())}'</b> အဖြစ် အသေးပြောင်းပြီး ထည့်သည်။ ဤနေရာတွင် အသေးပြောင်းထားခြင်းကြောင့် နောက်ဆုံး နှိုင်းယှဉ်မှုကို ရိုးရိုး ညီမျှခြင်းဖြင့် လုပ်နိုင်သည်။`)
-        : t(`<b>s[${i}] = '${e(ch)}'</b> survives, lowercased to <b>'${e(ch.toLowerCase())}'</b> at position ${pos} of <b>cleaned</b>.`,
-            `<b>s[${i}] = '${e(ch)}'</b> ကျန်ရစ်သည် — <b>'${e(ch.toLowerCase())}'</b> အဖြစ် အသေးပြောင်းပြီး <b>cleaned</b> ၏ နေရာ ${pos} တွင် ထားသည်။`) });
+        ? t(`<b>s[${i}] = '${esc(ch)}'</b> is alphanumeric, so it is lowercased to <b>'${esc(ch.toLowerCase())}'</b> and appended. Lowercasing here is what lets the comparison at the end be a plain equality.`,
+            `<b>s[${i}] = '${esc(ch)}'</b> သည် alphanumeric ဖြစ်သဖြင့် <b>'${esc(ch.toLowerCase())}'</b> အဖြစ် အသေးပြောင်းပြီး ထည့်သည်။ ဤနေရာတွင် အသေးပြောင်းထားခြင်းကြောင့် နောက်ဆုံး နှိုင်းယှဉ်မှုကို ရိုးရိုး ညီမျှခြင်းဖြင့် လုပ်နိုင်သည်။`)
+        : t(`<b>s[${i}] = '${esc(ch)}'</b> survives, lowercased to <b>'${esc(ch.toLowerCase())}'</b> at position ${pos} of <b>cleaned</b>.`,
+            `<b>s[${i}] = '${esc(ch)}'</b> ကျန်ရစ်သည် — <b>'${esc(ch.toLowerCase())}'</b> အဖြစ် အသေးပြောင်းပြီး <b>cleaned</b> ၏ နေရာ ${pos} တွင် ထားသည်။`) });
   }
 
   const reversed = cleaned.slice().reverse();
@@ -89,8 +86,8 @@ function buildClean({ s }) {
             'string ဗလာကို မည်သည့်ဘက်မှ ဖတ်ဖတ် အတူတူ ဖြစ်သဖြင့် အဖြေမှာ <b>true</b>။')
         : t(`Every position agrees, so the answer is <b>true</b>. Cost: ${n} characters read and ${2 * len} characters of scratch allocated.`,
             `နေရာတိုင်း ကိုက်ညီသဖြင့် အဖြေမှာ <b>true</b>။ ကုန်ကျမှု — စာလုံး ${n} လုံး ဖတ်ပြီး ယာယီ စာလုံး ${2 * len} လုံးစာ memory ယူခဲ့သည်။`))
-      : t(`Position ${diff} differs — <b>'${e(cleaned[diff])}'</b> against <b>'${e(reversed[diff])}'</b> — so the answer is <b>false</b>. Both copies were built in full before a single comparison happened.`,
-          `နေရာ ${diff} တွင် မတူပါ — <b>'${e(cleaned[diff])}'</b> နှင့် <b>'${e(reversed[diff])}'</b> — ထို့ကြောင့် အဖြေမှာ <b>false</b>။ နှိုင်းယှဉ်မှု တစ်ခုမျှ မလုပ်ရသေးမီ copy နှစ်ခုလုံးကို အပြည့် တည်ဆောက်ခဲ့ရသည်။`) });
+      : t(`Position ${diff} differs — <b>'${esc(cleaned[diff])}'</b> against <b>'${esc(reversed[diff])}'</b> — so the answer is <b>false</b>. Both copies were built in full before a single comparison happened.`,
+          `နေရာ ${diff} တွင် မတူပါ — <b>'${esc(cleaned[diff])}'</b> နှင့် <b>'${esc(reversed[diff])}'</b> — ထို့ကြောင့် အဖြေမှာ <b>false</b>။ နှိုင်းယှဉ်မှု တစ်ခုမျှ မလုပ်ရသေးမီ copy နှစ်ခုလုံးကို အပြည့် တည်ဆောက်ခဲ့ရသည်။`) });
 
   return steps;
 }
@@ -163,10 +160,10 @@ function buildTwoPointer({ s }) {
         ? t(`Skipping has left <b>left</b> and <b>right</b> on the same character, index ${left}. The code still runs the comparison, and it is trivially true.`,
             `ကျော်လိုက်ရာမှ <b>left</b> နှင့် <b>right</b> တို့ index ${left} ရှိ စာလုံးတစ်လုံးတည်းပေါ် ရောက်နေသည်။ code က နှိုင်းယှဉ်မှုကို လုပ်ဆဲဖြစ်ပြီး မှန်သည်မှာ သေချာသည်။`)
         : match
-          ? t(`<b>s[${left}] = '${e(a)}'</b> against <b>s[${right}] = '${e(b)}'</b>. Lowercased both read <b>'${e(la)}'</b>, so this pair holds.`,
-              `<b>s[${left}] = '${e(a)}'</b> နှင့် <b>s[${right}] = '${e(b)}'</b>။ အသေးပြောင်းလိုက်လျှင် နှစ်ခုလုံး <b>'${e(la)}'</b> ဖြစ်သဖြင့် ဤအတွဲ ကိုက်သည်။`)
-          : t(`<b>s[${left}] = '${e(a)}'</b> against <b>s[${right}] = '${e(b)}'</b>. Lowercased that is <b>'${e(la)}'</b> against <b>'${e(lb)}'</b>.`,
-              `<b>s[${left}] = '${e(a)}'</b> နှင့် <b>s[${right}] = '${e(b)}'</b>။ အသေးပြောင်းလိုက်လျှင် <b>'${e(la)}'</b> နှင့် <b>'${e(lb)}'</b> ဖြစ်သည်။`) }));
+          ? t(`<b>s[${left}] = '${esc(a)}'</b> against <b>s[${right}] = '${esc(b)}'</b>. Lowercased both read <b>'${esc(la)}'</b>, so this pair holds.`,
+              `<b>s[${left}] = '${esc(a)}'</b> နှင့် <b>s[${right}] = '${esc(b)}'</b>။ အသေးပြောင်းလိုက်လျှင် နှစ်ခုလုံး <b>'${esc(la)}'</b> ဖြစ်သဖြင့် ဤအတွဲ ကိုက်သည်။`)
+          : t(`<b>s[${left}] = '${esc(a)}'</b> against <b>s[${right}] = '${esc(b)}'</b>. Lowercased that is <b>'${esc(la)}'</b> against <b>'${esc(lb)}'</b>.`,
+              `<b>s[${left}] = '${esc(a)}'</b> နှင့် <b>s[${right}] = '${esc(b)}'</b>။ အသေးပြောင်းလိုက်လျှင် <b>'${esc(la)}'</b> နှင့် <b>'${esc(lb)}'</b> ဖြစ်သည်။`) }));
 
     if (!match) {
       const gap = right - left - 1;
@@ -528,7 +525,7 @@ function mountFilterWidget(host) {
 
     q('[data-arr]').innerHTML = s.map((ch, i) => {
       const on = pairs && (i === a || i === b);
-      return `<div class="cell ${isAlnum(ch) ? 'kept' : 'cut'}${on ? ' picked amber' : ''}"><span>${e(show(ch))}</span><span class="idx">${i}</span></div>`;
+      return `<div class="cell ${isAlnum(ch) ? 'kept' : 'cut'}${on ? ' picked amber' : ''}"><span>${esc(show(ch))}</span><span class="idx">${i}</span></div>`;
     }).join('');
 
     widgetLabel(pick(t(`${s.length} characters, ${m} count`, `စာလုံး ${s.length} လုံး၊ ${m} လုံး အရေးပါ`)));
@@ -543,16 +540,16 @@ function mountFilterWidget(host) {
     } else {
       const x = s[a], y = s[b], eq = x.toLowerCase() === y.toLowerCase();
       line = eq
-        ? t(`Pair ${k}: s[${a}] = '${e(x)}' and s[${b}] = '${e(y)}'. ${x === y ? 'Equal.' : 'Equal once both are lowercased.'} Everything between them that is not lit was never part of the question.`,
-            `အတွဲ ${k} — s[${a}] = '${e(x)}' နှင့် s[${b}] = '${e(y)}'။ ${x === y ? 'တူသည်။' : 'နှစ်ခုလုံး အသေးပြောင်းလိုက်လျှင် တူသည်။'} ကြားရှိ မလင်းသော စာလုံးများသည် မေးခွန်း၏ အစိတ်အပိုင်း မဟုတ်ခဲ့ပါ။`)
-        : t(`Pair ${k}: s[${a}] = '${e(x)}' against s[${b}] = '${e(y)}'. Different even after lowercasing — that one pair makes the answer false.`,
-            `အတွဲ ${k} — s[${a}] = '${e(x)}' နှင့် s[${b}] = '${e(y)}'။ အသေးပြောင်းပြီးသည့်တိုင် မတူပါ — ထိုအတွဲ တစ်ခုတည်းကြောင့် အဖြေ false ဖြစ်သည်။`);
+        ? t(`Pair ${k}: s[${a}] = '${esc(x)}' and s[${b}] = '${esc(y)}'. ${x === y ? 'Equal.' : 'Equal once both are lowercased.'} Everything between them that is not lit was never part of the question.`,
+            `အတွဲ ${k} — s[${a}] = '${esc(x)}' နှင့် s[${b}] = '${esc(y)}'။ ${x === y ? 'တူသည်။' : 'နှစ်ခုလုံး အသေးပြောင်းလိုက်လျှင် တူသည်။'} ကြားရှိ မလင်းသော စာလုံးများသည် မေးခွန်း၏ အစိတ်အပိုင်း မဟုတ်ခဲ့ပါ။`)
+        : t(`Pair ${k}: s[${a}] = '${esc(x)}' against s[${b}] = '${esc(y)}'. Different even after lowercasing — that one pair makes the answer false.`,
+            `အတွဲ ${k} — s[${a}] = '${esc(x)}' နှင့် s[${b}] = '${esc(y)}'။ အသေးပြောင်းပြီးသည့်တိုင် မတူပါ — ထိုအတွဲ တစ်ခုတည်းကြောင့် အဖြေ false ဖြစ်သည်။`);
     }
     q('[data-line]').innerHTML = pick(line);
 
     // the ledger is a formula, as on x-sum: the string the question is really about
     const filtered = kept.map((i) => s[i].toLowerCase()).join('');
-    q('[data-expr]').innerHTML = `"${e(filtered)}" ${filtered === [...filtered].reverse().join('') ? '=' : '≠'} "${e([...filtered].reverse().join(''))}"`;
+    q('[data-expr]').innerHTML = `"${esc(filtered)}" ${filtered === [...filtered].reverse().join('') ? '=' : '≠'} "${esc([...filtered].reverse().join(''))}"`;
     q('[data-total]').innerHTML = `${good}/${pairs}<small>${pick(t('pairs match', 'အတွဲ ကိုက်'))}</small>`;
   }
 
@@ -670,7 +667,7 @@ mountLesson({
   // 12,000 short strings over "aAbB01 .,:!_`", 6,000 noisy palindromes (half
   // perturbed), 2,000 random printable-ASCII strings, and three at 2 × 10⁵ —
   // checked against a separate pointer-peeling reference. Go and Rust ran in
-  // Docker (golang:1.23-alpine, rust:1-slim).
+  // Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 20,016 cases vs a reference',
     python: 'ran here · 20,016 cases vs a reference',

@@ -674,7 +674,7 @@ mountLesson({
   // 4-letter words over "abc", 5,000 of 3 to 6 letters over "abcd" with up to
   // 300 words, and six with 10-letter words, five of them 5,000 words long —
   // against an oracle that groups words by pattern ("h*t"). Go and Rust ran
-  // in Docker (golang:1.23-alpine, rust:1-slim).
+  // in Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 20,015 cases',
     python: 'ran here · 20,015 cases',

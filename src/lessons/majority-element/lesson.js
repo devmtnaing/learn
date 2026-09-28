@@ -490,7 +490,7 @@ mountLesson({
   // n = 5×10⁴ (random, few distinct values, all equal, and two with the
   // tightest majority, ⌊n/2⌋ + 1 copies) — every array built to have a
   // majority, against an oracle that sorts and takes the middle. Go and Rust
-  // ran in Docker (golang:1.23-alpine, rust:1-slim).
+  // ran in Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 20,011 cases',
     python: 'ran here · 20,011 cases',

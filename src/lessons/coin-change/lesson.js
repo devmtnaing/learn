@@ -525,7 +525,7 @@ mountLesson({
   // from 1..10 with amounts 0..12, 5,000 of up to 12 coins with amounts up to
   // 500, and five at amount = 10⁴ — against a breadth-first search over the
   // amounts. The plain recursion runs only the 15,131 cases with amount ≤ 12.
-  // Go and Rust ran in Docker (golang:1.23-alpine, rust:1-slim).
+  // Go and Rust ran in Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: { recurse: 'ran here · 15,131 cases, amount ≤ 12 only', table: 'ran here · 20,014 cases' },
     python: { recurse: 'ran here · 15,131 cases, amount ≤ 12 only', table: 'ran here · 20,014 cases' },

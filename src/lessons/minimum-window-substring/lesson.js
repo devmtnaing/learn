@@ -572,7 +572,7 @@ mountLesson({
   // letters, 5,000 over ten letters of both cases up to 300 long, and five
   // with 10⁵-letter strings — against an oracle that binary-searches the
   // window's length. The brute force skips the five at 10⁵. Go and Rust ran
-  // in Docker (golang:1.23-alpine, rust:1-slim).
+  // in Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: { brute: 'ran here · 20,010 cases, not the five at m = 10⁵', window: 'ran here · 20,015 cases' },
     python: { brute: 'ran here · 20,010 cases, not the five at m = 10⁵', window: 'ran here · 20,015 cases' },

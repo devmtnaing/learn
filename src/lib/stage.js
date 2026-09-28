@@ -9,7 +9,7 @@
  *   tone  {index: 'up'|'down'|'warn'|'done'} — per-cell colour
  */
 
-import { esc } from './stepper.js';
+import { esc } from './kit.js';
 import { pick } from './i18n.js';
 
 const tones = (t) => (t ? ` t-${t}` : '');

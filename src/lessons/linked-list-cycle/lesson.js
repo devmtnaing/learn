@@ -601,7 +601,7 @@ mountLesson({
   // empty list and repeated values), 15,000 lists up to 8 nodes with every pos,
   // 4,990 up to 200 nodes over the full value range, and four at the 10⁴-node
   // constraint — each checked against the pos it was built from. Go and Rust
-  // ran in Docker (golang:1.23-alpine, rust:1-slim); the Rust harness builds
+  // ran in Docker (golang:1.23-alpine, rust:1.98-slim); the Rust harness builds
   // the Rc<RefCell> list the caveat describes.
   verification: {
     ruby: 'ran here · 20,001 cases up to n = 10⁴',

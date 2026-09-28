@@ -420,7 +420,7 @@ mountLesson({
   // 12 bars from 0..5, 5,000 of up to 300 across the full range, and five of
   // 10⁵ bars — against a nearest-lower-by-jumping oracle. Growing around each
   // bar skips the five at 10⁵. Go and Rust ran in Docker (golang:1.23-alpine,
-  // rust:1-slim).
+  // rust:1.98-slim).
   verification: {
     ruby: { extend: 'ran here · 20,008 cases, not the five at n = 10⁵', stack: 'ran here · 20,013 cases' },
     python: { extend: 'ran here · 20,008 cases, not the five at n = 10⁵', stack: 'ran here · 20,013 cases' },

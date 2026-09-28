@@ -752,7 +752,7 @@ mountLesson({
   // a random tree, a complete tree, a chain of -1000s). Each driver
   // serializes with one codec, deserializes with another, and checks the
   // rebuilt tree prints as the input. Go and Rust ran in Docker
-  // (golang:1.23-alpine, rust:1-slim) on their default stacks. The preorder
+  // (golang:1.23-alpine, rust:1.98-slim) on their default stacks. The preorder
   // limits were measured cold, one left chain per process.
   verification: {
     ruby: { preorder: 'ran here · overflows Ruby 3.1\'s default stack past an 8,185-node chain', level: 'ran here · 20,014 round trips' },

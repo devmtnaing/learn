@@ -637,7 +637,7 @@ mountLesson({
   // The corpus: the 2 examples, 6 edges, 15,000 random grids up to 6 × 8,
   // 5,000 up to 40 × 40, and five at 300 × 300 (all land, a checkerboard,
   // three random densities) — against a union-find oracle. Go and Rust ran in
-  // Docker (golang:1.23-alpine, rust:1-slim). The DFS stack limits were
+  // Docker (golang:1.23-alpine, rust:1.98-slim). The DFS stack limits were
   // measured cold, one snake-shaped island per process, on each default stack.
   verification: {
     ruby: { dfs: 'ran here · overflows Ruby 3.1\'s default stack past 8,729 cells deep', bfs: 'ran here · 20,013 cases' },

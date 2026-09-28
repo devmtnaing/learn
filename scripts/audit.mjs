@@ -173,6 +173,7 @@ async function keysAndLink(page, url) {
   const found = [];
   await page.goto(url);
   await page.waitForSelector('#lesson .atab');
+  await page.waitForTimeout(300);                       // the address is written after a 150ms debounce
   if (new URL(page.url()).search) found.push(`an untouched page has a query: ${new URL(page.url()).search}`);
   const count = () => page.$eval('#lesson [data-count]', (e) => e.textContent.trim());
   const playLabel = () => page.$eval('#lesson [data-act="play"]', (e) => e.textContent.trim());
@@ -181,7 +182,8 @@ async function keysAndLink(page, url) {
   await page.keyboard.press(' ');
   if (!(await count()).startsWith('2 /') || (await playLabel()) !== 'Play') {
     found.push(`space on a focused Next: step ${await count()}, play button "${await playLabel()}" (want step 2, not playing)`);
-    await page.click('#lesson [data-act="play"]').catch(() => {});
+    // stop playback if space started it; clicking a stopped Play would start it
+    if ((await playLabel()) !== 'Play') await page.click('#lesson [data-act="play"]').catch(() => {});
   }
   if ((await page.$$('#lesson .atab')).length > 1) {
     await page.focus('#lesson .atab[aria-selected="true"]');

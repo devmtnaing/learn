@@ -579,7 +579,7 @@ mountLesson({
   // with binomials (itself checked by enumerating every climb up to 20).
   // Plain recursion ran on n = 1..35 in every language, and on n = 45, timed
   // on an Apple M5 Pro — right answer each time, and the time is the point.
-  // Go and Rust ran in Docker (golang:1.23-alpine, rust:1-slim).
+  // Go and Rust ran in Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: { naive: 'ran here · n = 1–35, and 45 in 63 s', memo: 'ran here · every n, 1–45', dp: 'ran here · every n, 1–45' },
     python: { naive: 'ran here · n = 1–35, and 45 in 72 s', memo: 'ran here · every n, 1–45', dp: 'ran here · every n, 1–45' },

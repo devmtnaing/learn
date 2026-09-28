@@ -746,7 +746,7 @@ mountLesson({
   // reversed, a walled snake 20,099 calls deep, r + c, all equal, a
   // checkerboard, random values to 2³¹ − 1) — against an oracle that sorts
   // the cells by value. Go and Rust ran in Docker (golang:1.23-alpine,
-  // rust:1-slim) on their default stacks. The memo DFS limits were measured
+  // rust:1.98-slim) on their default stacks. The memo DFS limits were measured
   // cold, one walled snake per process, on each default stack.
   verification: {
     ruby: { memo: 'ran here · overflows Ruby 3.1\'s default stack past 2,846 calls deep', peel: 'ran here · 20,016 cases' },

@@ -509,7 +509,7 @@ mountLesson({
   // The corpus: the 2 examples, 8 edges, 15,000 random pairs of up to 6
   // values from -5..5, 5,000 of up to 1,000 each, and four at the limits —
   // against sort-and-read-the-middle. Each driver prints five decimals. Go
-  // and Rust ran in Docker (golang:1.23-alpine, rust:1-slim).
+  // and Rust ran in Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 20,014 cases',
     python: 'ran here · 20,014 cases',

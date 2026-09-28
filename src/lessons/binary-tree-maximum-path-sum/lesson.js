@@ -532,7 +532,7 @@ mountLesson({
   // non-recursive oracle. Trying every node as the top skips those six. Ruby
   // and Node ran with a larger stack (BIG_STACK); their default-stack limits
   // were measured cold, one chain per process. Go and Rust ran in Docker
-  // (golang:1.23-alpine, rust:1-slim) on their default stacks.
+  // (golang:1.23-alpine, rust:1.98-slim) on their default stacks.
   verification: {
     ruby: { every: 'ran here · 20,007 cases, not the six at 3 × 10⁴; overflows Ruby 3.1\'s default stack past 8,731 deep', once: 'ran here · overflows Ruby 3.1\'s default stack past 8,186 deep' },
     python: { every: 'ran here · 20,007 cases, not the six at 3 × 10⁴', once: 'ran here · 20,013 cases, 3 × 10⁴ calls deep' },

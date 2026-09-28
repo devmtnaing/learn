@@ -468,7 +468,7 @@ mountLesson({
   // The corpus: the 2 examples, 6 edges, 15,000 random landscapes of up to 12
   // bars from 0..5, 5,000 of up to 300 across the full range, and four of
   // 2 × 10⁴ bars — the largest answer 1,999,800,000 — against a stack
-  // oracle. Go and Rust ran in Docker (golang:1.23-alpine, rust:1-slim).
+  // oracle. Go and Rust ran in Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 20,012 cases',
     python: 'ran here · 20,012 cases',

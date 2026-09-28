@@ -7,10 +7,10 @@
  * the last merged one — anything earlier ended before the last one started —
  * so the sweep compares with one interval, not all of them.
  */
-import { mountLesson, esc } from '../../lib/stepper.js';
+import { mountLesson } from '../../lib/stepper.js';
 import { pick, onLangChange } from '../../lib/i18n.js';
 import { cells, readout, slots, stagePanel } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, stageGap, presetChips, widgetLabel, stageEmpty } from '../../lib/kit.js';
+import { t, esc, exampleTitle, LANGUAGES, k, c, stageGap, presetChips, widgetLabel, stageEmpty } from '../../lib/kit.js';
 
 const MAX_LEN = 8;
 const TOP = 20;
@@ -565,7 +565,7 @@ mountLesson({
   // intervals inside 0..10, 5,000 of 1–40 inside 0..100, and five at
   // n = 10⁴ — against an oracle that paints a doubled number line. Merged
   // intervals are compared in sorted order. The brute force skips the five at
-  // n = 10⁴. Go and Rust ran in Docker (golang:1.23-alpine, rust:1-slim).
+  // n = 10⁴. Go and Rust ran in Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: { brute: 'ran here · 20,010 cases, not the five at n = 10⁴', sweep: 'ran here · 20,015 cases' },
     python: { brute: 'ran here · 20,010 cases, not the five at n = 10⁴', sweep: 'ran here · 20,015 cases' },

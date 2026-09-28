@@ -10,6 +10,10 @@ import { pick } from './i18n.js';
 /** A reader-facing sentence in both languages; `pick()` chooses the side. */
 export const t = (en, my) => ({ en, my });
 
+/** Text made safe to splice into HTML. Narration, notes and widget lines are
+ * HTML, so anything the reader typed goes through this first. */
+export const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+
 /** "1 node", "3 nodes". English only — Burmese needs no plural. */
 export const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 

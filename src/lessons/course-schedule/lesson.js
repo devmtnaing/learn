@@ -699,7 +699,7 @@ mountLesson({
   // chain closed into a cycle, random DAG and random graph with 5,000 pairs,
   // a 2,000-cycle, one course needed by all) — against an oracle that peels
   // off free courses until none are left. Go and Rust ran in Docker
-  // (golang:1.23-alpine, rust:1-slim), every language on its default stack.
+  // (golang:1.23-alpine, rust:1.98-slim), every language on its default stack.
   verification: {
     ruby: 'ran here · 20,016 cases',
     python: 'ran here · 20,016 cases',

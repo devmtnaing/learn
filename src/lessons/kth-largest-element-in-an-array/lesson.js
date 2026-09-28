@@ -462,7 +462,7 @@ mountLesson({
   // The corpus: the 2 examples, 5 edges, 15,000 random arrays of 1–9 values
   // from -3..3 with any valid k, 5,000 of up to 300 across ±10⁴, and five at
   // n = 10⁵ — against an oracle that counts values and walks down from the
-  // largest. Go and Rust ran in Docker (golang:1.23-alpine, rust:1-slim).
+  // largest. Go and Rust ran in Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 20,012 cases',
     python: 'ran here · 20,012 cases',

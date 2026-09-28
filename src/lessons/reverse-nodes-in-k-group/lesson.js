@@ -525,7 +525,7 @@ mountLesson({
   // nodes with every k, 5,000 of up to 300, and five of 5,000 nodes with k =
   // 1, 2, 70, 4,999 and 5,000 — against chunk-and-reverse in a Python list.
   // Every language ran on its default stack. Go and Rust ran in Docker
-  // (golang:1.23-alpine, rust:1-slim).
+  // (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 20,013 cases',
     python: 'ran here · 20,013 cases',

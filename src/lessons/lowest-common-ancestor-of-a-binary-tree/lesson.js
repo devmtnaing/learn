@@ -598,7 +598,7 @@ mountLesson({
   // measured cold here, Ruby 3.1 overflows past 7,687 levels, Node 24 past
   // 6,906, and Rust's 8 MB main thread aborts at 10⁵ (fine at 5 × 10⁴).
   // Python (recursion limit raised in the listing) and Go ran a 10⁵ chain.
-  // Go and Rust ran in Docker (golang:1.23-alpine, rust:1-slim).
+  // Go and Rust ran in Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: { parents: 'ran here · 20,013 cases', recurse: 'ran here · overflows Ruby 3.1\'s default stack past 7,687 deep' },
     python: { parents: 'ran here · 20,013 cases', recurse: 'ran here · 20,011 cases, and a 10⁵-deep chain' },

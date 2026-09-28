@@ -600,7 +600,7 @@ mountLesson({
   // The constraint allows n = 1 to 9, so the corpus is all nine, checked
   // against an oracle that filters every permutation of the columns. Each
   // driver sorts the boards, since any order is accepted. Go and Rust ran in
-  // Docker (golang:1.23-alpine, rust:1-slim).
+  // Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · every n from 1 to 9',
     python: 'ran here · every n from 1 to 9',

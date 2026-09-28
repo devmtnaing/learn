@@ -544,7 +544,7 @@ mountLesson({
   // values from -10..10, weighted toward length 6 — against
   // itertools.permutations. Each driver sorts the answer and prints its
   // length first, since any order is accepted. Go and Rust ran in Docker
-  // (golang:1.23-alpine, rust:1-slim).
+  // (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 20,005 cases',
     python: 'ran here · 20,005 cases',

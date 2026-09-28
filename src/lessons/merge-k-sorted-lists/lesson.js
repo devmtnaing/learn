@@ -585,7 +585,7 @@ mountLesson({
   // short lists, 5,000 of up to 60 lists up to 20 long, and five of 10⁴
   // nodes — against concatenate-and-sort. Merging one at a time skips the
   // three with 10⁴ lists. Go and Rust ran in Docker (golang:1.23-alpine,
-  // rust:1-slim).
+  // rust:1.98-slim).
   verification: {
     ruby: { one: 'ran here · 20,011 cases, not the three with 10⁴ lists', halves: 'ran here · 20,014 cases' },
     python: { one: 'ran here · 20,011 cases, not the three with 10⁴ lists', halves: 'ran here · 20,014 cases' },

@@ -563,7 +563,7 @@ mountLesson({
   // over -3..3, 5,000 of up to 100 nodes over -100..100, and three 100-node
   // chains (all-left, all-right, zigzag) — against a reference that builds a
   // new mirrored tree rather than swapping in place. Go and Rust ran in Docker
-  // (golang:1.23-alpine, rust:1-slim).
+  // (golang:1.23-alpine, rust:1.98-slim).
   verification: {
     ruby: 'ran here · 20,010 cases',
     python: 'ran here · 20,010 cases',

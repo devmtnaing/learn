@@ -50,7 +50,8 @@ right.
   draws itself (a board square) is at least 40px tall there too.
 - ✓ Example cards: input, output, a `why` list explaining the answer, and a
   "Load into the stepper" button.
-- The traps disclosure, phrased as "N ways the statement bites".
+- The traps disclosure, titled "N traps in the statement to know before you
+  code" (Burmese: "code မရေးမီ သိထားသင့်သည့် မေးခွန်းစာသားထဲက ချော်လွယ်သည့်နေရာ N ခု").
 
 **2 · The answer, step by step** — three sub-sections, laid out by the kit:
 - **2·1 Pick an approach.** ✓ A tab per mode (name, optional `sub`, one-line

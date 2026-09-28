@@ -46,11 +46,11 @@ function loneValue(nums) {
   for (const v of nums) counts.set(v, (counts.get(v) ?? 0) + 1);
 
   const overcounted = [...counts].find(([, c]) => c > 2);
-  if (overcounted) throw new Error(`${overcounted[0]} appears ${overcounted[1]} times — values may appear at most twice`);
+  if (overcounted) throw new Error(`${overcounted[0]} appears ${overcounted[1]} times, but values may appear at most twice`);
 
   const alone = [...counts].filter(([, c]) => c === 1).map(([v]) => v);
-  if (!alone.length) throw new Error('every value is paired — exactly one has to stand alone');
-  if (alone.length > 1) throw new Error(`${alone.join(' and ')} each appear once — only one value may`);
+  if (!alone.length) throw new Error('every value is paired, but exactly one has to stand alone');
+  if (alone.length > 1) throw new Error(`${alone.join(' and ')} each appear once, but only one value may`);
   return alone[0];
 }
 

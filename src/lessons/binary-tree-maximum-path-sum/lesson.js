@@ -453,7 +453,7 @@ function mountTopWidget(host) {
 
 function atLeastOne(text) {
   const level = treeInput(MAX_NODES)(text);
-  if (!level.length) throw new Error('at least one node — the constraints start at 1');
+  if (!level.length) throw new Error('at least one node; the constraints start at 1');
   return level;
 }
 

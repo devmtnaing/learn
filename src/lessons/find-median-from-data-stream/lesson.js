@@ -22,7 +22,7 @@ function parseOps(text) {
   let rest = s;
   while (rest) {
     const m = rest.match(/^(?:addNum\((-?\d{1,2})\)|findMedian\(\))(?:,|$)/);
-    if (!m) throw new Error('calls like addNum(1), findMedian() — numbers from -99 to 99 here');
+    if (!m) throw new Error('calls like addNum(1), findMedian(), with numbers from -99 to 99 here');
     ops.push(m[1] != null ? Number(m[1]) : 'f');
     rest = rest.slice(m[0].length);
   }

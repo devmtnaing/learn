@@ -17,7 +17,7 @@ const MAX_LEN = 12;
 /* The statement's promise: a sorted array, rotated once. */
 function rotatedOnce(nums) {
   const drops = nums.filter((v, i) => i > 0 && v < nums[i - 1]).length;
-  if (drops > 1 || (drops === 1 && nums.at(-1) > nums[0])) throw new Error('a sorted array, rotated once — like 4, 5, 6, 7, 0, 1, 2');
+  if (drops > 1 || (drops === 1 && nums.at(-1) > nums[0])) throw new Error('a sorted array, rotated once, like 4, 5, 6, 7, 0, 1, 2');
 }
 
 const span = (nums, a, b) => `[${nums.slice(a, b + 1).join(', ')}]`;

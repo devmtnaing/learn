@@ -25,7 +25,7 @@ function parseWords(text) {
   const ws = String(text).replace(/[[\]]/g, '').split(/[,\s]+/).map((w) => w.trim().replace(/^"|"$/g, '')).filter(Boolean);
   if (!ws.length || ws.some((w) => !/^[a-z]+$/.test(w))) throw new Error('lowercase words, like hot, dot, dog');
   if (ws.length > MAX_WORDS) throw new Error(`at most ${MAX_WORDS} words, so the stage stays readable`);
-  if (new Set(ws).size !== ws.length) throw new Error('each word only once — the statement says they are unique');
+  if (new Set(ws).size !== ws.length) throw new Error('each word only once; the statement says they are unique');
   return ws;
 }
 

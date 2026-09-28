@@ -580,11 +580,11 @@ mountLesson({
   // on an Apple M5 Pro — right answer each time, and the time is the point.
   // Go and Rust ran in Docker (golang:1.23-alpine, rust:1.98-slim).
   verification: {
-    ruby: { naive: 'ran here · n = 1–35, and 45 in 63 s', memo: 'ran here · every n, 1–45', dp: 'ran here · every n, 1–45' },
-    python: { naive: 'ran here · n = 1–35, and 45 in 72 s', memo: 'ran here · every n, 1–45', dp: 'ran here · every n, 1–45' },
-    javascript: { naive: 'ran here · n = 1–35, and 45 in 5.5 s', memo: 'ran here · every n, 1–45', dp: 'ran here · every n, 1–45' },
-    go: { naive: 'ran here · n = 1–35, and 45 in 2.7 s · Go 1.23', memo: 'ran here · every n, 1–45 · Go 1.23', dp: 'ran here · every n, 1–45 · Go 1.23' },
-    rust: { naive: 'ran here · n = 1–35, and 45 in 1.6 s · rustc 1.98', memo: 'ran here · every n, 1–45 · rustc 1.98', dp: 'ran here · every n, 1–45 · rustc 1.98' },
+    ruby: { naive: 'ran here · n = 1 to 35, and 45 in 63 s', memo: 'ran here · every n, 1 to 45', dp: 'ran here · every n, 1 to 45' },
+    python: { naive: 'ran here · n = 1 to 35, and 45 in 72 s', memo: 'ran here · every n, 1 to 45', dp: 'ran here · every n, 1 to 45' },
+    javascript: { naive: 'ran here · n = 1 to 35, and 45 in 5.5 s', memo: 'ran here · every n, 1 to 45', dp: 'ran here · every n, 1 to 45' },
+    go: { naive: 'ran here · n = 1 to 35, and 45 in 2.7 s · Go 1.23', memo: 'ran here · every n, 1 to 45 · Go 1.23', dp: 'ran here · every n, 1 to 45 · Go 1.23' },
+    rust: { naive: 'ran here · n = 1 to 35, and 45 in 1.6 s · rustc 1.98', memo: 'ran here · every n, 1 to 45 · rustc 1.98', dp: 'ran here · every n, 1 to 45 · rustc 1.98' },
   },
   strip,
   stripLabel: t('The staircase: ways to reach each step, once something knows it', 'လှေကား: step တစ်ခုစီသို့ ရောက်ရန် နည်း (သိပြီးသည့်အခါ)'),

@@ -21,7 +21,7 @@ function parseOps(text) {
   let rest = s;
   while (rest) {
     const m = rest.match(/^(?:put\((\d{1,2}),(\d{1,3})\)|get\((\d{1,2})\))(?:,|$)/);
-    if (!m) throw new Error('calls like put(1,1), get(1) — keys up to 99, values up to 999');
+    if (!m) throw new Error('calls like put(1,1), get(1), with keys up to 99 and values up to 999');
     ops.push(m[3] != null ? ['get', Number(m[3])] : ['put', Number(m[1]), Number(m[2])]);
     rest = rest.slice(m[0].length);
   }

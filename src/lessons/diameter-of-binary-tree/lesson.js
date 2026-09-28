@@ -557,7 +557,7 @@ function mountBendWidget(host) {
 /* The constraints start at one node, and a diameter needs somewhere to bend. */
 function atLeastOne(text) {
   const level = treeInput(MAX_NODES)(text);
-  if (!level.length) throw new Error('at least one node — the constraints start at 1');
+  if (!level.length) throw new Error('at least one node; the constraints start at 1');
   return level;
 }
 

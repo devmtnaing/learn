@@ -23,7 +23,7 @@ function majorityOf(nums) {
   for (const v of nums) counts.set(v, (counts.get(v) ?? 0) + 1);
   const half = Math.floor(nums.length / 2);
   const m = [...counts].find(([, n]) => n > half);
-  if (!m) throw new Error(`no value appears more than ⌊${nums.length}/2⌋ = ${half} times — the statement guarantees one does`);
+  if (!m) throw new Error(`no value appears more than ⌊${nums.length}/2⌋ = ${half} times, and the statement guarantees one does`);
   return m[0];
 }
 
@@ -464,7 +464,7 @@ mountLesson({
     { id: 'count', name: 'Count map',
       desc: t('Tally every value; stop when one passes half.', 'value တိုင်းကို ရေတွက်၊ တစ်ခုက တစ်ဝက်ကျော်လျှင် ရပ်။'),
       cost: 'O(n) time · O(n) space', build: buildCount },
-    { id: 'vote', name: 'Boyer–Moore vote',
+    { id: 'vote', name: 'Boyer-Moore vote',
       desc: t('One candidate; other values cancel its votes.', 'candidate တစ်ခု ထားပြီး အခြား value များက ၎င်း၏ မဲကို ချေဖျက်သည်။'),
       cost: 'O(n) time · O(1) space', build: buildVote },
   ],

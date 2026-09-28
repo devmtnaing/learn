@@ -20,7 +20,7 @@ function parseOps(text) {
   const ops = [];
   while (rest) {
     const m = rest.match(/^(insert|search|startsWith)\(["']?([a-z]+)["']?\)(?:,|$)/);
-    if (!m) throw new Error('calls like insert(apple), search(app), startsWith(ap) — lowercase letters only');
+    if (!m) throw new Error('calls like insert(apple), search(app), startsWith(ap), lowercase letters only');
     if (m[2].length > MAX_LEN) throw new Error(`words up to ${MAX_LEN} letters, so the trie stays readable`);
     ops.push([m[1], m[2]]);
     rest = rest.slice(m[0].length);

@@ -478,7 +478,7 @@ const APPROACH = {
         "climb တိုင်းသည် 1-step သို့မဟုတ် 2-step ဖြင့် ဆုံးသဖြင့် step n သို့ ရောက်ရန် နည်းများမှာ n − 1 သို့ ရောက်ရန် နည်းများနှင့် n − 2 သို့ ရောက်ရန် နည်းများ ပေါင်းလဒ် ဖြစ်သည်။"),
     steps: [
       t("Steps 0 and 1 have one way each: return 1.",
-        "step 0 နှင့် 1 တွင် နည်း တစ်နည်းစီ ရှိသည် — 1 ကို ပြန်ပေးသည်။"),
+        "step 0 နှင့် 1 တွင် နည်း တစ်နည်းစီ ရှိသည်။ 1 ကို ပြန်ပေးသည်။"),
       t("<code>one</code> = the ways to reach n − 1.",
         "<code>one</code> = n − 1 သို့ ရောက်ရန် နည်းများ။"),
       t("<code>two</code> = the ways to reach n − 2.",
@@ -487,7 +487,7 @@ const APPROACH = {
         "<code>one + two</code> ကို ပြန်ပေးသည်။"),
     ],
     cost: t("small steps are worked out again in every branch: 3,672,623,805 calls at n = 45.",
-        "step ငယ်များကို branch တိုင်းတွင် ပြန်တွက်သည် — n = 45 တွင် call 3,672,623,805။"),
+        "step ငယ်များကို branch တိုင်းတွင် ပြန်တွက်သည်။ n = 45 တွင် call 3,672,623,805။"),
   },
   memo: {
     idea: t("The same recurrence, but each answer is remembered the first time it is worked out, so no step is computed twice.",
@@ -503,21 +503,21 @@ const APPROACH = {
         "<code>one + two</code> ကို <code>memo[n]</code> တွင် သိမ်းပြီး ပြန်ပေးသည်။"),
     ],
     cost: t("each step is worked out once: 89 calls at n = 45, and a table of 44 entries.",
-        "step တစ်ခုစီကို တစ်ကြိမ်သာ တွက်သည် — n = 45 တွင် call 89 နှင့် entry 44 ခုရှိ table။"),
+        "step တစ်ခုစီကို တစ်ကြိမ်သာ တွက်သည်။ n = 45 တွင် call 89 နှင့် entry 44 ခုရှိ table။"),
   },
   dp: {
     idea: t("Each step needs only the two below it, so climb from the bottom holding just those two numbers.",
         "step တစ်ခုစီသည် ၎င်းအောက်ရှိ နှစ်ခုကိုသာ လိုသဖြင့် ထိုကိန်းနှစ်ခုကိုသာ ကိုင်၍ အောက်ခြေမှ တက်သည်။"),
     steps: [
       t("Start with <code>a = 1</code> and <code>b = 1</code>: the ways to reach steps 0 and 1.",
-        "<code>a = 1</code> နှင့် <code>b = 1</code> ဖြင့် စသည် — step 0 နှင့် 1 သို့ ရောက်ရန် နည်းများ။"),
+        "<code>a = 1</code> နှင့် <code>b = 1</code> ဖြင့် စသည်။ ၎င်းတို့မှာ step 0 နှင့် 1 သို့ ရောက်ရန် နည်းများ ဖြစ်သည်။"),
       t("Repeat n − 1 times: <code>a, b = b, a + b</code>.",
-        "n − 1 ကြိမ် ထပ်လုပ်သည် — <code>a, b = b, a + b</code>။"),
+        "n − 1 ကြိမ် ထပ်လုပ်သည်: <code>a, b = b, a + b</code>။"),
       t("Return <code>b</code>.",
         "<code>b</code> ကို ပြန်ပေးသည်။"),
     ],
     cost: t("n − 1 additions and two integers: 44 additions at n = 45.",
-        "ပေါင်းခြင်း n − 1 ကြိမ်နှင့် integer နှစ်ခု — n = 45 တွင် ပေါင်းခြင်း 44 ကြိမ်။"),
+        "ပေါင်းခြင်း n − 1 ကြိမ်နှင့် integer နှစ်ခု၊ n = 45 တွင် ပေါင်းခြင်း 44 ကြိမ်။"),
   },
 };
 
@@ -541,14 +541,14 @@ mountLesson({
   examples: [
     { title: exampleTitle(1), inputHtml: '<code>n = 2</code>', output: '2',
       why: [t('1 step + 1 step, or one 2-step.', 'step 1 + step 1၊ သို့မဟုတ် 2-step တစ်ခု။'),
-            t('In the recurrence: ways(1) + ways(0) = 1 + 1 — the empty climb of step 0 counts as one way.',
-              'recurrence အရ — ways(1) + ways(0) = 1 + 1 — step 0 ၏ ဘာမျှ မတက်ခြင်းကို နည်း တစ်နည်းဟု ရေတွက်သည်။')],
+            t('In the recurrence: ways(1) + ways(0) = 1 + 1. The empty climb of step 0 counts as one way.',
+              'recurrence အရ ways(1) + ways(0) = 1 + 1 ဖြစ်သည်။ step 0 ၏ ဘာမျှ မတက်ခြင်းကို နည်း တစ်နည်းဟု ရေတွက်သည်။')],
       load: { n: 2 } },
     { title: exampleTitle(2), inputHtml: '<code>n = 3</code>', output: '3',
-      why: [t('1 + 1 + 1, 1 + 2, and 2 + 1 — order matters, so 1 + 2 and 2 + 1 are different climbs.',
-              '1 + 1 + 1၊ 1 + 2 နှင့် 2 + 1 — အစီအစဉ် အရေးကြီးသဖြင့် 1 + 2 နှင့် 2 + 1 သည် မတူသော climb များ ဖြစ်သည်။'),
+      why: [t('1 + 1 + 1, 1 + 2, and 2 + 1. Order matters, so 1 + 2 and 2 + 1 are different climbs.',
+              '1 + 1 + 1၊ 1 + 2 နှင့် 2 + 1။ အစီအစဉ် အရေးကြီးသဖြင့် 1 + 2 နှင့် 2 + 1 သည် မတူသော climb များ ဖြစ်သည်။'),
             t('Two of them end in 1 (the climbs of 2) and one ends in 2 (the climb of 1): 2 + 1 = 3.',
-              'နှစ်ခုသည် 1 ဖြင့် ဆုံးပြီး (2 ၏ climb များ) တစ်ခုသည် 2 ဖြင့် ဆုံးသည် (1 ၏ climb) — 2 + 1 = 3။')],
+              'နှစ်ခုသည် 1 ဖြင့် ဆုံးပြီး (2 ၏ climb များ) တစ်ခုသည် 2 ဖြင့် ဆုံးသည် (1 ၏ climb)။ 2 + 1 = 3။')],
       load: { n: 3 } },
   ],
   modes: [
@@ -566,11 +566,11 @@ mountLesson({
   code: CODE,
   solutions: {
     naive: { approach: APPROACH.naive, desc: t('The recurrence, written straight down. Correct for every n, and exponential: n = 45 makes 3,672,623,805 calls because the small steps are recomputed inside every branch.',
-                     'recurrence ကို တိုက်ရိုက် ချရေးခြင်း။ n တိုင်းအတွက် မှန်ပြီး exponential ဖြစ်သည် — step ငယ်များကို branch တိုင်းအတွင်း ပြန်တွက်သဖြင့် n = 45 သည် call 3,672,623,805 ခု ဖြစ်စေသည်။') },
-    memo: { approach: APPROACH.memo, desc: t('The same recursion with a table in front of it: each step is worked out once and looked up after that — 89 calls for n = 45.',
-                    'ရှေ့တွင် table တစ်ခုပါသော recursion အတူတူ — step တစ်ခုစီကို တစ်ကြိမ် တွက်ပြီး နောက်ပိုင်း ရှာဖတ်သည် — n = 45 အတွက် call 89 ခု။') },
+                     'recurrence ကို တိုက်ရိုက် ချရေးခြင်း။ n တိုင်းအတွက် မှန်ပြီး exponential ဖြစ်သည်။ step ငယ်များကို branch တိုင်းအတွင်း ပြန်တွက်သဖြင့် n = 45 သည် call 3,672,623,805 ခု ဖြစ်စေသည်။') },
+    memo: { approach: APPROACH.memo, desc: t('The same recursion with a table in front of it: each step is worked out once and looked up after that. 89 calls for n = 45.',
+                    'ရှေ့တွင် table တစ်ခုပါသော recursion အတူတူ ဖြစ်သည်။ step တစ်ခုစီကို တစ်ကြိမ် တွက်ပြီး နောက်ပိုင်း ရှာဖတ်သည်။ n = 45 အတွက် call 89 ခု။') },
     dp: { approach: APPROACH.dp, desc: t('Each step only needs the two below it, so walk up from step 1 carrying just those two. No recursion, no table: 44 additions for n = 45.',
-                  'step တစ်ခုစီသည် ၎င်းအောက်ရှိ နှစ်ခုကိုသာ လိုသဖြင့် step 1 မှ ထိုနှစ်ခုကိုသာ သယ်၍ တက်သည်။ recursion မရှိ၊ table မရှိ — n = 45 အတွက် ပေါင်းခြင်း 44 ကြိမ်။') },
+                  'step တစ်ခုစီသည် ၎င်းအောက်ရှိ နှစ်ခုကိုသာ လိုသဖြင့် step 1 မှ ထိုနှစ်ခုကိုသာ သယ်၍ တက်သည်။ recursion မရှိ၊ table မရှိ။ n = 45 အတွက် ပေါင်းခြင်း 44 ကြိမ်။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The input is a single n in 1..45, so memo and two-variable ran on every
@@ -587,7 +587,7 @@ mountLesson({
     rust: { naive: 'ran here · n = 1–35, and 45 in 1.6 s · rustc 1.98', memo: 'ran here · every n, 1–45 · rustc 1.98', dp: 'ran here · every n, 1–45 · rustc 1.98' },
   },
   strip,
-  stripLabel: t('The staircase — ways to reach each step, once something knows it', 'လှေကား — step တစ်ခုစီသို့ ရောက်ရန် နည်း (သိပြီးသည့်အခါ)'),
+  stripLabel: t('The staircase: ways to reach each step, once something knows it', 'လှေကား: step တစ်ခုစီသို့ ရောက်ရန် နည်း (သိပြီးသည့်အခါ)'),
   draw,
   answer,
   vars,

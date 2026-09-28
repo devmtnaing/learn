@@ -790,29 +790,29 @@ function mountEvictWidget(host) {
 const APPROACH = {
   list: {
     idea: t('Keep the values in a hash map and the keys in a list ordered by last use. Every use moves its key to the end; the key to evict is always first.',
-            'value များကို hash map ထဲ၊ key များကို နောက်ဆုံးသုံးချိန်အလိုက် list ထဲ ထားသည်။ အသုံးပြုတိုင်း ၎င်း၏ key ကို နောက်ဆုံးသို့ ရွှေ့သည် — ဖယ်ရမည့် key သည် အမြဲ ပထမ။'),
+            'value များကို hash map ထဲ၊ key များကို နောက်ဆုံးသုံးချိန်အလိုက် list ထဲ ထားသည်။ အသုံးပြုတိုင်း ၎င်း၏ key ကို နောက်ဆုံးသို့ ရွှေ့သည်။ ဖယ်ရမည့် key သည် အမြဲ ပထမ။'),
     steps: [
-      t('<code>get</code>: missing → -1; otherwise <code>touch</code> the key and return its value.', '<code>get</code> — မရှိလျှင် -1 — ရှိလျှင် key ကို <code>touch</code> ပြီး value ပြန်သည်။'),
-      t('<code>touch</code>: find the key in <code>order</code>, cut it out, append it.', '<code>touch</code> — <code>order</code> ထဲ key ကို ရှာ၊ ဖြတ်ထုတ်၊ နောက်ဆုံးတွင် ထည့်သည်။'),
+      t('<code>get</code>: missing → -1; otherwise <code>touch</code> the key and return its value.', '<code>get</code>: မရှိလျှင် -1။ ရှိလျှင် key ကို <code>touch</code> ပြီး value ပြန်ပေးသည်။'),
+      t('<code>touch</code>: find the key in <code>order</code>, cut it out, append it.', '<code>touch</code>: <code>order</code> ထဲ key ကို ရှာ၊ ဖြတ်ထုတ်ပြီး နောက်ဆုံးတွင် ထည့်သည်။'),
       t('<code>put</code>: touch or append the key, set the value, and if <code>order</code> is over capacity drop its first key from both.',
-        '<code>put</code> — key ကို touch သို့မဟုတ် ထည့်၊ value သတ်မှတ်၊ <code>order</code> capacity ကျော်လျှင် ပထမ key ကို နှစ်ခုလုံးမှ ဖယ်သည်။'),
+        '<code>put</code>: key ကို touch သို့မဟုတ် ထည့်၊ value သတ်မှတ်ပြီး <code>order</code> capacity ကျော်လျှင် ပထမ key ကို နှစ်ခုလုံးမှ ဖယ်သည်။'),
     ],
     cost: t('Finding a key in the list, and removing the first one, both shift up to capacity entries: O(capacity) per call, which the statement rules out.',
-            'list ထဲ key ရှာခြင်းနှင့် ပထမ key ဖယ်ခြင်း နှစ်ခုလုံး entry capacity အထိ ရွှေ့သည် — call တစ်ခုလျှင် O(capacity)၊ မေးခွန်းက ပယ်ထားသည်။'),
+            'list ထဲ key ရှာခြင်းနှင့် ပထမ key ဖယ်ခြင်း နှစ်ခုလုံး entry capacity အထိ ရွှေ့သည်။ call တစ်ခုလျှင် O(capacity) ဖြစ်ပြီး မေးခွန်းက ပယ်ထားသည်။'),
   },
   linked: {
     idea: t('Make the recency order a doubly linked list and let the hash map point at each key\'s node. Any node can then be cut out and put at the front in a few pointer writes, and the oldest is always the one before tail.',
             'recency အစီအစဉ်ကို doubly linked list ဖြစ်စေပြီး hash map က key တစ်ခုစီ၏ node ကို ညွှန်စေသည်။ ထို့နောက် မည်သည့် node ကိုမဆို pointer ရေးခြင်း အနည်းငယ်ဖြင့် ဖြတ်ထုတ်ပြီး ရှေ့ဆုံးတွင် ထားနိုင်ပြီး အဟောင်းဆုံးသည် အမြဲ tail ရှေ့ရှိ node ဖြစ်သည်။'),
     steps: [
       t('<code>get</code>: look the node up in <code>nodes</code>; missing → -1; otherwise <code>unlink</code> it, move it to the front, return its value.',
-        '<code>get</code> — <code>nodes</code> ထဲ node ရှာ — မရှိလျှင် -1 — ရှိလျှင် <code>unlink</code>၊ ရှေ့ဆုံးသို့ ရွှေ့၊ value ပြန်သည်။'),
+        '<code>get</code>: <code>nodes</code> ထဲ node ရှာသည်။ မရှိလျှင် -1။ ရှိလျှင် <code>unlink</code> ပြီး ရှေ့ဆုံးသို့ ရွှေ့ကာ value ပြန်ပေးသည်။'),
       t('<code>put</code>: an existing node gets the new value and is unlinked; a new key gets a new node. Either way it goes to the front.',
-        '<code>put</code> — ရှိပြီးသား node သည် value အသစ် ရပြီး unlink ခံရသည် — key အသစ်သည် node အသစ် ရသည်။ မည်သို့ပင်ဖြစ်စေ ရှေ့ဆုံးသို့ သွားသည်။'),
+        '<code>put</code>: ရှိပြီးသား node သည် value အသစ် ရပြီး unlink ခံရသည်။ key အသစ်သည် node အသစ် ရသည်။ မည်သို့ပင်ဖြစ်စေ ရှေ့ဆုံးသို့ သွားသည်။'),
       t('Over capacity: <code>lru = tail.prev</code>; unlink it and delete <code>lru.key</code> from <code>nodes</code>.',
-        'capacity ကျော်လျှင် — <code>lru = tail.prev</code> — unlink ပြီး <code>nodes</code> မှ <code>lru.key</code> ကို ဖျက်သည်။'),
+        'capacity ကျော်လျှင် <code>lru = tail.prev</code> ကို unlink ပြီး <code>nodes</code> မှ <code>lru.key</code> ကို ဖျက်သည်။'),
     ],
     cost: t('A hash lookup plus a fixed number of pointer writes per call: O(1). The sentinels mean no call ever checks for an empty list or a missing neighbour.',
-            'call တစ်ခုလျှင် hash lookup တစ်ကြိမ်နှင့် pointer ရေးခြင်း အရေအတွက် ပုံသေ — O(1)။ sentinel များကြောင့် မည်သည့် call ကမျှ list ဗလာ သို့မဟုတ် အိမ်နီး မရှိခြင်းကို မစစ်ရ။'),
+            'call တစ်ခုလျှင် hash lookup တစ်ကြိမ်နှင့် pointer ရေးခြင်း အရေအတွက် ပုံသေ: O(1)။ sentinel များကြောင့် မည်သည့် call ကမျှ list ဗလာ သို့မဟုတ် အိမ်နီး မရှိခြင်းကို မစစ်ရ။'),
   },
 };
 
@@ -837,7 +837,7 @@ mountLesson({
       output: '[null,null,null,1,null,-1,null,-1,3,4]',
       why: [
         t('get(1) returns 1 and makes 1 the most recently used, so put(3, 3) evicts 2, not 1.', 'get(1) သည် 1 ပြန်ပြီး 1 ကို အသစ်ဆုံး အသုံးပြုထားသည် ဖြစ်စေသဖြင့် put(3, 3) သည် 1 မဟုတ်ဘဲ 2 ကို ဖယ်သည်။'),
-        t('put(4, 4) then evicts 1, the least recently used of {1, 3}; 3 and 4 remain.', 'ထို့နောက် put(4, 4) သည် {1, 3} ထဲမှ အဟောင်းဆုံး အသုံးပြုထားသော 1 ကို ဖယ်သည် — 3 နှင့် 4 ကျန်သည်။'),
+        t('put(4, 4) then evicts 1, the least recently used of {1, 3}; 3 and 4 remain.', 'ထို့နောက် put(4, 4) သည် {1, 3} ထဲမှ အဟောင်းဆုံး အသုံးပြုထားသော 1 ကို ဖယ်သည်။ 3 နှင့် 4 ကျန်သည်။'),
       ],
       load: { capacity: 2, ops: EX1 } },
   ],
@@ -847,7 +847,7 @@ mountLesson({
       desc: t('A map for values and a list of keys in order of use.', 'value အတွက် map နှင့် အသုံးပြုသည့် အစီအစဉ်အလိုက် key list။'),
       cost: 'O(capacity) per call', build: buildList },
     { id: 'linked', name: 'Hash map + linked list',
-      desc: t('The map finds a node; the list moves it in O(1).', 'map က node ကို ရှာ — list က O(1) ဖြင့် ရွှေ့သည်။'),
+      desc: t('The map finds a node; the list moves it in O(1).', 'map က node ကို ရှာပြီး list က O(1) ဖြင့် ရွှေ့သည်။'),
       cost: 'O(1) per call · O(capacity) space', build: buildLinked },
   ],
   languages: LANGUAGES,
@@ -855,11 +855,11 @@ mountLesson({
   hover: { ruby: { '@vals': 'vals', '@order': 'order', '@nodes': 'nodes', '@cap': 'cap', '@head': 'head', '@tail': 'tail' } },
   solutions: {
     list: { approach: APPROACH.list,
-      desc: t('Correct, and the clearest statement of what the cache must do — but every use pays a scan of the list, so it fails the O(1) requirement.',
-              'မှန်ပြီး cache လုပ်ရမည့်အရာ၏ အရှင်းဆုံး ဖော်ပြချက် — သို့သော် အသုံးပြုတိုင်း list scan ပေးရသဖြင့် O(1) လိုအပ်ချက်ကို မအောင်။') },
+      desc: t('Correct, and the clearest statement of what the cache must do. But every use pays a scan of the list, so it fails the O(1) requirement.',
+              'မှန်ပြီး cache လုပ်ရမည့်အရာ၏ အရှင်းဆုံး ဖော်ပြချက် ဖြစ်သည်။ သို့သော် အသုံးပြုတိုင်း list scan ပေးရသဖြင့် O(1) လိုအပ်ချက်ကို မအောင်။') },
     linked: { approach: APPROACH.linked,
       desc: t('The answer the statement asks for. Every language gets the same two helpers, <code>unlink</code> and to-front; Rust keeps the nodes in a Vec and links them by index.',
-              'မေးခွန်း တောင်းသော အဖြေ။ ဘာသာစကားတိုင်းတွင် helper နှစ်ခု <code>unlink</code> နှင့် to-front တူတူ ရှိသည် — Rust သည် node များကို Vec ထဲ ထားပြီး index ဖြင့် ချိတ်သည်။') },
+              'မေးခွန်း တောင်းသော အဖြေ။ ဘာသာစကားတိုင်းတွင် helper နှစ်ခု <code>unlink</code> နှင့် to-front တူတူ ရှိသည်။ Rust သည် node များကို Vec ထဲ ထားပြီး index ဖြင့် ချိတ်သည်။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the example, 6 edges, 15,000 random runs of up to 20 calls
@@ -873,7 +873,7 @@ mountLesson({
     go: 'ran here · 20,010 cases · Go 1.23',
     rust: 'ran here · 20,010 cases · rustc 1.98',
   },
-  stripLabel: t('The calls, in order', 'call များ — အစီအစဉ်အတိုင်း'),
+  stripLabel: t('The calls, in order', 'call များ၊ အစီအစဉ်အတိုင်း'),
   strip,
   draw,
   answer,

@@ -558,24 +558,24 @@ function mountHalvesWidget(host) {
 const APPROACH = {
   sorted: {
     idea: t('Keep every number in one sorted array. Each add binary-searches its place and inserts it there; the median is then one or two indexes away.',
-            'ကိန်းတိုင်းကို စီထားသော array တစ်ခုထဲ ထားသည်။ ထည့်တိုင်း ၎င်း၏နေရာကို binary search ပြီး ထိုနေရာတွင် ထည့်သည် — median သည် index တစ်ခု သို့မဟုတ် နှစ်ခု အကွာတွင် ရှိသည်။'),
+            'ကိန်းတိုင်းကို စီထားသော array တစ်ခုထဲ ထားသည်။ ထည့်တိုင်း ၎င်း၏နေရာကို binary search ပြီး ထိုနေရာတွင် ထည့်သည်။ median သည် index တစ်ခု သို့မဟုတ် နှစ်ခု အကွာတွင် ရှိသည်။'),
     steps: [
-      t('<code>addNum</code>: binary-search the first number ≥ num, insert num there.', '<code>addNum</code> — num ထက် ≥ ပထမကိန်းကို binary search ပြီး ထိုနေရာတွင် num ကို ထည့်။'),
-      t('<code>findMedian</code>: the middle element if the count is odd, else the average of the middle two.', '<code>findMedian</code> — အရေအတွက် မဖြစ်လျှင် အလယ် element၊ မဟုတ်လျှင် အလယ်နှစ်ခု၏ ပျမ်းမျှ။'),
+      t('<code>addNum</code>: binary-search the first number ≥ num, insert num there.', '<code>addNum</code>: num ထက် ≥ ပထမကိန်းကို binary search ပြီး ထိုနေရာတွင် num ကို ထည့်သည်။'),
+      t('<code>findMedian</code>: the middle element if the count is odd, else the average of the middle two.', '<code>findMedian</code>: အရေအတွက် မဖြစ်လျှင် အလယ် element၊ မဟုတ်လျှင် အလယ်နှစ်ခု၏ ပျမ်းမျှ။'),
     ],
-    cost: t('O(log n) to find the place but O(n) to insert, since everything after it moves; findMedian is O(1). 5 × 10⁴ adds took 148 ms in Python here — the shift is one fast memory move.',
-            'နေရာရှာရန် O(log n) သို့သော် ထည့်ရန် O(n) — နောက်ရှိ အရာအားလုံး ရွှေ့သောကြောင့်၊ findMedian သည် O(1)။ ဤနေရာတွင် Python ဖြင့် ထည့်ခြင်း 5 × 10⁴ သည် 148 ms ကြာသည် — ရွှေ့ခြင်းသည် မြန်သော memory move တစ်ခု။'),
+    cost: t('O(log n) to find the place but O(n) to insert, since everything after it moves; findMedian is O(1). 5 × 10⁴ adds took 148 ms in Python here, because the shift is one fast memory move.',
+            'နေရာရှာရန် O(log n) သို့သော် ထည့်ရန် O(n) (နောက်ရှိ အရာအားလုံး ရွှေ့သောကြောင့်)။ findMedian သည် O(1)။ ဤနေရာတွင် Python ဖြင့် ထည့်ခြင်း 5 × 10⁴ သည် 148 ms ကြာသည်။ ရွှေ့ခြင်းသည် မြန်သော memory move တစ်ခု။'),
   },
   heaps: {
     idea: t('Keep the smaller half in a max-heap and the larger half in a min-heap, the smaller half equal in size or one ahead. The two tops are the middle.',
             'အငယ်တစ်ဝက်ကို max-heap ထဲ၊ အကြီးတစ်ဝက်ကို min-heap ထဲ ထားပြီး အငယ်တစ်ဝက်သည် size တူ သို့မဟုတ် တစ်ခု ပို။ top နှစ်ခုသည် အလယ်။'),
     steps: [
-      t('<code>addNum</code>: push onto low, then move low\'s largest to high.', '<code>addNum</code> — low ပေါ် push ပြီး low ၏ အကြီးဆုံးကို high သို့ ရွှေ့။'),
+      t('<code>addNum</code>: push onto low, then move low\'s largest to high.', '<code>addNum</code>: low ပေါ် push ပြီး low ၏ အကြီးဆုံးကို high သို့ ရွှေ့သည်။'),
       t('If high is now bigger, move its smallest back to low.', 'high ပိုကြီးသွားလျှင် ၎င်း၏ အငယ်ဆုံးကို low သို့ ပြန်ရွှေ့။'),
-      t('<code>findMedian</code>: low\'s top if low is bigger, else the average of both tops.', '<code>findMedian</code> — low ပိုကြီးလျှင် low ၏ top၊ မဟုတ်လျှင် top နှစ်ခု၏ ပျမ်းမျှ။'),
+      t('<code>findMedian</code>: low\'s top if low is bigger, else the average of both tops.', '<code>findMedian</code>: low ပိုကြီးလျှင် low ၏ top၊ မဟုတ်လျှင် top နှစ်ခု၏ ပျမ်းမျှ။'),
     ],
     cost: t('At most three heap operations per add, O(log n); findMedian is O(1). 5 × 10⁴ adds took 16 ms in Python here.',
-            'ထည့်တစ်ကြိမ်လျှင် heap operation အများဆုံး သုံးခု၊ O(log n) — findMedian သည် O(1)။ ဤနေရာတွင် Python ဖြင့် ထည့်ခြင်း 5 × 10⁴ သည် 16 ms ကြာသည်။'),
+            'ထည့်တစ်ကြိမ်လျှင် heap operation အများဆုံး သုံးခု၊ O(log n)။ findMedian သည် O(1)။ ဤနေရာတွင် Python ဖြင့် ထည့်ခြင်း 5 × 10⁴ သည် 16 ms ကြာသည်။'),
   },
 };
 
@@ -598,15 +598,15 @@ mountLesson({
       inputHtml: '<code>["MedianFinder", "addNum", "addNum", "findMedian", "addNum", "findMedian"]<br>[[], [1], [2], [], [3], []]</code>',
       output: '[null, null, null, 1.5, null, 2.0]',
       why: [
-        t('After addNum(1) and addNum(2), arr = [1, 2]: findMedian returns 1.5, i.e. (1 + 2) / 2.', 'addNum(1) နှင့် addNum(2) ပြီးနောက် arr = [1, 2] — findMedian သည် 1.5 ပြန်ပေးသည်၊ ဆိုလိုသည်မှာ (1 + 2) / 2။'),
-        t('After addNum(3), arr = [1, 2, 3]: findMedian returns 2.0.', 'addNum(3) ပြီးနောက် arr = [1, 2, 3] — findMedian သည် 2.0 ပြန်ပေးသည်။'),
+        t('After addNum(1) and addNum(2), arr = [1, 2]: findMedian returns 1.5, i.e. (1 + 2) / 2.', 'addNum(1) နှင့် addNum(2) ပြီးနောက် arr = [1, 2] ဖြစ်သည်။ findMedian သည် 1.5 ပြန်ပေးသည်၊ ဆိုလိုသည်မှာ (1 + 2) / 2။'),
+        t('After addNum(3), arr = [1, 2, 3]: findMedian returns 2.0.', 'addNum(3) ပြီးနောက် arr = [1, 2, 3] ဖြစ်သည်။ findMedian သည် 2.0 ပြန်ပေးသည်။'),
       ],
       load: { ops: EX1 } },
   ],
   modes: [
     { id: 'sorted', name: 'Sorted array',
       sub: t('insert in place', 'နေရာတွင် ထည့်'),
-      desc: t('Binary-search each number\'s place and insert it; read the middle.', 'ကိန်းတစ်ခုစီ၏ နေရာကို binary search ပြီး ထည့် — အလယ်ကို ဖတ်။'),
+      desc: t('Binary-search each number\'s place and insert it; read the middle.', 'ကိန်းတစ်ခုစီ၏ နေရာကို binary search ပြီး ထည့်ကာ အလယ်ကို ဖတ်သည်။'),
       cost: 'O(n) add · O(1) find', build: buildSorted },
     { id: 'heaps', name: 'Two heaps',
       sub: t('two halves', 'တစ်ဝက် နှစ်ခု'),
@@ -619,10 +619,10 @@ mountLesson({
   solutions: {
     sorted: { approach: APPROACH.sorted,
       desc: t('Simple and, at this problem\'s size, fast: the insert is O(n), but it is one block memory move, and 5 × 10⁴ of them finish in well under a second. It is the stream growing much past that which makes it quadratic in practice.',
-              'ရိုးရှင်းပြီး ဤပြဿနာ၏ size တွင် မြန်သည် — ထည့်ခြင်းသည် O(n) ဖြစ်သော်လည်း memory move တစ်ခုတည်း ဖြစ်ပြီး 5 × 10⁴ ခု တစ်စက္ကန့်အောက် ပြီးသည်။ stream သည် ထိုထက် အများကြီး ကြီးလာမှ လက်တွေ့တွင် quadratic ဖြစ်သည်။') },
+              'ရိုးရှင်းပြီး ဤပြဿနာ၏ size တွင် မြန်သည်။ ထည့်ခြင်းသည် O(n) ဖြစ်သော်လည်း memory move တစ်ခုတည်း ဖြစ်ပြီး 5 × 10⁴ ခု တစ်စက္ကန့်အောက် ပြီးသည်။ stream သည် ထိုထက် အများကြီး ကြီးလာမှ လက်တွေ့တွင် quadratic ဖြစ်သည်။') },
     heaps: { approach: APPROACH.heaps,
       desc: t('The answer the problem is built around. Python and Go have a min-heap only, so low stores negated numbers; Ruby and JavaScript have no heap at all, so the listings carry a small one.',
-              'ပြဿနာကို ဒီဇိုင်းထားသော အဖြေ။ Python နှင့် Go တွင် min-heap သာ ရှိသဖြင့် low သည် အနုတ်ပြောင်းထားသော ကိန်းများကို သိမ်းသည် — Ruby နှင့် JavaScript တွင် heap လုံးဝ မရှိသဖြင့် listing များတွင် heap သေးသေးလေး ပါသည်။') },
+              'ပြဿနာကို ဒီဇိုင်းထားသော အဖြေ။ Python နှင့် Go တွင် min-heap သာ ရှိသဖြင့် low သည် အနုတ်ပြောင်းထားသော ကိန်းများကို သိမ်းသည်။ Ruby နှင့် JavaScript တွင် heap လုံးဝ မရှိသဖြင့် listing များတွင် heap သေးသေးလေး ပါသည်။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the example, 6 edges, 15,000 random runs of up to 20 calls
@@ -636,7 +636,7 @@ mountLesson({
     go: 'ran here · 20,013 cases · Go 1.23',
     rust: 'ran here · 20,013 cases · rustc 1.98',
   },
-  stripLabel: t('The calls, in order', 'call များ — အစဉ်အတိုင်း'),
+  stripLabel: t('The calls, in order', 'call များ၊ အစဉ်အတိုင်း'),
   strip,
   draw,
   answer,

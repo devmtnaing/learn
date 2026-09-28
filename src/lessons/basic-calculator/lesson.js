@@ -547,24 +547,24 @@ function mountSignWidget(host) {
 const APPROACH = {
   recurse: {
     idea: t('A recursive parser: expr() sums terms until it meets ")" or the end. A "(" calls expr() for the bracket, and its value comes back to be used like a number.',
-            'recursive parser — expr() သည် ")" သို့မဟုတ် အဆုံး မတွေ့မချင်း term များကို ပေါင်းသည်။ "(" က ကွင်းအတွက် expr() ကို ခေါ်ပြီး ၎င်း၏ တန်ဖိုး ပြန်လာကာ ကိန်းကဲ့သို့ သုံးသည်။'),
+            'recursive parser: expr() သည် ")" သို့မဟုတ် အဆုံး မတွေ့မချင်း term များကို ပေါင်းသည်။ "(" က ကွင်းအတွက် expr() ကို ခေါ်ပြီး ၎င်း၏ တန်ဖိုး ပြန်လာကာ ကိန်းကဲ့သို့ သုံးသည်။'),
     steps: [
-      t('Keep <code>total</code>, <code>sign</code> and <code>num</code>; a digit extends <code>num</code>.', '<code>total</code>၊ <code>sign</code> နှင့် <code>num</code> ကို ထိန်း — digit က <code>num</code> ကို ဆက်ရှည်စေသည်။'),
+      t('Keep <code>total</code>, <code>sign</code> and <code>num</code>; a digit extends <code>num</code>.', '<code>total</code>၊ <code>sign</code> နှင့် <code>num</code> ကို ထိန်းပါ။ digit က <code>num</code> ကို ဆက်ရှည်စေသည်။'),
       t('An operator adds <code>sign × num</code> to <code>total</code> and sets the next sign.', 'operator က <code>sign × num</code> ကို <code>total</code> ထဲ ပေါင်းပြီး နောက် sign ကို သတ်မှတ်သည်။'),
-      t('"(" sets <code>num = expr()</code> and skips the ")"; at ")" or the end, return <code>total + sign × num</code>.', '"(" က <code>num = expr()</code> သတ်မှတ်ပြီး ")" ကို ကျော်သည် — ")" သို့မဟုတ် အဆုံးတွင် <code>total + sign × num</code> ကို ပြန်ပေး။'),
+      t('"(" sets <code>num = expr()</code> and skips the ")"; at ")" or the end, return <code>total + sign × num</code>.', '"(" က <code>num = expr()</code> သတ်မှတ်ပြီး ")" ကို ကျော်သည်။ ")" သို့မဟုတ် အဆုံးတွင် <code>total + sign × num</code> ကို ပြန်ပေး။'),
     ],
-    cost: t('Each character is read once: O(n). The calls nest as deep as the brackets — up to 149,999 at the constraint, past the default stack of Ruby, Node and Rust.',
-            'စာလုံးတစ်ခုစီကို တစ်ကြိမ် ဖတ်သည် — O(n)။ call များသည် ကွင်းများလောက် နက်သည် — ကန့်သတ်ချက်တွင် 149,999 အထိ၊ Ruby၊ Node နှင့် Rust ၏ default stack ကို ကျော်သည်။'),
+    cost: t('Each character is read once: O(n). The calls nest as deep as the brackets: up to 149,999 at the constraint, past the default stack of Ruby, Node and Rust.',
+            'စာလုံးတစ်ခုစီကို တစ်ကြိမ် ဖတ်သည်: O(n)။ call များသည် ကွင်းများလောက် နက်သည်။ ကန့်သတ်ချက်တွင် 149,999 အထိ၊ Ruby၊ Node နှင့် Rust ၏ default stack ကို ကျော်သည်။'),
   },
   stack: {
     idea: t('The same reading, one loop. At "(" push the outer total and sign and start afresh; at ")" the bracket\'s value becomes num, and the outer total and sign come back off the stack.',
-            'ဖတ်ပုံ အတူတူ၊ loop တစ်ခုတည်း။ "(" တွင် အပြင် total နှင့် sign ကို push ပြီး အသစ်စ — ")" တွင် ကွင်း၏ တန်ဖိုးသည် num ဖြစ်လာပြီး အပြင် total နှင့် sign ကို stack မှ ပြန်ယူသည်။'),
+            'ဖတ်ပုံ အတူတူ၊ loop တစ်ခုတည်း။ "(" တွင် အပြင် total နှင့် sign ကို push ပြီး အသစ်စပါ။ ")" တွင် ကွင်း၏ တန်ဖိုးသည် num ဖြစ်လာပြီး အပြင် total နှင့် sign ကို stack မှ ပြန်ယူသည်။'),
     steps: [
-      t('A digit extends <code>num</code>; an operator adds <code>sign × num</code> to <code>total</code> and sets the next sign.', 'digit က <code>num</code> ကို ဆက်ရှည်စေ — operator က <code>sign × num</code> ကို <code>total</code> ထဲ ပေါင်းပြီး နောက် sign ကို သတ်မှတ်။'),
-      t('"(": push <code>(total, sign)</code>; reset all three.', '"(" — <code>(total, sign)</code> ကို push — သုံးခုလုံး reset။'),
-      t('")": <code>num = total + sign × num</code>, then pop <code>total, sign</code>. At the end return <code>total + sign × num</code>.', '")" — <code>num = total + sign × num</code>၊ ပြီးမှ <code>total, sign</code> ကို pop။ အဆုံးတွင် <code>total + sign × num</code> ကို ပြန်ပေး။'),
+      t('A digit extends <code>num</code>; an operator adds <code>sign × num</code> to <code>total</code> and sets the next sign.', 'digit က <code>num</code> ကို ဆက်ရှည်စေသည်။ operator က <code>sign × num</code> ကို <code>total</code> ထဲ ပေါင်းပြီး နောက် sign ကို သတ်မှတ်။'),
+      t('"(": push <code>(total, sign)</code>; reset all three.', '"(": <code>(total, sign)</code> ကို push ပြီး သုံးခုလုံး reset။'),
+      t('")": <code>num = total + sign × num</code>, then pop <code>total, sign</code>. At the end return <code>total + sign × num</code>.', '")": <code>num = total + sign × num</code>၊ ပြီးမှ <code>total, sign</code> ကို pop။ အဆုံးတွင် <code>total + sign × num</code> ကို ပြန်ပေး။'),
     ],
-    cost: t('O(n) time; the stack holds one pair per open bracket, up to 149,999 — on the heap, where any language has room.', 'O(n) အချိန် — stack သည် ဖွင့်ထားသော ကွင်းတစ်ခုလျှင် အတွဲ တစ်ခု ကိုင်သည်၊ 149,999 အထိ — heap ပေါ်တွင်၊ မည်သည့် ဘာသာစကားမဆို နေရာရှိသည်။'),
+    cost: t('O(n) time. The stack holds one pair per open bracket, up to 149,999, on the heap, where any language has room.', 'O(n) အချိန်။ stack သည် ဖွင့်ထားသော ကွင်းတစ်ခုလျှင် အတွဲ တစ်ခု ကိုင်သည် (149,999 အထိ)။ ၎င်းသည် heap ပေါ်တွင် ရှိပြီး မည်သည့် ဘာသာစကားမဆို နေရာရှိသည်။'),
   },
 };
 
@@ -590,7 +590,7 @@ mountLesson({
   modes: [
     { id: 'recurse', name: 'Recursive parser',
       sub: t('the call stack waits', 'call stack က စောင့်'),
-      desc: t('Call expr() for each bracket; its value comes back as a number.', 'ကွင်းတစ်ခုစီအတွက် expr() ခေါ် — ၎င်း၏ တန်ဖိုး ကိန်းအဖြစ် ပြန်လာသည်။'),
+      desc: t('Call expr() for each bracket; its value comes back as a number.', 'ကွင်းတစ်ခုစီအတွက် expr() ခေါ်ပါ။ ၎င်း၏ တန်ဖိုး ကိန်းအဖြစ် ပြန်လာသည်။'),
       cost: 'O(n) time · O(depth) call stack', build: buildRecurse },
     { id: 'stack', name: 'One pass with a stack',
       sub: t('(total, sign) pairs', '(total, sign) အတွဲ'),
@@ -601,11 +601,11 @@ mountLesson({
   code: CODE,
   solutions: {
     recurse: { approach: APPROACH.recurse,
-      desc: t('The grammar written as code: short and easy to extend with * and / later. The catch is depth — 149,999 nested brackets are 150,000 calls, past the default stack of Ruby, Node and Rust.',
-              'grammar ကို code အဖြစ် ရေးခြင်း — တိုပြီး နောင်တွင် * နှင့် / ထည့်ရန် လွယ်သည်။ ပြဿနာမှာ အနက် — nested ကွင်း 149,999 သည် call 150,000 ဖြစ်ပြီး Ruby၊ Node နှင့် Rust ၏ default stack ကို ကျော်သည်။') },
+      desc: t('The grammar written as code: short, and easy to extend with * and / later. The catch is depth. 149,999 nested brackets are 150,000 calls, past the default stack of Ruby, Node and Rust.',
+              'grammar ကို code အဖြစ် ရေးခြင်း ဖြစ်သည်။ တိုပြီး နောင်တွင် * နှင့် / ထည့်ရန် လွယ်သည်။ ပြဿနာမှာ အနက် ဖြစ်သည်။ nested ကွင်း 149,999 သည် call 150,000 ဖြစ်ပြီး Ruby၊ Node နှင့် Rust ၏ default stack ကို ကျော်သည်။') },
     stack: { approach: APPROACH.stack,
       desc: t('The answer to write: the same arithmetic, with the waiting totals kept in a list instead of in call frames. No depth limit to worry about in any language.',
-              'ရေးသင့်သည့် အဖြေ — ဂဏန်းတွက်ပုံ အတူတူ၊ စောင့်နေသော total များကို call frame အစား list ထဲ ထားသည်။ မည်သည့် ဘာသာစကားတွင်မဆို အနက် ကန့်သတ်ချက် စိုးရိမ်စရာ မရှိ။') },
+              'ရေးသင့်သည့် အဖြေ: ဂဏန်းတွက်ပုံ အတူတူ၊ စောင့်နေသော total များကို call frame အစား list ထဲ ထားသည်။ မည်သည့် ဘာသာစကားတွင်မဆို အနက် ကန့်သတ်ချက် စိုးရိမ်စရာ မရှိ။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the 3 examples, 10 edges, 15,000 random expressions up to
@@ -626,17 +626,17 @@ mountLesson({
   },
   caveats: {
     recurse: {
-      ruby: t('Correct on all 20,019 cases with a larger stack, but on Ruby 3.1\'s default stack more than 8,185 nested brackets overflow it (<code>SystemStackError</code>) — measured here — and the constraint allows 149,999. Use the stack version.',
-              'stack ပိုကြီးလျှင် case 20,019 ခုလုံးတွင် မှန်သည်၊ သို့သော် Ruby 3.1 ၏ default stack ပေါ်တွင် nested ကွင်း 8,185 ထက် များလျှင် overflow (<code>SystemStackError</code>) ဖြစ်သည် — ဤနေရာတွင် တိုင်းတာထားသည် — ကန့်သတ်ချက်က 149,999 ကို ခွင့်ပြုသည်။ stack version ကို သုံးပါ။'),
-      javascript: t('Correct on all 20,019 cases with a larger stack, but on Node 24\'s default stack, run cold, more than 6,912 nested brackets overflow it (<code>RangeError</code>) — measured here — and the constraint allows 149,999. Use the stack version.',
-                    'stack ပိုကြီးလျှင် case 20,019 ခုလုံးတွင် မှန်သည်၊ သို့သော် Node 24 ၏ default stack ပေါ်တွင် cold run လုပ်လျှင် nested ကွင်း 6,912 ထက် များလျှင် overflow (<code>RangeError</code>) ဖြစ်သည် — ဤနေရာတွင် တိုင်းတာထားသည် — ကန့်သတ်ချက်က 149,999 ကို ခွင့်ပြုသည်။ stack version ကို သုံးပါ။'),
-      rust: t('Correct on all 20,019 cases on a larger thread, but a release build on the 8 MB main thread overflows past 104,797 nested brackets — measured here — and the constraint allows 149,999. Use the stack version.',
-              'thread ပိုကြီးလျှင် case 20,019 ခုလုံးတွင် မှန်သည်၊ သို့သော် 8 MB main thread ပေါ်ရှိ release build သည် nested ကွင်း 104,797 ကျော်လျှင် overflow ဖြစ်သည် — ဤနေရာတွင် တိုင်းတာထားသည် — ကန့်သတ်ချက်က 149,999 ကို ခွင့်ပြုသည်။ stack version ကို သုံးပါ။'),
+      ruby: t('Correct on all 20,019 cases with a larger stack, but on Ruby 3.1\'s default stack more than 8,185 nested brackets overflow it (<code>SystemStackError</code>, measured here), and the constraint allows 149,999. Use the stack version.',
+              'stack ပိုကြီးလျှင် case 20,019 ခုလုံးတွင် မှန်သည်၊ သို့သော် Ruby 3.1 ၏ default stack ပေါ်တွင် nested ကွင်း 8,185 ထက် များလျှင် overflow (<code>SystemStackError</code>) ဖြစ်သည် (ဤနေရာတွင် တိုင်းတာထားသည်)။ ကန့်သတ်ချက်က 149,999 ကို ခွင့်ပြုသည်။ stack version ကို သုံးပါ။'),
+      javascript: t('Correct on all 20,019 cases with a larger stack, but on Node 24\'s default stack, run cold, more than 6,912 nested brackets overflow it (<code>RangeError</code>, measured here), and the constraint allows 149,999. Use the stack version.',
+                    'stack ပိုကြီးလျှင် case 20,019 ခုလုံးတွင် မှန်သည်၊ သို့သော် Node 24 ၏ default stack ပေါ်တွင် cold run လုပ်လျှင် nested ကွင်း 6,912 ထက် များလျှင် overflow (<code>RangeError</code>) ဖြစ်သည် (ဤနေရာတွင် တိုင်းတာထားသည်)။ ကန့်သတ်ချက်က 149,999 ကို ခွင့်ပြုသည်။ stack version ကို သုံးပါ။'),
+      rust: t('Correct on all 20,019 cases on a larger thread, but a release build on the 8 MB main thread overflows past 104,797 nested brackets (measured here), and the constraint allows 149,999. Use the stack version.',
+              'thread ပိုကြီးလျှင် case 20,019 ခုလုံးတွင် မှန်သည်၊ သို့သော် 8 MB main thread ပေါ်ရှိ release build သည် nested ကွင်း 104,797 ကျော်လျှင် overflow ဖြစ်သည် (ဤနေရာတွင် တိုင်းတာထားသည်)။ ကန့်သတ်ချက်က 149,999 ကို ခွင့်ပြုသည်။ stack version ကို သုံးပါ။'),
       python: t('The <code>setrecursionlimit</code> line is part of the answer: Python\'s default of 1,000 is far below the 150,000 calls 149,999 nested brackets need.',
-                '<code>setrecursionlimit</code> စာကြောင်းသည် အဖြေ၏ အစိတ်အပိုင်း — Python ၏ default 1,000 သည် nested ကွင်း 149,999 လိုအပ်သော call 150,000 ထက် အများကြီး နိမ့်သည်။'),
+                '<code>setrecursionlimit</code> စာကြောင်းသည် အဖြေ၏ အစိတ်အပိုင်း ဖြစ်သည်။ Python ၏ default 1,000 သည် nested ကွင်း 149,999 လိုအပ်သော call 150,000 ထက် အများကြီး နိမ့်သည်။'),
     },
   },
-  stripLabel: t('s, one character per cell (· = space)', 's — cell တစ်ခုလျှင် စာလုံး တစ်လုံး (· = space)'),
+  stripLabel: t('s, one character per cell (· = space)', 's၊ cell တစ်ခုလျှင် စာလုံး တစ်လုံး (· = space)'),
   strip,
   draw,
   answer,

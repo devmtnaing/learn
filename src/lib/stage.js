@@ -60,7 +60,7 @@ export function slots(values, o = {}) {
 
 /* A titled block inside the stage panel, in the page's panel-head style. */
 export function stagePanel(title, note, inner) {
-  return `<div class="panel-head"><h2>${esc(title)}</h2>${note ? `<span class="note">${esc(note)}</span>` : ''}</div>${inner}`;
+  return `<div class="panel-head"><h4 class="as-h2">${esc(title)}</h4>${note ? `<span class="note">${esc(note)}</span>` : ''}</div>${inner}`;
 }
 
 /* A key/value table: hash maps, counters, memo tables. */

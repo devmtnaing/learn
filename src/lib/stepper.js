@@ -97,6 +97,7 @@ const UI = {
   unset:     { en: 'not set yet at this step', my: 'ဤအဆင့်တွင် မသတ်မှတ်ရသေး' },
   valueNow:  { en: 'value at this step', my: 'ဤအဆင့်ရှိ တန်ဖိုး' },
   badInput:  { en: 'That input does not work here', my: 'ဤ input ကို အသုံးမပြုနိုင်ပါ' },
+  stale:     { en: 'The walkthrough below still shows the last input that worked.', my: 'အောက်ပါ လမ်းညွှန်သည် နောက်ဆုံး အလုပ်လုပ်ခဲ့သော input ကိုသာ ပြနေဆဲ ဖြစ်သည်။' },
 };
 
 export function mountLesson(cfg) {
@@ -132,7 +133,7 @@ export function mountLesson(cfg) {
     let steps;
     try {
       steps = mode().build(structuredClone(state.input)) || [];
-      showWarn('');
+      if (!badFields().length) showWarn('');
     } catch (err) {
       steps = [];
       showWarn(`${pick(UI.badInput)}: ${err.message}`);
@@ -189,12 +190,12 @@ export function mountLesson(cfg) {
         ${head('2·2', UI.secRun)}
         <div class="player">
           <div class="player-row controls">${fields}${presets}
-            <p class="warn" data-warn hidden></p>
+            <p class="warn" id="f-warn" data-warn aria-live="polite" hidden></p>
           </div>
           ${cfg.strip ? `
           <div class="player-row">
             <div class="strip-head">
-              <h2>${esc(pick(cfg.stripLabel ?? UI.array))}</h2>
+              <h4 class="as-h2">${esc(pick(cfg.stripLabel ?? UI.array))}</h4>
               <span class="op mono" data-op>${esc(pick(UI.ready))}</span>
             </div>
             <div class="strip" data-strip tabindex="0" role="region" aria-label="${esc(pick(cfg.stripLabel ?? UI.array))}"></div>
@@ -218,7 +219,7 @@ export function mountLesson(cfg) {
               ${cfg.answer ? `
               <div class="panel answer-card">
                 <div class="strip-head">
-                  <h2>${esc(pick(UI.answer))}</h2>
+                  <h4 class="as-h2">${esc(pick(UI.answer))}</h4>
                   <span class="note mono" data-ans-note></span>
                 </div>
                 <div class="answer-row" data-answer></div>
@@ -226,7 +227,7 @@ export function mountLesson(cfg) {
             </div>
             <div class="panel">
               <div class="panel-head">
-                <h2>${esc(pick(UI.codeLive))}</h2>
+                <h4 class="as-h2">${esc(pick(UI.codeLive))}</h4>
                 <span class="note" data-code-label></span>
               </div>
               ${langBar(langs, state.lang, ' mini')}
@@ -353,9 +354,32 @@ export function mountLesson(cfg) {
     state.input = structuredClone(input);
     (cfg.controls || []).forEach((c) => {
       const el = $(`[data-field="${c.key}"]`, root);
-      if (el) { el.value = format(c, state.input[c.key]); el.classList.remove('bad'); }
+      if (el) { el.value = format(c, state.input[c.key]); markBad(el, null); }
     });
     rebuild();
+    syncStale();
+  }
+
+  /* A field whose text does not parse: marked on the field itself, tied to the
+   * warning for a screen reader, and — while any field is bad — the player
+   * dims to say it still shows the last input that worked. */
+  const badFields = () => [...root.querySelectorAll('[data-field].bad')];
+  function markBad(el, msg) {
+    el.classList.toggle('bad', msg != null);
+    if (msg != null) {
+      el.dataset.err = msg;
+      el.setAttribute('aria-invalid', 'true');
+      el.setAttribute('aria-describedby', 'f-warn');
+    } else {
+      delete el.dataset.err;
+      el.removeAttribute('aria-invalid');
+      el.removeAttribute('aria-describedby');
+    }
+  }
+  function syncStale() {
+    const bad = badFields();
+    $('.player', root)?.classList.toggle('is-stale', bad.length > 0);
+    if (bad.length) showWarn(`${bad[0].dataset.err} — ${pick(UI.stale)}`);
   }
 
   function showWarn(msg) {
@@ -371,14 +395,15 @@ export function mountLesson(cfg) {
         const spec = cfg.controls.find((c) => c.key === el.dataset.field);
         try {
           state.input[spec.key] = spec.parse ? spec.parse(el.value) : el.value;
-          el.classList.remove('bad');
+          markBad(el, null);
         } catch (err) {
-          el.classList.add('bad');
-          showWarn(err.message);
+          markBad(el, err.message);
+          syncStale();
           return;
         }
         stop();
         rebuild();
+        syncStale();
       });
     });
     const scrub = $('[data-scrub]', root);
@@ -564,7 +589,7 @@ function renderSolutions(cfg, activeLang) {
           return `
           <div class="src">
             <div class="src-head">
-              <h2>${esc(pick(m.name))}${m.sub ? ` <span class="sub-name">&middot; ${esc(pick(m.sub))}</span>` : ''}${meta.tag ? `<span class="tagpill">${esc(meta.tag)}</span>` : ''}</h2>
+              <h3 class="as-h2">${esc(pick(m.name))}${m.sub ? ` <span class="sub-name">&middot; ${esc(pick(m.sub))}</span>` : ''}${meta.tag ? `<span class="tagpill">${esc(meta.tag)}</span>` : ''}</h3>
               ${badge(l.id, m.id)}
               <button class="btn copy" data-copy>${esc(pick(UI.copy))}</button>
               ${meta.desc ? `<p class="sub">${pick(meta.desc)}</p>` : `<p class="sub mono">${esc(pick(m.cost))}</p>`}

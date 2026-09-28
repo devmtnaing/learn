@@ -76,7 +76,7 @@ const lcUrl = (slug: string) => `https://leetcode.com/problems/${slug}/`;
     </div>
     <h1 set:html={en(p.title)} />
     <p class="lede" data-i18n={my(p.lede)} set:html={en(p.lede)} />
-    <nav class="jump">
+    <nav class="jump" aria-label="On this page">
       <a href="#part-1"><b>1</b> <span data-i18n="မေးခွန်း">The question</span></a>
       <a href="#part-2"><b>2</b> <span data-i18n="အဖြေ">The answer</span></a>
       <a href="#part-3"><b>3</b> <span data-i18n="Code">The code</span></a>
@@ -101,7 +101,7 @@ const lcUrl = (slug: string) => `https://leetcode.com/problems/${slug}/`;
   <section class="question">
     <div class="q-statement">
       <div class="q-head">
-        <h2 data-i18n="ပုစ္ဆာ">The problem</h2>
+        <h3 class="as-h2" data-i18n="ပုစ္ဆာ">The problem</h3>
         <span class="q-src" data-i18n="LeetCode မှ ကူးယူဖော်ပြသည်">quoted from LeetCode</span>
       </div>
       <div class="statement" set:html={p.statement} />
@@ -117,7 +117,7 @@ const lcUrl = (slug: string) => `https://leetcode.com/problems/${slug}/`;
 
     <div class="q-play panel">
       <div class="panel-head">
-        <h2 data-i18n={my(p.widgetTitle)} set:html={en(p.widgetTitle)} />
+        <h3 class="as-h2" data-i18n={my(p.widgetTitle)} set:html={en(p.widgetTitle)} />
         <span class="note" id="q-label"></span>
       </div>
       <div id="q-widget"></div>

@@ -26,6 +26,10 @@ input:focus-visible,button:focus-visible,select:focus-visible{outline:2px solid 
 /* A widget chip that is the current choice (presetChips marks it aria-pressed). */
 .chip[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);font-weight:600}
 .warn{color:var(--down);font-size:12.5px;flex-basis:100%}
+/* A field that does not parse, and the player still showing the last input
+   that did: dimmed, not hidden, so the reader can compare. */
+input.bad{border-color:var(--down);box-shadow:0 0 0 1px var(--down)}
+.player.is-stale [data-strip],.player.is-stale .narration,.player.is-stale .bench{opacity:.5;transition:opacity .15s}
 
 /* ---------- array strip ---------- */
 .strip-head{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:baseline;margin-bottom:12px}
@@ -196,7 +200,7 @@ td.mono{font-variant-numeric:tabular-nums}
 }
 .lang:hover{color:var(--accent)}
 .lang[aria-selected="true"]{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.12)}
-.src-head h2{margin-right:auto}
+.src-head h3{margin-right:auto}
 .tagpill{
   font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:500;color:var(--accent);
   background:var(--accent-soft);border-radius:5px;padding:2px 7px;margin-left:8px;
@@ -250,9 +254,13 @@ td.mono{font-variant-numeric:tabular-nums}
   background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 13px 5px 8px;
 }
 .jump a:hover{border-color:var(--accent);color:var(--accent)}
-/* The problem on LeetCode, after the part chips. */
-.jump a.lc{padding-left:13px}
-.jump a.lc b{width:auto;padding:0 6px;border-radius:999px}
+/* The problem on LeetCode, after the part chips: a plain link past a rule,
+   not another pill, so leaving the page does not look like moving down it. */
+.jump a.lc{background:none;border-color:transparent;color:var(--ink-3);padding-inline:6px;text-underline-offset:3px}
+.jump a.lc:hover{border-color:transparent;text-decoration:underline}
+.jump a.lc b{width:auto;height:auto;padding:0;border-radius:0;background:none;color:inherit;font-weight:600}
+.jump a:not(.lc) + a.lc{position:relative;margin-left:9px}
+.jump a:not(.lc) + a.lc::before{content:"";position:absolute;left:-9px;top:50%;height:16px;margin-top:-8px;border-left:1px solid var(--line-2)}
 .jump b{
   font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--accent);background:var(--accent-soft);
   width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;
@@ -317,6 +325,7 @@ td.mono{font-variant-numeric:tabular-nums}
 /* Burmese stacks tall: give it room, and never let the script be squeezed */
 :root[data-ui="my"] body{line-height:1.85;font-size:15px}
 :root[data-ui="my"] h1,:root[data-ui="my"] h2,:root[data-ui="my"] h3,
+:root[data-ui="my"] .as-h2,:root[data-ui="my"] .as-h3,
 :root[data-ui="my"] .atab-name,:root[data-ui="my"] .part h2{
   font-family:"Noto Sans Myanmar","Padauk",Archivo,sans-serif;line-height:1.5;letter-spacing:0;
 }
@@ -461,3 +470,11 @@ td.mono{font-variant-numeric:tabular-nums}
 .report h3{margin:0 0 6px;font-size:16px}
 .report p{margin:0 0 12px;color:var(--ink-2);font-size:14px;line-height:1.55}
 .report-links{display:flex;flex-wrap:wrap;gap:8px}
+
+/* ---------- touch ---------- */
+/* On a touch screen the small controls grow to 40px tall — taller, not wider,
+   so rows keep their line breaks. */
+@media (pointer:coarse),(max-width:560px){
+  .chip,.lang,.lang-bar.mini .lang,.lang-opt,.copy,.btn.ex-load{min-height:40px}
+  .jump a{min-height:40px}
+}

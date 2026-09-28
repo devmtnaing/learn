@@ -9,9 +9,9 @@
  * variables walking up the stairs are all the memory the problem needs.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, stack, bars, readout, panels, slots, stagePanel } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, stageGap, intValue, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, stageGap, intValue, widgetLabel, wireWidget } from '../../lib/kit.js';
 
 /* ten steps is 177 calls in the plain recursion — 441 frames, which is as far
  * as stepping by hand stays worth it */
@@ -464,8 +464,7 @@ function mountLastMoveWidget(host) {
     state.n = Number(chip.dataset.n);
     render();
   });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render });
 }
 
 /* ---------------- the approach, in brief ----------------

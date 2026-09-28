@@ -5,9 +5,9 @@
  * same question by *skipping* the characters the filter would have removed —
  * same O(n) time, but the only state that survives a step is two integers.
  */
-import { t, esc, plural, exampleTitle, LANGUAGES, k, c, verdictAnswer, stageRow, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, esc, plural, exampleTitle, LANGUAGES, k, c, verdictAnswer, stageRow, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, readout, stagePanel } from '../../lib/stage.js';
 
 
@@ -557,15 +557,7 @@ function mountFilterWidget(host) {
     if (ev.target.id !== 'qw-pair') return;
     state.pair = Number(ev.target.value); render();
   });
-  host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (!chip) return;
-    state.set = Number(chip.dataset.set);
-    state.pair = 1;
-    render();
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.pair = 1; } });
 }
 
 /* ---------------- the approach, in brief ----------------

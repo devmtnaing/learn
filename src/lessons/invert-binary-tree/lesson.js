@@ -7,9 +7,9 @@
  * the stack and the queue beside it are the lesson.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, tree, stack, panels, slots, stagePanel } from '../../lib/stage.js';
-import { t, plural, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, presetChips, widgetLabel, stageEmpty } from '../../lib/kit.js';
+import { t, plural, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, presetChips, widgetLabel, stageEmpty, wireWidget } from '../../lib/kit.js';
 import { buildTree, levelOrder, asNested, treeDepth, copyKids as copy, nameOf, treeInput, formatLevelOrder } from '../../lib/tree.js';
 
 /* The tree helpers — parsing LeetCode's level order, drawing, serializing —
@@ -460,15 +460,7 @@ function mountMirrorWidget(host) {
     if (ev.target.id !== 'qw-k') return;
     state.k = Number(ev.target.value); render();
   });
-  host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (!chip) return;
-    state.set = Number(chip.dataset.set);
-    state.k = 0;
-    render();
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.k = 0; } });
 }
 
 /* ---------------- the approach, in brief ----------------

@@ -9,9 +9,9 @@
  * diagonals and checks in O(1).
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, slots, stagePanel, readout } from '../../lib/stage.js';
-import { t, LANGUAGES, k, c, labelledRows, stageGap, intValue, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, LANGUAGES, k, c, labelledRows, stageGap, intValue, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 
 const MAX_N = 5;
 const SOLUTIONS = [1, 0, 0, 2, 10, 4, 40, 92, 352];
@@ -517,17 +517,10 @@ function mountDiagWidget(host) {
     host.querySelector(`[data-r="${r}"][data-c="${cc}"]`)?.focus();
   }
   host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (chip) { load(Number(chip.dataset.set)); return render(); }
     const cell = ev.target.closest('[data-r]');
     if (cell) toggle(cell);
   });
-  host.addEventListener('keydown', (ev) => {
-    const cell = ev.target.closest('[data-r]');
-    if (cell && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); toggle(cell); }
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: load });
 }
 
 /* ---------------- the approach, in brief ---------------- */

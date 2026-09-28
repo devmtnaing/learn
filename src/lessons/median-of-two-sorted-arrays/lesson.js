@@ -10,9 +10,9 @@
  * big, give more. That is a binary search on i.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, slots, stagePanel, readout } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, labelledRows, stageGap, listText, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, labelledRows, stageGap, listText, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 
 const MAX_EACH = 8;
 const fmt = (x) => x.toFixed(5);
@@ -437,12 +437,7 @@ function mountCutWidget(host) {
     q('[data-total]').innerHTML = ok ? `${med}<small>${pick(t('median', 'median'))}</small>` : `—<small>${pick(t('not the split yet', 'ခွဲခြမ်းမှု မဟုတ်သေး'))}</small>`;
   }
   q('[data-i]').addEventListener('input', (ev) => { state.i = Number(ev.target.value); render(); });
-  host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (chip) { state.set = Number(chip.dataset.set); state.i = 0; render(); }
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.i = 0; } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

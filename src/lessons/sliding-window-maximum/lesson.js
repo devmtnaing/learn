@@ -8,9 +8,9 @@
  * slides out of the window.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, slots, stagePanel, readout } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, intList, intValue, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, intList, intValue, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 
 const MAX_N = 12;
 const win = (arr) => `[${arr.join(', ')}]`;
@@ -373,12 +373,7 @@ function mountDequeWidget(host) {
     q('[data-total]').innerHTML = `${nums[alive[0]]}<small>${pick(t('window max', 'window max'))}</small>`;
   }
   q('[data-lo]').addEventListener('input', (ev) => { state.lo = Number(ev.target.value); render(); });
-  host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (chip) { state.set = Number(chip.dataset.set); state.lo = 0; render(); }
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.lo = 0; } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

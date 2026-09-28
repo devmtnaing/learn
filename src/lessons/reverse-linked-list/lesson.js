@@ -12,9 +12,9 @@
  * suffix, and the suffix is reachable only through the variable saved one line
  * earlier. Drawing it as one tidy list would hide the entire problem.
  */
-import { t, plural, exampleTitle, LANGUAGES, k, c, intList, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, plural, exampleTitle, LANGUAGES, k, c, intList, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, chain, stack, panels, slots, stagePanel } from '../../lib/stage.js';
 
 
@@ -598,15 +598,7 @@ function mountRewireWidget(host) {
     if (ev.target.id !== 'qw-k') return;
     state.k = Number(ev.target.value); render();
   });
-  host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (!chip) return;
-    state.set = Number(chip.dataset.set);
-    state.k = 0;
-    render();
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.k = 0; } });
 }
 
 /* ---------------- the approach, in brief ----------------

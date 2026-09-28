@@ -5,9 +5,9 @@
  * passes and the other writes down nothing at all. Watching the visited set
  * grow next to two pointers that never grow is the whole lesson.
  */
-import { t, plural, exampleTitle, LANGUAGES, k, c, verdictAnswer, stageGap, intList, intValue, presetChips, widgetLabel, stageEmpty } from '../../lib/kit.js';
+import { t, plural, exampleTitle, LANGUAGES, k, c, verdictAnswer, stageGap, intList, intValue, presetChips, widgetLabel, stageEmpty, wireWidget } from '../../lib/kit.js';
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, chain, kv, readout, stagePanel } from '../../lib/stage.js';
 
 
@@ -496,15 +496,7 @@ function mountHiddenPosWidget(host) {
     if (ev.target.id !== 'qw-pos') return;
     state.pos = Number(ev.target.value); render();
   });
-  host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (!chip) return;
-    state.set = Number(chip.dataset.set);
-    state.pos = QW_SETS[state.set].pos;
-    render();
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.pos = QW_SETS[state.set].pos; } });
 }
 
 /* ---------------- the approach, in brief ----------------

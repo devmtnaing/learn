@@ -9,9 +9,9 @@
  * left — so its widest rectangle is known the moment it is popped.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { bars, cells, slots, stagePanel, readout } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, intList, listText, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, intList, listText, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 
 const MAX_N = 12;
 
@@ -340,17 +340,10 @@ function mountShortestWidget(host) {
   }
   const pickCol = (el) => { state.at = Number(el.dataset.col); render(); host.querySelector(`[data-col="${state.at}"]`)?.focus(); };
   host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (chip) { state.set = Number(chip.dataset.set); state.at = 0; return render(); }
     const col = ev.target.closest('[data-col]');
     if (col) pickCol(col);
   });
-  host.addEventListener('keydown', (ev) => {
-    const col = ev.target.closest('[data-col]');
-    if (col && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); pickCol(col); }
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.at = 0; } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

@@ -8,9 +8,9 @@
  * but has to look at every word for startsWith.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, slots, stagePanel, readout, trieOutline } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 
 const MAX_OPS = 8, MAX_LEN = 6;
 const NAMES = { insert: 'insert', search: 'search', startsWith: 'startsWith' };
@@ -574,12 +574,7 @@ function mountPrefixWidget(host) {
     q('[data-total]').innerHTML = `${hits.length}<small>${pick(t('words match', 'word ကိုက်'))}</small>`;
   }
   input.addEventListener('input', () => { state.prefix = input.value.toLowerCase().replace(/[^a-z]/g, '').slice(0, 6); render(); });
-  host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (chip) { state.set = Number(chip.dataset.set); state.prefix = QW_SETS[state.set].words[0].slice(0, 2); render(); }
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.prefix = QW_SETS[state.set].words[0].slice(0, 2); } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

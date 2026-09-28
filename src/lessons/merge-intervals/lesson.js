@@ -8,9 +8,9 @@
  * so the sweep compares with one interval, not all of them.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, readout, slots, stagePanel } from '../../lib/stage.js';
-import { t, esc, exampleTitle, LANGUAGES, k, c, stageGap, presetChips, widgetLabel, stageEmpty } from '../../lib/kit.js';
+import { t, esc, exampleTitle, LANGUAGES, k, c, stageGap, presetChips, widgetLabel, stageEmpty, wireWidget } from '../../lib/kit.js';
 
 const MAX_LEN = 8;
 const TOP = 20;
@@ -470,15 +470,7 @@ function mountOverlapWidget(host) {
     else return;
     render();
   });
-  host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (!chip) return;
-    const set = QW_SETS[Number(chip.dataset.set)];
-    Object.assign(state, { set: Number(chip.dataset.set), aEnd: set.aEnd, bStart: set.bStart });
-    render();
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { const set = QW_SETS[i]; Object.assign(state, { set: i, aEnd: set.aEnd, bStart: set.bStart }); } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

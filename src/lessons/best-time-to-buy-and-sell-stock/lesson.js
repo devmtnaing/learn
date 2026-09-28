@@ -11,10 +11,10 @@
  * after the buy, which is the whole reason the answer is not
  * max(prices) - min(prices).
  */
-import { t, plural, exampleTitle, LANGUAGES, k, c, intList, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, plural, exampleTitle, LANGUAGES, k, c, intList, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 import { mountLesson } from '../../lib/stepper.js';
 import { bars, cells, slots, stagePanel } from '../../lib/stage.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 
 /* A bilingual string: the { en, my } pair pick() reads at render time. */
 
@@ -528,16 +528,14 @@ function mountTradeWidget(host) {
     else return;
     render();
   });
-  host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (!chip) return;
-    state.set = Number(chip.dataset.set);
-    const { pair } = bestTrade(QW_SETS[state.set].prices);
-    [state.buy, state.sell] = pair ?? [0, 1];
-    render();
+  wireWidget(host, {
+    render,
+    choose: (i) => {
+      state.set = i;
+      const { pair } = bestTrade(QW_SETS[state.set].prices);
+      [state.buy, state.sell] = pair ?? [0, 1];
+    },
   });
-  onLangChange(render);
-  render();
 }
 
 /* ---------------- the approach, in brief ----------------

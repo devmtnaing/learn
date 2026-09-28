@@ -8,9 +8,9 @@
  * a two-pointer squeeze, where equal neighbours can simply be stepped over.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, kv, readout, slots, stagePanel } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, stageGap, intList, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, stageGap, intList, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 
 const MAX_LEN = 10;
 
@@ -535,17 +535,10 @@ function mountTripletWidget(host) {
     render();
   }
   host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (chip) { state.set = Number(chip.dataset.set); state.sel = [0, 1, 2]; return render(); }
     const cell = ev.target.closest('[data-i]');
     if (cell) toggle(Number(cell.dataset.i));
   });
-  host.addEventListener('keydown', (ev) => {
-    const cell = ev.target.closest('[data-i]');
-    if (cell && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); toggle(Number(cell.dataset.i)); }
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.sel = [0, 1, 2]; } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

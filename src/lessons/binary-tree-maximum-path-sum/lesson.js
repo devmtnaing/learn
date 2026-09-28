@@ -9,9 +9,9 @@
  * parent and records the bend on the way back: O(n).
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, tree, stack, readout, panels, slots, stagePanel } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, stageGap, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, stageGap, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 import { buildTree, levelOrder, asNested, preorderKeys, nameOf, treeInput, formatLevelOrder } from '../../lib/tree.js';
 
 const MAX_NODES = 15;
@@ -448,12 +448,7 @@ function mountTopWidget(host) {
     q('[data-total]').innerHTML = `${best}<small>${pick(t('best path', 'အကောင်းဆုံး'))}</small>`;
   }
   host.addEventListener('input', (ev) => { if (ev.target.id === 'mps-b') { state.b = Number(ev.target.value) - 1; render(); } });
-  host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (chip) { state.set = Number(chip.dataset.set); state.b = 0; render(); }
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.b = 0; } });
 }
 
 function atLeastOne(text) {

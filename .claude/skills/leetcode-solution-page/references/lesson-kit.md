@@ -128,7 +128,11 @@ or cell with the same `data-*` attributes, so give each clickable one a stable
 `data-*` key (`data-set`, `data-i`). The part 1 widget uses `presetChips(sets, active)` for its chips
 (the active one is `aria-pressed`, which lesson.css draws as selected; a
 widget's own toggle chips should set it too) and `widgetLabel(text)` for the
-note beside its heading. Anything a lesson draws uses a class from `lesson.css`, `kit.css`
+note beside its heading. It ends with `wireWidget(host, { render, choose })`,
+which draws it now and on every language change, calls `choose(i)` then
+`render()` when chip `i` is clicked, and turns Enter or space on a
+`role="button"` cell into a click, so the widget has one click listener and no
+keydown of its own. Anything a lesson draws uses a class from `lesson.css`, `kit.css`
 or its own `style.css`; never a `style="…"` string (a width that varies can be
 a class per step, as x-sum's tally bars are). In `page.js`'s cost table, the
 gloss under an approach's name is `<span class="sub">`. A class a second lesson would

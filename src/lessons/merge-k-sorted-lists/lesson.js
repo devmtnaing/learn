@@ -8,9 +8,9 @@
  * and there are about log₂ k rounds.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, slots, stagePanel, readout } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, labelledRows, stageRow, stageGap, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, labelledRows, stageRow, stageGap, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 
 const MAX_K = 6, MAX_N = 14;
 
@@ -507,12 +507,7 @@ function mountMovesWidget(host) {
     q('[data-total]').innerHTML = `${(total(fold) / total(pairs)).toFixed(1)}×<small>${pick(t('more moves', 'ရွှေ့ခြင်း ပိုများ'))}</small>`;
   }
   q('[data-k]').addEventListener('input', (ev) => { state.k = Number(ev.target.value); render(); });
-  host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (chip) { state.k = QW_SETS[Number(chip.dataset.set)].k; render(); }
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.k = QW_SETS[i].k; } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

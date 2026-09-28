@@ -10,9 +10,9 @@
  */
 import { mountLesson } from '../../lib/stepper.js';
 import { heapNested } from '../../lib/tree.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, slots, stagePanel, tree, readout, panels } from '../../lib/stage.js';
-import { t, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, presetChips, widgetLabel, stageEmpty } from '../../lib/kit.js';
+import { t, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, presetChips, widgetLabel, stageEmpty, wireWidget } from '../../lib/kit.js';
 
 const MAX_OPS = 12;
 
@@ -550,12 +550,7 @@ function mountHalvesWidget(host) {
     q('[data-total]').innerHTML = `${fmt(med)}<small>${pick(t('median', 'median'))}</small>`;
   }
   host.addEventListener('input', (ev) => { if (ev.target.id === 'mf-n') { state.n = Number(ev.target.value); render(); } });
-  host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (chip) { state.set = Number(chip.dataset.set); state.n = QW_SETS[state.set].nums.length; render(); }
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.n = QW_SETS[state.set].nums.length; } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

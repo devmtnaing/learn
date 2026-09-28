@@ -8,9 +8,9 @@
  * the call stack, the loop carries the current level.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, tree, stack, readout, panels, slots, stagePanel } from '../../lib/stage.js';
-import { t, plural, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, presetChips, widgetLabel, stageEmpty } from '../../lib/kit.js';
+import { t, plural, exampleTitle, LANGUAGES, k, c, stageRow, stageGap, presetChips, widgetLabel, stageEmpty, wireWidget } from '../../lib/kit.js';
 import { buildTree, levelOrder, asNested, treeDepth, nameOf, treeInput, formatLevelOrder } from '../../lib/tree.js';
 
 const MAX_NODES = 15;
@@ -431,15 +431,7 @@ function mountPathWidget(host) {
     if (ev.target.id !== 'qw-p') return;
     state.p = Number(ev.target.value) - 1; render();
   });
-  host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (!chip) return;
-    state.set = Number(chip.dataset.set);
-    state.p = 0;
-    render();
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.p = 0; } });
 }
 
 /* ---------------- the approach, in brief ----------------

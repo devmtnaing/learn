@@ -8,9 +8,9 @@
  * walked again.
  */
 import { mountLesson } from '../../lib/stepper.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 import { cells, slots, stagePanel, readout, trieOutline } from '../../lib/stage.js';
-import { t, LANGUAGES, k, c, labelledRows, stageRow, stageGap, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, LANGUAGES, k, c, labelledRows, stageRow, stageGap, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 
 const MAX_SIDE = 4, MAX_WORDS = 5, MAX_LEN = 6;
 const DIRS = [[1, 0], [-1, 0], [0, 1], [0, -1]];
@@ -612,17 +612,10 @@ function mountPathWidget(host) {
     host.querySelector(`[data-r="${r}"][data-c="${cc}"]`)?.focus();
   }
   host.addEventListener('click', (ev) => {
-    const chip = ev.target.closest('[data-set]');
-    if (chip) { state.set = Number(chip.dataset.set); state.path = []; return render(); }
     const el = ev.target.closest('[data-r]');
     if (el) tap(el);
   });
-  host.addEventListener('keydown', (ev) => {
-    const el = ev.target.closest('[data-r]');
-    if (el && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); tap(el); }
-  });
-  onLangChange(render);
-  render();
+  wireWidget(host, { render, choose: (i) => { state.set = i; state.path = []; } });
 }
 
 /* ---------------- the approach, in brief ---------------- */

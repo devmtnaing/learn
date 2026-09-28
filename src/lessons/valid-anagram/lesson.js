@@ -10,10 +10,10 @@
  * resolves with pick(). Only the cost strings stay as they are: "O(n log n)
  * time" is notation, not prose.
  */
-import { t, plural, exampleTitle, LANGUAGES, k, c, verdictAnswer, labelledRows, presetChips, widgetLabel } from '../../lib/kit.js';
+import { t, plural, exampleTitle, LANGUAGES, k, c, verdictAnswer, labelledRows, presetChips, widgetLabel, wireWidget } from '../../lib/kit.js';
 import { mountLesson } from '../../lib/stepper.js';
 import { cells, strip, kv, panels } from '../../lib/stage.js';
-import { pick, onLangChange } from '../../lib/i18n.js';
+import { pick } from '../../lib/i18n.js';
 
 
 /* ---------------- step generators ---------------- */
@@ -468,13 +468,9 @@ function mountWidget(host) {
   host.addEventListener('click', (ev) => {
     const cell = ev.target.closest('[data-i]');
     if (cell) return swap(Number(cell.dataset.i), false);
-    const chip = ev.target.closest('[data-set], [data-act]');
+    const chip = ev.target.closest('[data-act]');
     if (!chip) return;
-    if (chip.dataset.set != null) {
-      state.set = Number(chip.dataset.set);
-      settle([...QW_SETS[state.set].t]);
-      state.moves = 0;
-    } else if (chip.dataset.act === 'shuffle') {
+    if (chip.dataset.act === 'shuffle') {
       const word = shown();
       const before = word.join('');
       for (let tries = 0; tries < 40 && word.join('') === before; tries++) {
@@ -507,8 +503,10 @@ function mountWidget(host) {
     swap(Number(cell.dataset.i), true);
   });
 
-  onLangChange(() => render());
-  render();
+  wireWidget(host, {
+    render,
+    choose: (i) => { state.set = i; settle([...QW_SETS[i].t]); state.moves = 0; },
+  });
 }
 
 /* ---------------- the approach, in brief ----------------

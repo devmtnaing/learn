@@ -31,6 +31,12 @@
   .masthead nav a{font-size:12.5px;padding:5px 7px}
   .brand{font-size:15px}
 }
+/* Under 375px brand, links, search and theme fit with no room to spare, and a
+   wider fallback font (before the web fonts load, or on Linux) wraps the bar.
+   The "LeetCode" link goes where the brand already does, so it steps aside. */
+@media (max-width:374px){
+  .masthead nav a[href="/"]{display:none}
+}
 
 /* ---------- theme switch ---------- */
 .theme-btn{

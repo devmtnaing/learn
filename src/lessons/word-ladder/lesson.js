@@ -602,22 +602,22 @@ const APPROACH = {
             'beginWord မှ level အလိုက် breadth-first search။ စကားလုံးတစ်ခု၏ အိမ်နီးများကို ရှာရန် မရောက်ရသေးသော စကားလုံးတိုင်းနှင့် စာလုံးအလိုက် နှိုင်းယှဉ်သည်။'),
     steps: [
       t('If endWord is not in the list, return 0.', 'endWord သည် list ထဲ မရှိလျှင် 0 ပြန်။'),
-      t('Queue <code>(beginWord, 1)</code>. Pop a word; if it is endWord, return its count.', '<code>(beginWord, 1)</code> ကို queue ထဲ ထည့်။ စကားလုံးတစ်ခု ထုတ် — endWord ဖြစ်လျှင် ၎င်း၏ အရေအတွက်ကို ပြန်။'),
+      t('Queue <code>(beginWord, 1)</code>. Pop a word; if it is endWord, return its count.', '<code>(beginWord, 1)</code> ကို queue ထဲ ထည့်သည်။ စကားလုံးတစ်ခု ထုတ်ပြီး endWord ဖြစ်လျှင် ၎င်း၏ အရေအတွက်ကို ပြန်ပေးသည်။'),
       t('Every unreached word one letter away goes on the queue at count + 1 and leaves the unreached list.', 'စာလုံး တစ်လုံး ကွာသော မရောက်ရသေးသည့် စကားလုံးတိုင်း count + 1 ဖြင့် queue ထဲ ဝင်ပြီး မရောက်ရသေးသော list မှ ထွက်သည်။'),
     ],
-    cost: t('Each word popped is compared with up to n others, L letters each: O(n² · L) — 1.22 s in Python here on 5,000 words of 10 letters.',
-             'ထုတ်သော စကားလုံးတစ်ခုစီကို အခြား n ခုအထိ၊ တစ်ခုစီ စာလုံး L လုံးဖြင့် နှိုင်းယှဉ်သည် — O(n² · L) — ဤနေရာတွင် 10 လုံးပါ စကားလုံး 5,000 ပေါ်တွင် Python ဖြင့် 1.22 စက္ကန့်။'),
+    cost: t('Each word popped is compared with up to n others, L letters each: O(n² · L), or 1.22 s in Python here on 5,000 words of 10 letters.',
+             'ထုတ်သော စကားလုံးတစ်ခုစီကို အခြား n ခုအထိ၊ တစ်ခုစီ စာလုံး L လုံးဖြင့် နှိုင်းယှဉ်သည်: O(n² · L)။ ဤနေရာတွင် 10 လုံးပါ စကားလုံး 5,000 ပေါ်တွင် Python ဖြင့် 1.22 စက္ကန့်။'),
   },
   letters: {
-    idea: t('The same BFS, but a word finds its neighbours by changing each letter to each of 26 and asking a hash set — work that does not grow with the list.',
-            'BFS အတူတူ၊ သို့သော် စကားလုံးတစ်ခုသည် စာလုံးတစ်လုံးစီကို 26 လုံးစီသို့ ပြောင်းပြီး hash set ကို မေးခြင်းဖြင့် အိမ်နီးများကို ရှာသည် — list နှင့်အတူ မကြီးထွားသော အလုပ်။'),
+    idea: t('The same BFS, but a word finds its neighbours by changing each letter to each of 26 and asking a hash set. That work does not grow with the list.',
+            'BFS အတူတူ၊ သို့သော် စကားလုံးတစ်ခုသည် စာလုံးတစ်လုံးစီကို 26 လုံးစီသို့ ပြောင်းပြီး hash set ကို မေးခြင်းဖြင့် အိမ်နီးများကို ရှာသည်။ ထိုအလုပ်သည် list နှင့်အတူ မကြီးထွားပါ။'),
     steps: [
-      t('Put the list in a set; if endWord is not in it, return 0.', 'list ကို set ထဲ ထည့် — endWord မပါလျှင် 0 ပြန်။'),
-      t('Queue <code>(beginWord, 1)</code>. Pop a word; if it is endWord, return its count.', '<code>(beginWord, 1)</code> ကို queue ထဲ ထည့်။ စကားလုံးတစ်ခု ထုတ် — endWord ဖြစ်လျှင် ၎င်း၏ အရေအတွက်ကို ပြန်။'),
-      t('For each position and each letter, build the new word; if the set has it, remove it and queue it at count + 1.', 'နေရာတစ်ခုစီနှင့် စာလုံးတစ်ခုစီအတွက် စကားလုံးအသစ် တည်ဆောက် — set တွင် ရှိလျှင် ဖယ်ပြီး count + 1 ဖြင့် queue ထဲ ထည့်။'),
+      t('Put the list in a set; if endWord is not in it, return 0.', 'list ကို set ထဲ ထည့်သည်။ endWord မပါလျှင် 0 ပြန်ပေးသည်။'),
+      t('Queue <code>(beginWord, 1)</code>. Pop a word; if it is endWord, return its count.', '<code>(beginWord, 1)</code> ကို queue ထဲ ထည့်သည်။ စကားလုံးတစ်ခု ထုတ်ပြီး endWord ဖြစ်လျှင် ၎င်း၏ အရေအတွက်ကို ပြန်ပေးသည်။'),
+      t('For each position and each letter, build the new word; if the set has it, remove it and queue it at count + 1.', 'နေရာတစ်ခုစီနှင့် စာလုံးတစ်ခုစီအတွက် စကားလုံးအသစ် တည်ဆောက်သည်။ set တွင် ရှိလျှင် ဖယ်ပြီး count + 1 ဖြင့် queue ထဲ ထည့်သည်။'),
     ],
-    cost: t('Each word popped makes 26 · L candidates of L letters: O(n · 26 · L²) — 0.054 s in Python here on the same 5,000 words.',
-            'ထုတ်သော စကားလုံးတစ်ခုစီက စာလုံး L လုံးပါ candidate 26 · L ခု ပြုလုပ်သည် — O(n · 26 · L²) — ဤနေရာတွင် တူညီသော စကားလုံး 5,000 ပေါ်တွင် Python ဖြင့် 0.054 စက္ကန့်။'),
+    cost: t('Each word popped makes 26 · L candidates of L letters: O(n · 26 · L²), or 0.054 s in Python here on the same 5,000 words.',
+            'ထုတ်သော စကားလုံးတစ်ခုစီက စာလုံး L လုံးပါ candidate 26 · L ခု ပြုလုပ်သည်: O(n · 26 · L²)။ ဤနေရာတွင် တူညီသော စကားလုံး 5,000 ပေါ်တွင် Python ဖြင့် 0.054 စက္ကန့်။'),
   },
 };
 
@@ -661,10 +661,10 @@ mountLesson({
   solutions: {
     pairs: { approach: APPROACH.pairs,
       desc: t('Correct, and the natural first version: the graph is never built, just discovered. It pays for that with a pass over the unreached words for every word it pops.',
-              'မှန်ပြီး သဘာဝကျသော ပထမ version — graph ကို ဘယ်တော့မှ မတည်ဆောက်ဘဲ ရှာဖွေရုံသာ။ ထုတ်သော စကားလုံးတိုင်းအတွက် မရောက်ရသေးသော စကားလုံးများကို တစ်ပတ် လျှောက်ရခြင်းဖြင့် ပေးဆပ်သည်။') },
+              'မှန်ပြီး သဘာဝကျသော ပထမ version ဖြစ်သည်။ graph ကို ဘယ်တော့မှ မတည်ဆောက်ဘဲ ရှာဖွေရုံသာ။ ထုတ်သော စကားလုံးတိုင်းအတွက် မရောက်ရသေးသော စကားလုံးများကို တစ်ပတ် လျှောက်ရခြင်းဖြင့် ပေးဆပ်သည်။') },
     letters: { approach: APPROACH.letters,
       desc: t('The answer to write: the same search, but the list is only ever asked, never walked. With 26 letters and words of 10, it beats scanning once the list passes a few hundred words.',
-              'ရေးသင့်သည့် အဖြေ — ရှာပုံ အတူတူ၊ သို့သော် list ကို မေးရုံသာ၊ ဘယ်တော့မှ မလျှောက်။ စာလုံး 26 လုံးနှင့် 10 လုံးပါ စကားလုံးများဖြင့် list သည် စကားလုံး ရာဂဏန်း အနည်းငယ် ကျော်သည်နှင့် scan လုပ်ခြင်းကို နိုင်သည်။') },
+              'ရေးသင့်သည့် အဖြေ: ရှာပုံ အတူတူ၊ သို့သော် list ကို မေးရုံသာ၊ ဘယ်တော့မှ မလျှောက်။ စာလုံး 26 လုံးနှင့် 10 လုံးပါ စကားလုံးများဖြင့် list သည် စကားလုံး ရာဂဏန်း အနည်းငယ် ကျော်သည်နှင့် scan လုပ်ခြင်းကို နိုင်သည်။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the 2 examples, 7 edges, 15,000 random cases of 1- to

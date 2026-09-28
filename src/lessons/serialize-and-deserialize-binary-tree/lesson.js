@@ -688,21 +688,21 @@ function mountMarksWidget(host) {
 const APPROACH = {
   preorder: {
     idea: t('Write the tree in preorder with "#" for every missing child. Reading it back is the same walk: take a token; "#" is an empty subtree, anything else is a node whose left and right subtrees follow.',
-            'tree ကို preorder ဖြင့် ရေးပြီး မရှိသော ကလေးတိုင်းအတွက် "#"။ ပြန်ဖတ်ခြင်းသည် walk တူတူ — token တစ်ခုယူ — "#" သည် ဗလာ subtree၊ အခြားအရာသည် ၎င်း၏ ဘယ်နှင့် ညာ subtree များ နောက်မှ လိုက်သော node။'),
+            'tree ကို preorder ဖြင့် ရေးပြီး မရှိသော ကလေးတိုင်းအတွက် "#"။ ပြန်ဖတ်ခြင်းသည် walk တူတူ ဖြစ်သည်: token တစ်ခုယူသည်။ "#" သည် ဗလာ subtree၊ အခြားအရာသည် ၎င်း၏ ဘယ်နှင့် ညာ subtree များ နောက်မှ လိုက်သော node။'),
     steps: [
-      t('<code>serialize</code>: null → "#"; otherwise the value, then the left subtree, then the right. Join with commas.', '<code>serialize</code> — null → "#" — မဟုတ်လျှင် value၊ ပြီးမှ ဘယ် subtree၊ ပြီးမှ ညာ။ comma ဖြင့် ဆက်။'),
-      t('<code>deserialize</code>: split, then <code>read()</code> takes the next token — "#" returns null, a number makes a node and reads its left and right.', '<code>deserialize</code> — split ပြီး <code>read()</code> က နောက် token ကို ယူ — "#" က null ပြန်ပေး၊ ကိန်းက node ပြုလုပ်ပြီး ၎င်း၏ ဘယ်နှင့် ညာကို ဖတ်။'),
+      t('<code>serialize</code>: null → "#"; otherwise the value, then the left subtree, then the right. Join with commas.', '<code>serialize</code>: null → "#"။ မဟုတ်လျှင် value၊ ပြီးမှ ဘယ် subtree၊ ပြီးမှ ညာ။ comma ဖြင့် ဆက်သည်။'),
+      t('<code>deserialize</code>: split, then <code>read()</code> takes the next token: "#" returns null, and a number makes a node and reads its left and right.', '<code>deserialize</code>: split ပြီး <code>read()</code> က နောက် token ကို ယူသည်။ "#" က null ပြန်ပေးပြီး ကိန်းက node ပြုလုပ်ကာ ၎င်း၏ ဘယ်နှင့် ညာကို ဖတ်သည်။'),
     ],
-    cost: t('O(n) time and 2n + 1 tokens each way; both walks recurse as deep as the tree — 10⁴ on a chain.', 'O(n) အချိန်၊ ဘက်တစ်ခုစီ token 2n + 1 — walk နှစ်ခုလုံး tree ၏ အနက်အထိ recurse — ကွင်းဆက်တွင် 10⁴။'),
+    cost: t('O(n) time and 2n + 1 tokens each way. Both walks recurse as deep as the tree, 10⁴ on a chain.', 'O(n) အချိန်၊ ဘက်တစ်ခုစီ token 2n + 1။ walk နှစ်ခုလုံး tree ၏ အနက်အထိ recurse လုပ်သည် (ကွင်းဆက်တွင် 10⁴)။'),
   },
   level: {
     idea: t('Write the tree level by level with a queue, both children of every node including the missing ones. To read it back, each node taken off a queue claims the next two tokens as its children.',
-            'queue ဖြင့် tree ကို level အလိုက် ရေး — node တိုင်း၏ ကလေး နှစ်ခုလုံး၊ မရှိသည်များပါ။ ပြန်ဖတ်ရန် queue မှ ထုတ်သော node တစ်ခုစီက နောက် token နှစ်ခုကို ၎င်း၏ ကလေးများအဖြစ် ယူသည်။'),
+            'queue ဖြင့် tree ကို level အလိုက် ရေးသည်: node တိုင်း၏ ကလေး နှစ်ခုလုံး၊ မရှိသည်များပါ။ ပြန်ဖတ်ရန် queue မှ ထုတ်သော node တစ်ခုစီက နောက် token နှစ်ခုကို ၎င်း၏ ကလေးများအဖြစ် ယူသည်။'),
     steps: [
-      t('<code>serialize</code>: pop a node; null → "#", else its value, and queue both children.', '<code>serialize</code> — node တစ်ခု pop — null → "#"၊ မဟုတ်လျှင် ၎င်း၏ value ပြီး ကလေး နှစ်ခုလုံး queue။'),
-      t('<code>deserialize</code>: the first token is the root. Pop a parent; tokens <code>i</code> and <code>i + 1</code> are its children — make and queue any that are not "#".', '<code>deserialize</code> — ပထမ token သည် root။ parent တစ်ခု pop — token <code>i</code> နှင့် <code>i + 1</code> သည် ၎င်း၏ ကလေးများ — "#" မဟုတ်သည်ကို ပြုလုပ်ပြီး queue။'),
+      t('<code>serialize</code>: pop a node; null → "#", else its value, and queue both children.', '<code>serialize</code>: node တစ်ခု pop သည်။ null → "#"၊ မဟုတ်လျှင် ၎င်း၏ value ပြီး ကလေး နှစ်ခုလုံး queue ထဲ ထည့်သည်။'),
+      t('<code>deserialize</code>: the first token is the root. Pop a parent; tokens <code>i</code> and <code>i + 1</code> are its children, so make and queue any that are not "#".', '<code>deserialize</code>: ပထမ token သည် root ဖြစ်သည်။ parent တစ်ခု pop သည်။ token <code>i</code> နှင့် <code>i + 1</code> သည် ၎င်း၏ ကလေးများ ဖြစ်သဖြင့် "#" မဟုတ်သည်ကို ပြုလုပ်ပြီး queue ထဲ ထည့်သည်။'),
     ],
-    cost: t('O(n) time and 2n + 1 tokens; the queue holds at most one level plus its children, and nothing recurses.', 'O(n) အချိန်နှင့် token 2n + 1 — queue သည် level တစ်ခုနှင့် ၎င်း၏ ကလေးများ အများဆုံး ကိုင်ပြီး ဘာမှ recurse မလုပ်။'),
+    cost: t('O(n) time and 2n + 1 tokens; the queue holds at most one level plus its children, and nothing recurses.', 'O(n) အချိန်နှင့် token 2n + 1။ queue သည် level တစ်ခုနှင့် ၎င်း၏ ကလေးများ အများဆုံး ကိုင်ပြီး ဘာမှ recurse မလုပ်။'),
   },
 };
 
@@ -726,22 +726,22 @@ mountLesson({
   modes: [
     { id: 'preorder', name: 'Preorder with # markers',
       sub: t('recursive', 'recursive'),
-      desc: t('Write and read the tree depth-first, "#" for every missing child.', 'tree ကို depth-first ဖြင့် ရေးပြီး ဖတ် — မရှိသော ကလေးတိုင်းအတွက် "#"။'),
+      desc: t('Write and read the tree depth-first, "#" for every missing child.', 'tree ကို depth-first ဖြင့် ရေးပြီး ဖတ်သည်။ မရှိသော ကလေးတိုင်းအတွက် "#"။'),
       cost: 'O(n) time · O(h) stack', build: buildPreorder },
     { id: 'level', name: 'Level order with a queue',
       sub: t('no recursion', 'recursion မပါ'),
-      desc: t('Write and read the tree level by level; each parent takes the next two tokens.', 'tree ကို level အလိုက် ရေးပြီး ဖတ် — parent တစ်ခုစီက နောက် token နှစ်ခုကို ယူ။'),
+      desc: t('Write and read the tree level by level; each parent takes the next two tokens.', 'tree ကို level အလိုက် ရေးပြီး ဖတ်သည်။ parent တစ်ခုစီက နောက် token နှစ်ခုကို ယူသည်။'),
       cost: 'O(n) time · O(width) queue', build: buildLevel },
   ],
   languages: LANGUAGES,
   code: CODE,
   solutions: {
     preorder: { approach: APPROACH.preorder,
-      desc: t('The shortest codec to write, and each half mirrors the other. Its depth is the catch: a 10⁴-node chain takes both walks 10⁴ calls deep, past the default stacks of Ruby and Node.',
-              'ရေးရန် အတိုဆုံး codec ဖြစ်ပြီး တစ်ဝက်စီသည် အခြားတစ်ဝက်၏ ပုံရိပ်။ ပြဿနာမှာ အနက် — node 10⁴ ကွင်းဆက်က walk နှစ်ခုလုံးကို call 10⁴ ဆင့် နက်စေပြီး Ruby နှင့် Node ၏ default stack ကို ကျော်သည်။') },
+      desc: t('The shortest codec to write, and each half mirrors the other. Its depth is the catch. A 10⁴-node chain takes both walks 10⁴ calls deep, past the default stacks of Ruby and Node.',
+              'ရေးရန် အတိုဆုံး codec ဖြစ်ပြီး တစ်ဝက်စီသည် အခြားတစ်ဝက်၏ ပုံရိပ် ဖြစ်သည်။ ပြဿနာမှာ အနက် ဖြစ်သည်။ node 10⁴ ကွင်းဆက်က walk နှစ်ခုလုံးကို call 10⁴ ဆင့် နက်စေပြီး Ruby နှင့် Node ၏ default stack ကို ကျော်သည်။') },
     level: { approach: APPROACH.level,
       desc: t('The format LeetCode itself uses, with the trailing "#"s kept so every node has two tokens. A queue each way and no recursion, so no stack to run out of.',
-              'LeetCode ကိုယ်တိုင် သုံးသော format — node တိုင်းတွင် token နှစ်ခု ရှိစေရန် နောက်ဆုံး "#" များကို ထားထားသည်။ ဘက်တစ်ခုစီ queue တစ်ခု၊ recursion မပါ၊ ထို့ကြောင့် ကုန်သွားမည့် stack မရှိ။') },
+              'LeetCode ကိုယ်တိုင် သုံးသော format ဖြစ်သည်။ node တိုင်းတွင် token နှစ်ခု ရှိစေရန် နောက်ဆုံး "#" များကို ထားထားသည်။ ဘက်တစ်ခုစီ queue တစ်ခု၊ recursion မပါ၊ ထို့ကြောင့် ကုန်သွားမည့် stack မရှိ။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the 2 examples, 6 edges, 15,000 random trees of up to 9
@@ -760,15 +760,15 @@ mountLesson({
   },
   caveats: {
     preorder: {
-      ruby: t('Correct on all 20,014 round trips with a larger stack, but on Ruby 3.1\'s default stack a chain of more than 8,185 nodes overflows it (<code>SystemStackError</code>) — measured here — and the constraint allows 10⁴. Use the level-order codec.',
-              'stack ပိုကြီးလျှင် round trip 20,014 ခုလုံးတွင် မှန်သည်၊ သို့သော် Ruby 3.1 ၏ default stack ပေါ်တွင် node 8,185 ထက် ရှည်သော ကွင်းဆက်က overflow (<code>SystemStackError</code>) ဖြစ်စေသည် — ဤနေရာတွင် တိုင်းတာထားသည် — ကန့်သတ်ချက်က 10⁴ ကို ခွင့်ပြုသည်။ level-order codec ကို သုံးပါ။'),
-      javascript: t('Correct on all 20,014 round trips with a larger stack, but on Node 24\'s default stack, run cold, a chain of more than 8,881 nodes overflows it (<code>RangeError</code>) — measured here — and the constraint allows 10⁴. Use the level-order codec.',
-                    'stack ပိုကြီးလျှင် round trip 20,014 ခုလုံးတွင် မှန်သည်၊ သို့သော် Node 24 ၏ default stack ပေါ်တွင် cold run လုပ်လျှင် node 8,881 ထက် ရှည်သော ကွင်းဆက်က overflow (<code>RangeError</code>) ဖြစ်စေသည် — ဤနေရာတွင် တိုင်းတာထားသည် — ကန့်သတ်ချက်က 10⁴ ကို ခွင့်ပြုသည်။ level-order codec ကို သုံးပါ။'),
+      ruby: t('Correct on all 20,014 round trips with a larger stack, but on Ruby 3.1\'s default stack a chain of more than 8,185 nodes overflows it (<code>SystemStackError</code>, measured here), and the constraint allows 10⁴. Use the level-order codec.',
+              'stack ပိုကြီးလျှင် round trip 20,014 ခုလုံးတွင် မှန်သည်၊ သို့သော် Ruby 3.1 ၏ default stack ပေါ်တွင် node 8,185 ထက် ရှည်သော ကွင်းဆက်က overflow (<code>SystemStackError</code>) ဖြစ်စေသည် (ဤနေရာတွင် တိုင်းတာထားသည်)။ ကန့်သတ်ချက်က 10⁴ ကို ခွင့်ပြုသည်။ level-order codec ကို သုံးပါ။'),
+      javascript: t('Correct on all 20,014 round trips with a larger stack, but on Node 24\'s default stack, run cold, a chain of more than 8,881 nodes overflows it (<code>RangeError</code>, measured here), and the constraint allows 10⁴. Use the level-order codec.',
+                    'stack ပိုကြီးလျှင် round trip 20,014 ခုလုံးတွင် မှန်သည်၊ သို့သော် Node 24 ၏ default stack ပေါ်တွင် cold run လုပ်လျှင် node 8,881 ထက် ရှည်သော ကွင်းဆက်က overflow (<code>RangeError</code>) ဖြစ်စေသည် (ဤနေရာတွင် တိုင်းတာထားသည်)။ ကန့်သတ်ချက်က 10⁴ ကို ခွင့်ပြုသည်။ level-order codec ကို သုံးပါ။'),
       python: t('The <code>setrecursionlimit</code> line is part of the answer: Python\'s default of 1,000 is far below the 10⁴-node chain the constraint allows.',
-                '<code>setrecursionlimit</code> စာကြောင်းသည် အဖြေ၏ အစိတ်အပိုင်း — Python ၏ default 1,000 သည် ကန့်သတ်ချက် ခွင့်ပြုသော node 10⁴ ကွင်းဆက်ထက် အများကြီး နိမ့်သည်။'),
+                '<code>setrecursionlimit</code> စာကြောင်းသည် အဖြေ၏ အစိတ်အပိုင်း ဖြစ်သည်။ Python ၏ default 1,000 သည် ကန့်သတ်ချက် ခွင့်ပြုသော node 10⁴ ကွင်းဆက်ထက် အများကြီး နိမ့်သည်။'),
     },
   },
-  stripLabel: t('root, in level order (∅ = null)', 'root — level order (∅ = null)'),
+  stripLabel: t('root, in level order (∅ = null)', 'root၊ level order (∅ = null)'),
   strip,
   draw,
   answer,

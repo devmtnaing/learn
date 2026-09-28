@@ -459,12 +459,12 @@ const APPROACH = {
       t("Walk the table and return the value whose count is 1.",
         "table ကို လျှောက်ပြီး count 1 ရှိသော value ကို ပြန်ပေးသည်။"),
     ],
-    cost: t("two passes and a table of (n + 1)/2 rows — 15,000 at the largest n — which the constant-space rule does not allow.",
-        "နှစ်ကြိမ် ဖြတ်ခြင်းနှင့် row (n + 1)/2 ခုရှိ table — အကြီးဆုံး n တွင် 15,000 — constant space စည်းကမ်းက ခွင့်မပြုပါ။"),
+    cost: t("Two passes and a table of (n + 1)/2 rows (15,000 at the largest n), which the constant-space rule does not allow.",
+        "နှစ်ကြိမ် ဖြတ်ခြင်းနှင့် row (n + 1)/2 ခုရှိ table (အကြီးဆုံး n တွင် 15,000)။ constant space စည်းကမ်းက ခွင့်မပြုပါ။"),
   },
   xor: {
     idea: t("XOR cancels pairs: <code>x ^ x</code> is 0, <code>x ^ 0</code> is <code>x</code>, and order does not matter. XOR every value together and each pair vanishes, leaving the single one.",
-        "XOR က အတွဲများကို ချေဖျက်သည် — <code>x ^ x</code> သည် 0၊ <code>x ^ 0</code> သည် <code>x</code> ဖြစ်ပြီး အစီအစဉ် အရေးမကြီးပါ။ value အားလုံးကို XOR လုပ်လျှင် အတွဲတိုင်း ပျောက်ပြီး တစ်ခုတည်းသော value သာ ကျန်သည်။"),
+        "XOR က အတွဲများကို ချေဖျက်သည်: <code>x ^ x</code> သည် 0၊ <code>x ^ 0</code> သည် <code>x</code> ဖြစ်ပြီး အစီအစဉ် အရေးမကြီးပါ။ value အားလုံးကို XOR လုပ်လျှင် အတွဲတိုင်း ပျောက်ပြီး တစ်ခုတည်းသော value သာ ကျန်သည်။"),
     steps: [
       t("Start with <code>acc = 0</code>.",
         "<code>acc = 0</code> ဖြင့် စသည်။"),
@@ -498,15 +498,15 @@ mountLesson({
   examples: [
     { title: exampleTitle(1), inputHtml: '<code>nums = [2,2,1]</code>', output: '1',
       why: [t('<code>2</code> appears twice, <code>1</code> once. As XOR: <code>2 ^ 2 ^ 1 = 0 ^ 1 = 1</code>.',
-              '<code>2</code> နှစ်ကြိမ်၊ <code>1</code> တစ်ကြိမ် ပါသည်။ XOR ဖြင့် — <code>2 ^ 2 ^ 1 = 0 ^ 1 = 1</code>။')],
+              '<code>2</code> နှစ်ကြိမ်၊ <code>1</code> တစ်ကြိမ် ပါသည်။ XOR ဖြင့်: <code>2 ^ 2 ^ 1 = 0 ^ 1 = 1</code>။')],
       load: { nums: [2, 2, 1] } },
     { title: exampleTitle(2), inputHtml: '<code>nums = [4,1,2,1,2]</code>', output: '4',
       why: [t('The pairs are not next to each other, and it does not matter: XOR is order-free, so <code>4 ^ 1 ^ 2 ^ 1 ^ 2 = 4 ^ (1 ^ 1) ^ (2 ^ 2) = 4</code>.',
-              'အတွဲများ ဘေးချင်းကပ် မဟုတ်ပါ၊ သို့သော် အရေးမကြီးပါ — XOR သည် အစီအစဉ်ပေါ် မမူတည်သဖြင့် <code>4 ^ 1 ^ 2 ^ 1 ^ 2 = 4 ^ (1 ^ 1) ^ (2 ^ 2) = 4</code>။')],
+              'အတွဲများ ဘေးချင်းကပ် မဟုတ်ပါ၊ သို့သော် အရေးမကြီးပါ။ XOR သည် အစီအစဉ်ပေါ် မမူတည်သဖြင့် <code>4 ^ 1 ^ 2 ^ 1 ^ 2 = 4 ^ (1 ^ 1) ^ (2 ^ 2) = 4</code>။')],
       load: { nums: [4, 1, 2, 1, 2] } },
     { title: exampleTitle(3), inputHtml: '<code>nums = [1]</code>', output: '1',
-      why: [t('No pairs at all. The only value is the single one — and <code>0 ^ 1 = 1</code>, so a fold starting at 0 returns it unchanged.',
-              'အတွဲ လုံးဝ မရှိပါ။ တစ်ခုတည်းသော value ပင် အဖြေ ဖြစ်သည် — <code>0 ^ 1 = 1</code> ဖြစ်သဖြင့် 0 မှ စသော fold က ၎င်းကို မပြောင်းဘဲ ပြန်ပေးသည်။')],
+      why: [t('No pairs at all. The only value is the single one, and <code>0 ^ 1 = 1</code>, so a fold starting at 0 returns it unchanged.',
+              'အတွဲ လုံးဝ မရှိပါ။ တစ်ခုတည်းသော value ပင် အဖြေ ဖြစ်သည်။ <code>0 ^ 1 = 1</code> ဖြစ်သဖြင့် 0 မှ စသော fold က ၎င်းကို မပြောင်းဘဲ ပြန်ပေးသည်။')],
       load: { nums: [1] } },
   ],
   modes: [
@@ -520,10 +520,10 @@ mountLesson({
   languages: LANGUAGES,
   code: CODE,
   solutions: {
-    count: { approach: APPROACH.count, desc: t('What to write first: obvious, hard to get wrong, and it survives a change to the premise. It fails only the constant-space clause — the table grows to about <code>n/2</code> rows.',
-                     'ပထမဆုံး ရေးသင့်သည်မှာ ဤပုံစံ — ရှင်းလင်းသည်၊ မှားရန်ခက်သည်၊ premise ပြောင်းသွားလည်း အလုပ်လုပ်ဆဲ။ constant-space စည်းကမ်းတစ်ခုတည်းကိုသာ မကိုက်ပါ — table သည် row <code>n/2</code> ခုခန့်အထိ ကြီးလာသည်။') },
-    xor: { approach: APPROACH.xor, desc: t('The submission the statement asks for: one integer, one pass. It never counts anything — only whether each bit was set an odd number of times.',
-                   'မေးခွန်း တောင်းထားသည့် submission — integer တစ်ခု၊ တစ်ခေါက်တည်း။ ဘာမျှ မရေတွက်ပါ — bit တစ်ခုစီကို မကိန်းအကြိမ် set လုပ်ခဲ့သလား ဆိုသည်ကိုသာ သိသည်။') },
+    count: { approach: APPROACH.count, desc: t('What to write first: obvious, hard to get wrong, and it survives a change to the premise. It fails only the constant-space clause, because the table grows to about <code>n/2</code> rows.',
+                     'ပထမဆုံး ရေးသင့်သည်မှာ ဤပုံစံ ဖြစ်သည်: ရှင်းလင်းသည်၊ မှားရန်ခက်သည်၊ premise ပြောင်းသွားလည်း အလုပ်လုပ်ဆဲ။ constant-space စည်းကမ်းတစ်ခုတည်းကိုသာ မကိုက်ပါ။ table သည် row <code>n/2</code> ခုခန့်အထိ ကြီးလာသည်။') },
+    xor: { approach: APPROACH.xor, desc: t('The one the statement asks for: one integer, one pass. It never counts anything; it only tracks whether each bit was set an odd number of times.',
+                   'မေးခွန်း တောင်းထားသည့် ဗားရှင်း: integer တစ်ခု၊ တစ်ခေါက်တည်း။ ဘာမျှ မရေတွက်ပါ။ bit တစ်ခုစီကို မကိန်းအကြိမ် set လုပ်ခဲ့သလား ဆိုသည်ကိုသာ သိသည်။') },
   },
   // How each language was actually checked. Printed as a badge on every
   // listing in part 3. The corpus: the 3 examples, 4 edges, 15,000 arrays of

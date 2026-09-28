@@ -8,7 +8,15 @@
 //   · every input field accepts the text it shows, and rejects junk
 //   · no page errors
 //   · nothing wider than the screen at 400px, in both page languages, for
-//     every approach and code language
+//     every approach and code language — and at 320px, a small phone
+//   · headings never skip a level, on any step
+//   · nothing waiting for a value shows a bare "·" or "—": answer slots,
+//     empty-stage notes and ledgers say "?" or words (a dot in a stage cell
+//     is notation, and allowed)
+//   · keys: space on a focused button presses it rather than playing, and
+//     an arrow on an approach tab moves between tabs rather than stepping
+//   · a shared link reopens the same approach, step, code language and
+//     input, and "Report an issue" carries it
 //   · a toned row in a key/value table is actually coloured (a later CSS
 //     rule once turned every highlighted row grey)
 //   · the home page loads, lists every lesson, and fits at 400px
@@ -71,7 +79,25 @@ function serve() {
 /* Runs inside the page: step every frame of every approach × code language. */
 async function stepEverything() {
   const wait = () => new Promise((r) => setTimeout(r, 0));
-  const out = { frames: 0, noHot: [], presets: [], greyTone: [], fields: [] };
+  const out = { frames: 0, noHot: [], presets: [], greyTone: [], fields: [], outline: new Map(), blank: new Map() };
+  // One line per approach and problem, naming the first step it shows on.
+  const once = (map, mode, i, what) => { if (!map.has(`${mode}: ${what}`)) map.set(`${mode}: ${what}`, i); };
+  // Heading levels in page order may step down any amount, up only by one.
+  const outline = (mode, i) => {
+    const hs = [...document.querySelectorAll('h1,h2,h3,h4,h5,h6')].filter((h) => h.getClientRects().length);
+    for (let j = 1; j < hs.length; j++) {
+      const [a, b] = [+hs[j - 1].tagName[1], +hs[j].tagName[1]];
+      if (b > a + 1) once(out.outline, mode, i, `h${a} "${hs[j - 1].textContent.trim().slice(0, 30)}" → h${b} "${hs[j].textContent.trim().slice(0, 30)}"`);
+    }
+  };
+  // A spot waiting for a value whose own text is only a dot or dash.
+  const PLACEHOLDER = /^[·•▪—–.…-]+$/;
+  const blank = (mode, i) => {
+    for (const el of document.querySelectorAll('#lesson [data-answer] *, #lesson .stage-empty, #lesson .ledger .expr, #lesson .ledger .total')) {
+      const own = [...el.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join('').trim();
+      if (PLACEHOLDER.test(own)) once(out.blank, mode, i, `"${own}" in .${[...el.classList].join('.') || el.tagName.toLowerCase()}`);
+    }
+  };
   const toneless = (el) => ![...el.classList].some((c) => c.startsWith('t-'));
   const plainRowBg = () => {
     const plain = [...document.querySelectorAll('#lesson .st-row:not(.head):not(.on)')].find(toneless);
@@ -89,6 +115,8 @@ async function stepEverything() {
         const toned = document.querySelector('#lesson .st-row.t-up, #lesson .st-row.t-warn');
         const plain = plainRowBg();
         if (toned && plain && getComputedStyle(toned).backgroundColor === plain) out.greyTone.push(`${mode}/step ${i}`);
+        outline(mode, i);
+        blank(mode, i);
       }
     }
     // each field re-reads its own text without complaint, and flags garbage
@@ -109,29 +137,90 @@ async function stepEverything() {
       if (warn && !warn.hidden) out.presets.push(`${mode}: "${chip.textContent.trim()}" → ${warn.textContent.trim()}`);
     }
   }
-  return out;
+  const lines = (map) => [...map].map(([what, i]) => `${what} (from step ${i})`);
+  return { ...out, outline: lines(out.outline), blank: lines(out.blank) };
 }
 
-/* Runs inside the page at 400px: the widest the page gets, anywhere. */
-async function widestAt400() {
+/* Runs inside the page at a phone width: the widest the page gets, anywhere.
+ * `everyLang` walks each code language too; at 320px one is enough, since the
+ * page's width does not depend on which listing the code panel holds. */
+async function widest(everyLang) {
   const wait = () => new Promise((r) => setTimeout(r, 15));
   const found = [];
   for (const mode of [...document.querySelectorAll('#lesson .atab')].map((b) => b.dataset.mode)) {
     document.querySelector(`#lesson .atab[data-mode="${mode}"]`).click(); await wait();
     const scrub = document.querySelector('#lesson [data-scrub]');
-    for (const lang of [...document.querySelectorAll('#lesson .lang-bar.mini .lang')].map((b) => b.dataset.lang)) {
+    const langs = [...document.querySelectorAll('#lesson .lang-bar.mini .lang')].map((b) => b.dataset.lang);
+    for (const lang of everyLang ? langs : langs.slice(0, 1)) {
       document.querySelector(`#lesson .lang-bar.mini .lang[data-lang="${lang}"]`).click(); await wait();
       for (const ui of ['en', 'my']) {
         document.querySelector(`[data-lang-opt="${ui}"]`).click(); await wait();
         for (const i of [0, Math.floor(Number(scrub.max) / 2), Number(scrub.max)]) {
           scrub.value = String(i); scrub.dispatchEvent(new Event('input', { bubbles: true })); await wait();
           const over = document.documentElement.scrollWidth - window.innerWidth;
-          if (over > 0) found.push(`${mode}/${lang}/${ui}/step ${i}: ${over}px too wide`);
+          if (over > 0) found.push(`${innerWidth}px ${mode}/${lang}/${ui}/step ${i}: ${over}px too wide`);
         }
       }
     }
   }
   document.querySelector('[data-lang-opt="en"]').click();
+  return found;
+}
+
+/* Real key presses, then a shared link opened fresh. The page is English
+ * (main's init script), so the play button reads "Play" when stopped. */
+async function keysAndLink(page, url) {
+  const found = [];
+  await page.goto(url);
+  await page.waitForSelector('#lesson .atab');
+  if (new URL(page.url()).search) found.push(`an untouched page has a query: ${new URL(page.url()).search}`);
+  const count = () => page.$eval('#lesson [data-count]', (e) => e.textContent.trim());
+  const playLabel = () => page.$eval('#lesson [data-act="play"]', (e) => e.textContent.trim());
+
+  await page.focus('#lesson [data-act="next"]');
+  await page.keyboard.press(' ');
+  if (!(await count()).startsWith('2 /') || (await playLabel()) !== 'Play') {
+    found.push(`space on a focused Next: step ${await count()}, play button "${await playLabel()}" (want step 2, not playing)`);
+    await page.click('#lesson [data-act="play"]').catch(() => {});
+  }
+  if ((await page.$$('#lesson .atab')).length > 1) {
+    await page.focus('#lesson .atab[aria-selected="true"]');
+    await page.keyboard.press('ArrowRight');
+    const tab = await page.evaluate(() => {
+      const t = [...document.querySelectorAll('#lesson .atab')];
+      return [t.indexOf(document.activeElement), t.findIndex((x) => x.getAttribute('aria-selected') === 'true')];
+    });
+    if (tab[0] !== 1 || tab[1] !== 1) found.push(`→ on an approach tab: focus on tab ${tab[0]}, tab ${tab[1]} selected (want 1 and 1)`);
+    if (!(await count()).startsWith('1 /')) found.push(`→ on an approach tab stepped the walkthrough: ${await count()}`);
+  }
+
+  // Change everything a link carries, then open the address in a fresh load.
+  await page.evaluate(() => {
+    document.querySelector('#lesson .lang-bar.mini .lang:last-child').click();
+    document.querySelector('#lesson [data-preset]:last-child')?.click();
+    for (let i = 0; i < 3; i++) document.querySelector('#lesson [data-act="next"]').click();
+  });
+  await page.waitForTimeout(300);                       // the address is written after a 150ms debounce
+  const where = () => page.evaluate(() => ({
+    mode: document.querySelector('#lesson .atab[aria-selected="true"]')?.dataset.mode,
+    step: document.querySelector('#lesson [data-count]').textContent.trim(),
+    lang: document.querySelector('#lesson .lang-bar.mini [aria-selected="true"]')?.dataset.lang,
+    part3: document.querySelector('#solutions [data-pane]:not([hidden])')?.dataset.pane,
+    fields: [...document.querySelectorAll('#lesson [data-field]')].map((e) => e.value),
+  }));
+  const before = await where();
+  const link = page.url();
+  const report = await page.evaluate(() => {
+    const a = document.querySelector('.report a[href*="/issues/new"]');
+    return a ? new URL(new URL(a.href).searchParams.get('page')).search : null;
+  });
+  if (report !== null && report !== new URL(link).search) found.push(`"Report an issue" names ${report || 'no state'}, the page is at ${new URL(link).search}`);
+  await page.goto(link);
+  await page.waitForSelector('#lesson .atab');
+  const after = await where();
+  for (const k of Object.keys(before)) {
+    if (JSON.stringify(before[k]) !== JSON.stringify(after[k])) found.push(`shared link ${new URL(link).search} reopens ${k} as ${JSON.stringify(after[k])}, not ${JSON.stringify(before[k])}`);
+  }
   return found;
 }
 
@@ -172,7 +261,12 @@ async function main() {
     await page.emulateMedia({ colorScheme: 'light' });
     await page.setViewportSize({ width: 400, height: 850 });
     await page.waitForTimeout(100);
-    const wide = await page.evaluate(widestAt400);
+    const wide = await page.evaluate(widest, true);
+    await page.setViewportSize({ width: 320, height: 700 });
+    await page.waitForTimeout(100);
+    wide.push(...await page.evaluate(widest, false));
+    await page.setViewportSize({ width: 1300, height: 900 });
+    const keys = await keysAndLink(page, `${BASE}/leetcode/${slug}`);
     page.off('pageerror', onError);
     report(`${slug} (${r.frames} frames)`, [
       ...errors,
@@ -181,6 +275,9 @@ async function main() {
       ...r.fields,
       ...r.greyTone.map((x) => `toned table row renders grey: ${x}`),
       ...wide,
+      ...r.outline.map((x) => `heading skips a level: ${x}`),
+      ...r.blank.map((x) => `placeholder instead of words: ${x}`),
+      ...keys,
       ...new Set(a11y),
     ]);
   }

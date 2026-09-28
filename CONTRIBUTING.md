@@ -184,8 +184,11 @@ npm run dev          # then open your page next to /leetcode/two-sum
 
 The audit drives the built page in Chromium (once: `npx playwright install
 chromium`): every approach × language highlights a line on every step, every
-preset loads, nothing throws, and nothing scrolls sideways at 400px in either
-language. What it cannot tell you is whether the page reads well — open it
+preset loads, nothing throws, nothing scrolls sideways at 400px or 320px in
+either language, headings never skip a level, an empty answer says "?" or
+words rather than a bare dot, space and the arrow keys do what a focused
+control expects, and a shared link reopens the same step. What it cannot
+tell you is whether the page reads well — open it
 beside another one and look.
 
 ## Burmese
@@ -205,7 +208,8 @@ collects phrasings a native reader should check. Help there is very welcome.
 - [ ] `npm run verify -- <slug>` passes, with Go and Rust run (not skipped)
 - [ ] every badge says what was actually run; every trap output was produced by running it
 - [ ] `npm run build` succeeds, then `npm run audit -- <slug>` passes: a line lit on
-      every step, presets load, no page errors, nothing too wide at 400px
+      every step, presets load, no page errors, nothing too wide at 400px or
+      320px, and a shared link reopens the same step
 - [ ] opens on step 1, and reads well beside another page at the same width
 - [ ] if you changed how every page is built (`src/lib/`, `src/layouts/`,
       `lesson.css`, `kit.css`, the checker), the skill in

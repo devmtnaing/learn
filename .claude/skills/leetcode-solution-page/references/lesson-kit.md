@@ -229,7 +229,8 @@ node scripts/check-lessons.mjs            # every lesson — structure and forma
 node scripts/check-lessons.mjs two-sum    # one
 python3 scripts/verify/run.py <slug>      # every listing × 5 languages, then every walkthrough
 python3 scripts/verify/run.py <slug> --from DIR   # listing files, before they are in lesson.js
-npm run build && npm run audit -- <slug>  # in a browser: a lit line on every step, presets, errors, 400px
+npm run build && npm run audit -- <slug>  # in a browser: a lit line on every step, presets, errors,
+                                          # 400px and 320px, heading order, empty states, keys, shared links
 ```
 
 `npm run audit` needs Chromium once: `npx playwright install chromium`.

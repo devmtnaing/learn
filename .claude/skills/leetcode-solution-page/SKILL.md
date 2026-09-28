@@ -50,7 +50,9 @@ step. This skill adds the judgement the procedure can't encode.
    computed.
 8. **`npm run check`**, `npm run verify -- <slug>` again, then the browser:
    every approach × language highlights a line on every step, the page opens on
-   step 1, and nothing scrolls sideways at 400px in either language.
+   step 1, and nothing scrolls sideways at 400px or 320px in either language.
+   `npm run audit -- <slug>` checks these, and that a shared link reopens the
+   same step.
 
 ## Part 2
 

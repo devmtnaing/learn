@@ -4,22 +4,18 @@ import { SITE_NAME } from '../data/site';
 import { asOf } from '../data/problems-meta.json';
 import { all, groups, haystack, leetcodeUrl, PAGE as WALKTHROUGH } from '../data/catalog';
 
-const core = all.filter((p) => !p.extra).length;
 const worked = all.filter((p) => WALKTHROUGH[p.id]).length;
 ---
 <Base
   title={`LeetCode · ${SITE_NAME}`}
-  description="Interview problems grouped by pattern, each with an interactive walkthrough and verified solutions in five languages."
+  description="LeetCode interview problems grouped by pattern, with step-by-step walkthroughs and tested code in five languages."
 >
   <div class="shell">
     <div class="page-head">
       <h1>LeetCode</h1>
       <p class="lede">
-        {core} interview problems, split evenly across easy, medium and hard and chosen
-        where three separate study plans agree, grouped by the pattern that solves them.
-        Open a problem to see its interactive solution: a page that runs the algorithm
-        step by step, with solutions in Ruby, Python, JavaScript, Go and Rust that were
-        all run before they were published.
+        Interview problems, grouped by pattern. Open one to step through the solution,
+        with code in Ruby, Python, JavaScript, Go and Rust.
       </p>
     </div>
 

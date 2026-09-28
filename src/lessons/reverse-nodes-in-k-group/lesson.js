@@ -454,23 +454,23 @@ function mountGroupWidget(host) {
 const APPROACH = {
   recurse: {
     idea: t('Reverse everything after the first k nodes first, then flip those k nodes onto it: the group\'s old first node lands pointing at the reversed rest with no extra bookkeeping.',
-            'ပထမ node k ခုနောက်ရှိ အားလုံးကို အရင် ပြောင်းပြန်လုပ်ပြီးမှ ထို k ခုကို ၎င်းပေါ် လှန်သည် — အုပ်စု၏ ပထမ node ဟောင်းသည် အပို စာရင်းကိုင်ခြင်း မလိုဘဲ ပြောင်းပြန်ပြီး ကျန်သည်ကို ညွှန်မည်။'),
+            'ပထမ node k ခုနောက်ရှိ အားလုံးကို အရင် ပြောင်းပြန်လုပ်ပြီးမှ ထို k ခုကို ၎င်းပေါ် လှန်သည်။ အုပ်စု၏ ပထမ node ဟောင်းသည် အပို စာရင်းကိုင်ခြင်း မလိုဘဲ ပြောင်းပြန်ပြီး ကျန်သည်ကို ညွှန်မည်။'),
     steps: [
-      t('Walk k nodes from <code>head</code>; running out means a short tail — return <code>head</code> as it is.', '<code>head</code> မှ node k ခု လျှောက် — ကုန်သွားလျှင် အမြီးတို — <code>head</code> ကို ရှိသည့်အတိုင်း ပြန်ပေး။'),
-      t('<code>prev</code> = the reversed rest, from the recursive call; <code>cur = head</code>.', '<code>prev</code> = recursive call မှ ပြောင်းပြန်ပြီး ကျန်သည် — <code>cur = head</code>။'),
-      t('k times: point <code>cur</code> back at <code>prev</code> and step both on. Return <code>prev</code>.', 'k ကြိမ် — <code>cur</code> ကို <code>prev</code> သို့ နောက်ပြန် ညွှန်ပြီး နှစ်ခုလုံး ရှေ့တိုး။ <code>prev</code> ကို ပြန်ပေး။'),
+      t('Walk k nodes from <code>head</code>. Running out means a short tail, so return <code>head</code> as it is.', '<code>head</code> မှ node k ခု လျှောက်သည်။ ကုန်သွားလျှင် အမြီးတို ဖြစ်သဖြင့် <code>head</code> ကို ရှိသည့်အတိုင်း ပြန်ပေးသည်။'),
+      t('<code>prev</code> = the reversed rest, from the recursive call; <code>cur = head</code>.', '<code>prev</code> = recursive call မှ ပြောင်းပြန်ပြီး ကျန်သည်။ <code>cur = head</code>။'),
+      t('k times: point <code>cur</code> back at <code>prev</code> and step both on. Return <code>prev</code>.', 'k ကြိမ်: <code>cur</code> ကို <code>prev</code> သို့ နောက်ပြန် ညွှန်ပြီး နှစ်ခုလုံး ရှေ့တိုးသည်။ <code>prev</code> ကို ပြန်ပေးသည်။'),
     ],
-    cost: t('Each node is counted once and flipped once: O(n) time, but n/k calls on the stack — 5,000 at k = 1.', 'node တစ်ခုစီကို တစ်ကြိမ် ရေတွက်ပြီး တစ်ကြိမ် လှန်သည် — O(n) အချိန်၊ သို့သော် stack ပေါ်တွင် call n/k — k = 1 တွင် 5,000။'),
+    cost: t('Each node is counted once and flipped once: O(n) time, but n/k calls on the stack, which is 5,000 at k = 1.', 'node တစ်ခုစီကို တစ်ကြိမ် ရေတွက်ပြီး တစ်ကြိမ် လှန်သည်: O(n) အချိန်၊ သို့သော် stack ပေါ်တွင် call n/k (k = 1 တွင် 5,000)။'),
   },
   iterate: {
     idea: t('Keep a pointer to the node just before the next group. Reverse the group with prev starting at the node after it, then point the node before at the group\'s new front and move on.',
             'နောက်အုပ်စု၏ ရှေ့ရှိ node ကို pointer တစ်ခုဖြင့် ထိန်းသည်။ prev ကို ၎င်းနောက်ရှိ node မှ စ၍ အုပ်စုကို ပြောင်းပြန်လုပ်ပြီး ရှေ့ node ကို အုပ်စု၏ ရှေ့ဆုံးအသစ်သို့ ညွှန်ကာ ဆက်သွားသည်။'),
     steps: [
-      t('A <code>dummy</code> before the head; <code>before = dummy</code>.', 'head ရှေ့တွင် <code>dummy</code> — <code>before = dummy</code>။'),
-      t('Walk k nodes to <code>end</code>; if the list runs out, return <code>dummy.next</code>.', 'node k ခု လျှောက်၍ <code>end</code> သို့ — list ကုန်လျှင် <code>dummy.next</code> ပြန်ပေး။'),
-      t('Reverse <code>first</code>..<code>end</code> with <code>prev = after</code>; then <code>before.next = end</code>, <code>before = first</code>.', '<code>prev = after</code> ဖြင့် <code>first</code>..<code>end</code> ကို ပြောင်းပြန် — ပြီးမှ <code>before.next = end</code>၊ <code>before = first</code>။'),
+      t('A <code>dummy</code> before the head; <code>before = dummy</code>.', 'head ရှေ့တွင် <code>dummy</code> ထားပြီး <code>before = dummy</code>။'),
+      t('Walk k nodes to <code>end</code>; if the list runs out, return <code>dummy.next</code>.', 'node k ခု လျှောက်၍ <code>end</code> သို့ ရောက်သည်။ list ကုန်လျှင် <code>dummy.next</code> ပြန်ပေးသည်။'),
+      t('Reverse <code>first</code>..<code>end</code> with <code>prev = after</code>; then <code>before.next = end</code>, <code>before = first</code>.', '<code>prev = after</code> ဖြင့် <code>first</code>..<code>end</code> ကို ပြောင်းပြန်လုပ်ပြီးမှ <code>before.next = end</code>၊ <code>before = first</code>။'),
     ],
-    cost: t('Each node is walked twice — once to count, once to flip: O(n) time and O(1) extra, the follow-up.', 'node တစ်ခုစီကို နှစ်ကြိမ် လျှောက်သည် — ရေတွက်ရန်တစ်ကြိမ်၊ လှန်ရန်တစ်ကြိမ် — O(n) အချိန်နှင့် O(1) အပို၊ follow-up။'),
+    cost: t('Each node is walked twice (once to count, once to flip): O(n) time and O(1) extra, which is the follow-up.', 'node တစ်ခုစီကို နှစ်ကြိမ် လျှောက်သည် (ရေတွက်ရန်တစ်ကြိမ်၊ လှန်ရန်တစ်ကြိမ်): O(n) အချိန်နှင့် O(1) အပို၊ follow-up။'),
   },
 };
 
@@ -490,10 +490,10 @@ mountLesson({
   ],
   examples: [
     { title: exampleTitle(1), inputHtml: '<code>head = [1,2,3,4,5], k = 2</code>', output: '[2,1,4,3,5]',
-      why: [t('Groups [1,2] and [3,4] turn around; 5 is a group of one, fewer than k, and stays.', 'အုပ်စု [1,2] နှင့် [3,4] လှည့်သည် — 5 သည် k ထက် နည်းသော တစ်ခုတည်း အုပ်စု ဖြစ်ပြီး ကျန်သည်။')],
+      why: [t('Groups [1,2] and [3,4] turn around; 5 is a group of one, fewer than k, and stays.', 'အုပ်စု [1,2] နှင့် [3,4] လှည့်သည်။ 5 သည် k ထက် နည်းသော တစ်ခုတည်း အုပ်စု ဖြစ်ပြီး ကျန်သည်။')],
       load: { values: [1, 2, 3, 4, 5], k: 2 } },
     { title: exampleTitle(2), inputHtml: '<code>head = [1,2,3,4,5], k = 3</code>', output: '[3,2,1,4,5]',
-      why: [t('[1,2,3] turns around; [4,5] is short and stays.', '[1,2,3] လှည့်သည် — [4,5] တိုပြီး ကျန်သည်။')], load: { values: [1, 2, 3, 4, 5], k: 3 } },
+      why: [t('[1,2,3] turns around; [4,5] is short and stays.', '[1,2,3] လှည့်သည်။ [4,5] တိုပြီး ကျန်သည်။')], load: { values: [1, 2, 3, 4, 5], k: 3 } },
   ],
   modes: [
     { id: 'recurse', name: 'Recursive',
@@ -501,7 +501,7 @@ mountLesson({
       cost: 'O(n) time · O(n/k) stack', build: buildRecurse },
     { id: 'iterate', name: 'In place',
       sub: t('O(1) extra', 'O(1) အပို'),
-      desc: t('A pointer before each group; relink both ends.', 'အုပ်စုတိုင်းရှေ့တွင် pointer — အစွန်နှစ်ဖက်ကို ပြန်ချိတ်။'),
+      desc: t('A pointer before each group; relink both ends.', 'အုပ်စုတိုင်းရှေ့တွင် pointer ထားပြီး အစွန်နှစ်ဖက်ကို ပြန်ချိတ်သည်။'),
       cost: 'O(n) time · O(1) extra', build: buildIterate },
   ],
   languages: LANGUAGES,
@@ -510,10 +510,10 @@ mountLesson({
   solutions: {
     recurse: { approach: APPROACH.recurse,
       desc: t('Short and hard to get wrong: the rest comes back already reversed, so the group\'s old head simply points at it. Python needs its recursion limit raised for k = 1 on 5,000 nodes.',
-              'တိုပြီး မှားရခက်သည် — ကျန်သည်သည် ပြောင်းပြန်ပြီးသား ပြန်လာသဖြင့် အုပ်စု၏ ခေါင်းဟောင်းသည် ၎င်းကို ရိုးရိုး ညွှန်သည်။ node 5,000 ပေါ်ရှိ k = 1 အတွက် Python ၏ recursion ကန့်သတ်ချက်ကို မြှင့်ရမည်။') },
+              'တိုပြီး မှားရခက်သည်။ ကျန်သည်သည် ပြောင်းပြန်ပြီးသား ပြန်လာသဖြင့် အုပ်စု၏ ခေါင်းဟောင်းသည် ၎င်းကို ရိုးရိုး ညွှန်သည်။ node 5,000 ပေါ်ရှိ k = 1 အတွက် Python ၏ recursion ကန့်သတ်ချက်ကို မြှင့်ရမည်။') },
     iterate: { approach: APPROACH.iterate,
       desc: t('The follow-up\'s answer: no recursion, O(1) extra. Starting prev at the node after the group is what joins each reversed group to the rest.',
-              'follow-up ၏ အဖြေ — recursion မပါ၊ O(1) အပို။ prev ကို အုပ်စုနောက်ရှိ node မှ စခြင်းက ပြောင်းပြန်ပြီး အုပ်စုတိုင်းကို ကျန်သည်နှင့် ဆက်ပေးသည်။') },
+              'follow-up ၏ အဖြေ: recursion မပါ၊ O(1) အပို။ prev ကို အုပ်စုနောက်ရှိ node မှ စခြင်းက ပြောင်းပြန်ပြီး အုပ်စုတိုင်းကို ကျန်သည်နှင့် ဆက်ပေးသည်။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the 2 examples, 6 edges, 15,000 random lists of up to 12
@@ -531,10 +531,10 @@ mountLesson({
   caveats: {
     recurse: {
       python: t('The <code>setrecursionlimit</code> line is part of the answer: at Python\'s default of 1,000, k = 1 on a list of 1,000 nodes already fails with <code>RecursionError</code> (checked here), and the constraint allows 5,000.',
-                '<code>setrecursionlimit</code> စာကြောင်းသည် အဖြေ၏ အစိတ်အပိုင်း — Python ၏ default 1,000 တွင် node 1,000 list ပေါ်ရှိ k = 1 ပင် <code>RecursionError</code> ဖြင့် ကျရှုံးသည် (ဤနေရာတွင် စစ်ထားသည်)၊ ကန့်သတ်ချက်က 5,000 ကို ခွင့်ပြုသည်။'),
+                '<code>setrecursionlimit</code> စာကြောင်းသည် အဖြေ၏ အစိတ်အပိုင်း ဖြစ်သည်။ Python ၏ default 1,000 တွင် node 1,000 list ပေါ်ရှိ k = 1 ပင် <code>RecursionError</code> ဖြင့် ကျရှုံးသည် (ဤနေရာတွင် စစ်ထားသည်)၊ ကန့်သတ်ချက်က 5,000 ကို ခွင့်ပြုသည်။'),
     },
   },
-  stripLabel: t('The values, in groups of k', 'value များ — k ခုစီ အုပ်စု'),
+  stripLabel: t('The values, in groups of k', 'value များ၊ k ခုစီ အုပ်စု'),
   strip,
   draw,
   answer,

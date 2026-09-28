@@ -477,29 +477,29 @@ function mountOverlapWidget(host) {
 
 const APPROACH = {
   brute: {
-    idea: t('Take the intervals as given. Each new one absorbs every merged interval it overlaps — and since the input is not sorted, that could be any of them.',
-            'interval များကို ပေးထားသည့်အတိုင်း ယူသည်။ အသစ်တစ်ခုစီသည် ၎င်း overlap ဖြစ်သော ပေါင်းပြီးသား interval တိုင်းကို ပေါင်းယူသည် — input ကို sort မလုပ်ထားသဖြင့် မည်သည့်တစ်ခုမဆို ဖြစ်နိုင်သည်။'),
+    idea: t('Take the intervals as given. Each new one absorbs every merged interval it overlaps, and since the input is not sorted, that could be any of them.',
+            'interval များကို ပေးထားသည့်အတိုင်း ယူသည်။ အသစ်တစ်ခုစီသည် ၎င်း overlap ဖြစ်သော ပေါင်းပြီးသား interval တိုင်းကို ပေါင်းယူသည်။ input ကို sort မလုပ်ထားသဖြင့် မည်သည့်တစ်ခုမဆို ဖြစ်နိုင်သည်။'),
     steps: [
       t('For each <code>[lo, hi]</code>, walk every interval already in <code>result</code>.',
         '<code>[lo, hi]</code> တစ်ခုစီအတွက် <code>result</code> ထဲရှိ interval တိုင်းကို လျှောက်သည်။'),
       t('Apart (<code>b &lt; lo</code> or <code>hi &lt; a</code>): keep it. Otherwise absorb it: <code>lo = min(lo, a)</code>, <code>hi = max(hi, b)</code>.',
-        'ခွဲနေလျှင် (<code>b &lt; lo</code> သို့မဟုတ် <code>hi &lt; a</code>) ထားသည်။ မဟုတ်လျှင် ပေါင်းယူသည် — <code>lo = min(lo, a)</code>၊ <code>hi = max(hi, b)</code>။'),
+        'ခွဲနေလျှင် (<code>b &lt; lo</code> သို့မဟုတ် <code>hi &lt; a</code>) ထားသည်။ မဟုတ်လျှင် ပေါင်းယူသည်: <code>lo = min(lo, a)</code>၊ <code>hi = max(hi, b)</code>။'),
       t('Add the grown <code>[lo, hi]</code> to what was kept.', 'ကြီးလာသော <code>[lo, hi]</code> ကို ထားခဲ့သည့်အထဲ ထည့်သည်။'),
     ],
-    cost: t('each interval checks every merged one: up to n(n − 1)/2 comparisons, about 5 × 10⁷ at n = 10⁴ when nothing merges.',
-            'interval တစ်ခုစီက ပေါင်းပြီးသား တစ်ခုစီကို စစ်သည် — နှိုင်းယှဉ်ခြင်း n(n − 1)/2 အထိ၊ ဘာမျှ မပေါင်းသည့်အခါ n = 10⁴ တွင် 5 × 10⁷ ခန့်။'),
+    cost: t('Each interval checks every merged one: up to n(n − 1)/2 comparisons, about 5 × 10⁷ at n = 10⁴ when nothing merges.',
+            'interval တစ်ခုစီက ပေါင်းပြီးသား တစ်ခုစီကို စစ်သည်: နှိုင်းယှဉ်ခြင်း n(n − 1)/2 အထိ၊ ဘာမျှ မပေါင်းသည့်အခါ n = 10⁴ တွင် 5 × 10⁷ ခန့်။'),
   },
   sweep: {
     idea: t('Sort by start. Then a new interval can only overlap the last merged one: every earlier one ended before the last one started, and the new one starts later still.',
-            'start ဖြင့် sort လုပ်သည်။ ထို့နောက် interval အသစ်သည် နောက်ဆုံး ပေါင်းထားသည့် တစ်ခုနှင့်သာ overlap ဖြစ်နိုင်သည် — ယခင် တစ်ခုစီသည် နောက်ဆုံးတစ်ခု မစမီ ဆုံးပြီးဖြစ်ပြီး အသစ်သည် ပိုနောက်ကျမှ စသည်။'),
+            'start ဖြင့် sort လုပ်သည်။ ထို့နောက် interval အသစ်သည် နောက်ဆုံး ပေါင်းထားသည့် တစ်ခုနှင့်သာ overlap ဖြစ်နိုင်သည်။ ယခင် တစ်ခုစီသည် နောက်ဆုံးတစ်ခု မစမီ ဆုံးပြီးဖြစ်ပြီး အသစ်သည် ပိုနောက်ကျမှ စသည်။'),
     steps: [
       t('Sort the intervals by start.', 'interval များကို start ဖြင့် sort လုပ်သည်။'),
       t('For each <code>[lo, hi]</code>: if <code>lo &lt;= last end</code>, extend the last end to <code>max(last end, hi)</code>.',
-        '<code>[lo, hi]</code> တစ်ခုစီအတွက် — <code>lo &lt;= last end</code> ဖြစ်လျှင် last end ကို <code>max(last end, hi)</code> အထိ ချဲ့သည်။'),
+        '<code>[lo, hi]</code> တစ်ခုစီအတွက်: <code>lo &lt;= last end</code> ဖြစ်လျှင် last end ကို <code>max(last end, hi)</code> အထိ ချဲ့သည်။'),
       t('Otherwise append <code>[lo, hi]</code> as a new merged interval.', 'မဟုတ်လျှင် <code>[lo, hi]</code> ကို ပေါင်းထားသော interval အသစ်အဖြစ် ထည့်သည်။'),
     ],
-    cost: t('the sort is O(n log n); after it, each interval is compared once, with the last merged one.',
-            'sort သည် O(n log n) — ထို့နောက် interval တစ်ခုစီကို နောက်ဆုံး ပေါင်းထားသည့် တစ်ခုနှင့် တစ်ကြိမ်သာ နှိုင်းယှဉ်သည်။'),
+    cost: t('The sort is O(n log n). After it, each interval is compared once, with the last merged one.',
+            'sort သည် O(n log n) ဖြစ်သည်။ ထို့နောက် interval တစ်ခုစီကို နောက်ဆုံး ပေါင်းထားသည့် တစ်ခုနှင့် တစ်ကြိမ်သာ နှိုင်းယှဉ်သည်။'),
   },
 };
 
@@ -527,10 +527,10 @@ mountLesson({
       why: [t('[1,3] and [2,6] share 2..3, so they merge into [1,6]. The others touch nothing.', '[1,3] နှင့် [2,6] တွင် 2..3 တူသဖြင့် [1,6] အဖြစ် ပေါင်းသည်။ ကျန်တို့ ဘာနှင့်မျှ မထိပါ။')],
       load: { intervals: EX1 } },
     { title: exampleTitle(2), inputHtml: '<code>intervals = [[1,4],[4,5]]</code>', output: '[[1,5]]',
-      why: [t('They share only the point 4 — and that counts as overlapping.', 'point 4 တစ်ခုတည်းသာ တူသည် — ၎င်းကို overlap ဟု ရေတွက်သည်။')],
+      why: [t('They share only the point 4, and that counts as overlapping.', 'point 4 တစ်ခုတည်းသာ တူသည်။ ၎င်းကို overlap ဟု ရေတွက်သည်။')],
       load: { intervals: [[1, 4], [4, 5]] } },
     { title: exampleTitle(3), inputHtml: '<code>intervals = [[4,7],[1,4]]</code>', output: '[[1,7]]',
-      why: [t('The input is not sorted: [1,4] comes second, but it merges with [4,7] all the same.', 'input ကို sort မလုပ်ထားပါ — [1,4] သည် ဒုတိယ ဖြစ်သော်လည်း [4,7] နှင့် ပေါင်းသည်။')],
+      why: [t('The input is not sorted: [1,4] comes second, but it merges with [4,7] all the same.', 'input ကို sort မလုပ်ထားပါ။ [1,4] သည် ဒုတိယ ဖြစ်သော်လည်း [4,7] နှင့် ပေါင်းသည်။')],
       load: { intervals: [[4, 7], [1, 4]] } },
   ],
   modes: [
@@ -549,8 +549,8 @@ mountLesson({
       desc: t('Unsorted, every new interval checks every merged one and absorbs those it overlaps. Correct, and quadratic when little merges.',
               'sort မလုပ်ဘဲ interval အသစ်တိုင်းက ပေါင်းပြီးသား တိုင်းကို စစ်ပြီး overlap ဖြစ်သည်များကို ပေါင်းယူသည်။ မှန်သည်၊ သို့သော် ပေါင်းစရာ နည်းလျှင် quadratic ဖြစ်သည်။') },
     sweep: { approach: APPROACH.sweep,
-      desc: t('The submission worth writing: sort by start, then one pass that only ever looks at the last merged interval. The <code>max</code> is what keeps a nested interval from shrinking it.',
-              'ရေးသင့်သည့် submission — start ဖြင့် sort လုပ်ပြီး နောက်ဆုံး ပေါင်းထားသည့် interval ကိုသာ ကြည့်သော တစ်ကြိမ် ဖြတ်ခြင်း။ <code>max</code> က အတွင်းထဲရှိ interval ကြောင့် ကျုံ့မသွားအောင် ကာကွယ်သည်။') },
+      desc: t('The one to submit: sort by start, then one pass that only ever looks at the last merged interval. The <code>max</code> is what keeps a nested interval from shrinking it.',
+              'တင်သင့်သည့် ဗားရှင်း: start ဖြင့် sort လုပ်ပြီး နောက်ဆုံး ပေါင်းထားသည့် interval ကိုသာ ကြည့်သော တစ်ကြိမ် ဖြတ်ခြင်း။ <code>max</code> က အတွင်းထဲရှိ interval ကြောင့် ကျုံ့မသွားအောင် ကာကွယ်သည်။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the 3 examples, 7 edges, 15,000 random lists of 1–8
@@ -565,7 +565,7 @@ mountLesson({
     go: { brute: 'ran here · 20,010 cases, not the five at n = 10⁴ · Go 1.23', sweep: 'ran here · 20,015 cases · Go 1.23' },
     rust: { brute: 'ran here · 20,010 cases, not the five at n = 10⁴ · rustc 1.98', sweep: 'ran here · 20,015 cases · rustc 1.98' },
   },
-  stripLabel: t('intervals, in the order taken', 'interval များ — ယူသည့် အစီအစဉ်'),
+  stripLabel: t('intervals, in the order taken', 'interval များ၊ ယူသည့် အစီအစဉ်အတိုင်း'),
   strip,
   draw,
   answer,

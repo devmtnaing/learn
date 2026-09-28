@@ -517,20 +517,20 @@ const APPROACH = {
     idea: t('Merge the lists into one running result, one at a time, with the two-list merge.', 'two-list merge ဖြင့် list များကို တစ်ခုချင်း ရလဒ်တစ်ခုထဲ ပေါင်းသည်။'),
     steps: [
       t('<code>merged</code> starts empty.', '<code>merged</code> သည် ဗလာဖြင့် စသည်။'),
-      t('For each <code>head</code>: <code>merged = merge(merged, head)</code>.', '<code>head</code> တစ်ခုစီအတွက် — <code>merged = merge(merged, head)</code>။'),
+      t('For each <code>head</code>: <code>merged = merge(merged, head)</code>.', '<code>head</code> တစ်ခုစီအတွက်: <code>merged = merge(merged, head)</code>။'),
       t('<code>merge</code> takes the smaller head until one side is empty, then attaches the rest.', '<code>merge</code> သည် တစ်ဖက် ဗလာ ဖြစ်သည်အထိ ငယ်သော ခေါင်းကို ယူပြီး ကျန်သည်ကို ချိတ်သည်။'),
     ],
-    cost: t('The first list is walked again in every one of the k − 1 merges after it: O(k · N) for N nodes in all.', 'ပထမ list ကို ၎င်းနောက်ရှိ merge k − 1 ခုတိုင်းတွင် ထပ်လျှောက်သည် — node စုစုပေါင်း N ခုအတွက် O(k · N)။'),
+    cost: t('The first list is walked again in every one of the k − 1 merges after it: O(k · N) for N nodes in all.', 'ပထမ list ကို ၎င်းနောက်ရှိ merge k − 1 ခုတိုင်းတွင် ထပ်လျှောက်သည်။ node စုစုပေါင်း N ခုအတွက် O(k · N)။'),
   },
   halves: {
-    idea: t('Merge the lists in pairs, then the results in pairs, until one is left — like the rounds of a knockout tournament.', 'list များကို အတွဲလိုက် ပေါင်း၊ ပြီးမှ ရလဒ်များကို အတွဲလိုက် — တစ်ခုကျန်သည်အထိ — knockout ပြိုင်ပွဲ အကြိမ်များကဲ့သို့။'),
+    idea: t('Merge the lists in pairs, then the results in pairs, until one is left, like the rounds of a knockout tournament.', 'list များကို အတွဲလိုက် ပေါင်းပြီး ရလဒ်များကို တစ်ခုကျန်သည်အထိ အတွဲလိုက် ဆက်ပေါင်းသည်။ knockout ပြိုင်ပွဲ အကြိမ်များကဲ့သို့ ဖြစ်သည်။'),
     steps: [
-      t('No lists: return an empty list.', 'list မရှိလျှင် — list ဗလာ ပြန်သည်။'),
+      t('No lists: return an empty list.', 'list မရှိလျှင် list ဗလာ ပြန်ပေးသည်။'),
       t('While more than one list is left: merge <code>lists[0]</code> with <code>lists[1]</code>, <code>lists[2]</code> with <code>lists[3]</code>, …; an odd one out merges with nothing.',
-        'list တစ်ခုထက် ပိုကျန်နေသမျှ — <code>lists[0]</code> ကို <code>lists[1]</code> နှင့်၊ <code>lists[2]</code> ကို <code>lists[3]</code> နှင့် … ပေါင်း — အပိုတစ်ခုသည် ဘာမှမပါသည်နှင့် ပေါင်းသည်။'),
+        'list တစ်ခုထက် ပိုကျန်နေသမျှ <code>lists[0]</code> ကို <code>lists[1]</code> နှင့်၊ <code>lists[2]</code> ကို <code>lists[3]</code> နှင့် … ပေါင်းသည်။ အပိုတစ်ခုသည် ဘာမှမပါသည်နှင့် ပေါင်းသည်။'),
       t('Return the one list left.', 'ကျန်သော list တစ်ခုကို ပြန်ပေးသည်။'),
     ],
-    cost: t('Each round moves every node at most once and halves the number of lists: O(N log k).', 'အကြိမ်တိုင်း node တိုင်းကို အများဆုံး တစ်ကြိမ် ရွှေ့ပြီး list အရေအတွက်ကို ထက်ဝက် လျှော့သည် — O(N log k)။'),
+    cost: t('Each round moves every node at most once and halves the number of lists: O(N log k).', 'အကြိမ်တိုင်း node တိုင်းကို အများဆုံး တစ်ကြိမ် ရွှေ့ပြီး list အရေအတွက်ကို ထက်ဝက် လျှော့သည်: O(N log k)။'),
   },
 };
 
@@ -553,7 +553,7 @@ mountLesson({
     { title: exampleTitle(1), inputHtml: '<code>lists = [[1,4,5],[1,3,4],[2,6]]</code>', output: '[1,1,2,3,4,4,5,6]',
       why: [t('All eight values, in one sorted list.', 'value ရှစ်ခုလုံး၊ စီထားသော list တစ်ခုတည်းတွင်။')], load: { lists: EX1 } },
     { title: exampleTitle(2), inputHtml: '<code>lists = []</code>', output: '[]',
-      why: [t('No lists: nothing to merge.', 'list မရှိ — ပေါင်းစရာ မရှိ။')], load: { lists: [] } },
+      why: [t('No lists: nothing to merge.', 'list မရှိသဖြင့် ပေါင်းစရာ မရှိပါ။')], load: { lists: [] } },
     { title: exampleTitle(3), inputHtml: '<code>lists = [[]]</code>', output: '[]',
       why: [t('One list, and it is empty.', 'list တစ်ခု၊ ၎င်းလည်း ဗလာ။')], load: { lists: [[]] } },
   ],
@@ -563,17 +563,17 @@ mountLesson({
       cost: 'O(k · N) time · O(1) extra', build: buildOne },
     { id: 'halves', name: 'Merge in pairs',
       sub: t('divide and conquer', 'divide and conquer'),
-      desc: t('Pair the lists up, round after round, until one is left.', 'list များကို အကြိမ်ကြိမ် အတွဲလိုက် ပေါင်း — တစ်ခုကျန်သည်အထိ။'),
+      desc: t('Pair the lists up, round after round, until one is left.', 'list များကို တစ်ခုကျန်သည်အထိ အကြိမ်ကြိမ် အတွဲလိုက် ပေါင်းသည်။'),
       cost: 'O(N log k) time · O(k) extra', build: buildHalves },
   ],
   languages: LANGUAGES,
   code: CODE,
   solutions: {
     one: { approach: APPROACH.one,
-      desc: t('Correct and short, reusing Merge Two Sorted Lists — but the running result is walked again for every list, so its cost grows with k.', 'မှန်ပြီး တိုသည်၊ Merge Two Sorted Lists ကို ပြန်သုံးသည် — သို့သော် ရလဒ်ကို list တိုင်းအတွက် ထပ်လျှောက်သဖြင့် ကုန်ကျမှုသည် k နှင့်အတူ ကြီးလာသည်။') },
+      desc: t('Correct and short, reusing Merge Two Sorted Lists. But the running result is walked again for every list, so its cost grows with k.', 'မှန်ပြီး တိုသည်၊ Merge Two Sorted Lists ကို ပြန်သုံးသည်။ သို့သော် ရလဒ်ကို list တိုင်းအတွက် ထပ်လျှောက်သဖြင့် ကုန်ကျမှုသည် k နှင့်အတူ ကြီးလာသည်။') },
     halves: { approach: APPROACH.halves,
-      desc: t('The same merge, in a better order: log₂ k rounds instead of k merges into one growing list. A min-heap of the k heads gets the same O(N log k) — see the notes.',
-              'merge အတူတူ၊ ပိုကောင်းသော အစီအစဉ်ဖြင့် — ကြီးလာသော list တစ်ခုထဲ merge k ကြိမ်အစား log₂ k အကြိမ်။ ခေါင်း k ခု၏ min-heap သည်လည်း O(N log k) ရသည် — မှတ်ချက်များကို ကြည့်ပါ။') },
+      desc: t('The same merge in a better order: log₂ k rounds instead of k merges into one growing list. A min-heap of the k heads gets the same O(N log k) (see the notes).',
+              'merge အတူတူ၊ ပိုကောင်းသော အစီအစဉ်ဖြင့်: ကြီးလာသော list တစ်ခုထဲ merge k ကြိမ်အစား log₂ k အကြိမ်။ ခေါင်း k ခု၏ min-heap သည်လည်း O(N log k) ရသည် (မှတ်ချက်များကို ကြည့်ပါ)။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the 3 examples, 6 edges, 15,000 random inputs of up to 6

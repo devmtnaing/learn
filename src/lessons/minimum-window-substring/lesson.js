@@ -500,23 +500,23 @@ const APPROACH = {
     idea: t('From every start, grow a window one letter at a time until it covers t, and keep the shortest such window.', 'အစတိုင်းမှ window ကို t ကို ဖုံးသည်အထိ စာလုံးတစ်လုံးစီ ကြီးထွားစေပြီး အတိုဆုံးကို ထိန်းသည်။'),
     steps: [
       t('Count <code>need</code> from t.', 't မှ <code>need</code> ကို ရေတွက်သည်။'),
-      t('For each start <code>i</code>: an empty <code>have</code>, <code>missing = len(t)</code>.', 'အစ <code>i</code> တစ်ခုစီအတွက် — <code>have</code> ဗလာ၊ <code>missing = len(t)</code>။'),
-      t('Add <code>s[j]</code>; if it was still needed, <code>missing</code> drops. At zero, compare with <code>best</code> and stop.', '<code>s[j]</code> ထည့် — လိုနေသေးလျှင် <code>missing</code> ကျသည်။ သုညရောက်လျှင် <code>best</code> နှင့် နှိုင်းယှဉ်ပြီး ရပ်သည်။'),
+      t('For each start <code>i</code>: an empty <code>have</code>, <code>missing = len(t)</code>.', 'အစ <code>i</code> တစ်ခုစီအတွက် <code>have</code> ဗလာ၊ <code>missing = len(t)</code> ဖြင့် စသည်။'),
+      t('Add <code>s[j]</code>; if it was still needed, <code>missing</code> drops. At zero, compare with <code>best</code> and stop.', '<code>s[j]</code> ထည့်သည်။ လိုနေသေးလျှင် <code>missing</code> ကျသည်။ သုညရောက်လျှင် <code>best</code> နှင့် နှိုင်းယှဉ်ပြီး ရပ်သည်။'),
     ],
     cost: t('Up to m windows of up to m letters: O(m²). On 10⁴ letters that took the Python listing 4.05 s here; the constraint allows 10⁵.',
-            'စာလုံး m လုံးအထိ window m ခုအထိ — O(m²)။ စာလုံး 10⁴ တွင် ဤနေရာ၌ Python listing ကို 4.05 s ကြာစေသည် — ကန့်သတ်ချက်က 10⁵ ကို ခွင့်ပြုသည်။'),
+            'စာလုံး m လုံးအထိ window m ခုအထိ: O(m²)။ စာလုံး 10⁴ တွင် ဤနေရာ၌ Python listing ကို 4.05 s ကြာစေသည်။ ကန့်သတ်ချက်က 10⁵ ကို ခွင့်ပြုသည်။'),
   },
   window: {
     idea: t('One window for the whole string. Grow it on the right until nothing is missing, then shrink it on the left for as long as nothing goes missing, recording the window each time.',
             'string တစ်ခုလုံးအတွက် window တစ်ခု။ ဘာမှ မလိုတော့သည်အထိ ညာဘက်တွင် ကြီးထွားစေ၊ ပြီးမှ ဘာမှ မလိုလာသမျှ ဘယ်ဘက်တွင် ချုံ့ပြီး အကြိမ်တိုင်း window ကို မှတ်သည်။'),
     steps: [
       t('<code>need</code> = counts of t; <code>missing = len(t)</code>.', '<code>need</code> = t ၏ အရေအတွက်၊ <code>missing = len(t)</code>။'),
-      t('Take <code>s[hi]</code>: if <code>need</code> was positive, <code>missing</code> drops; either way <code>need</code> drops.', '<code>s[hi]</code> ယူ — <code>need</code> အပေါင်းဖြစ်ခဲ့လျှင် <code>missing</code> ကျ — မည်သို့ပင်ဖြစ်စေ <code>need</code> ကျ။'),
+      t('Take <code>s[hi]</code>: if <code>need</code> was positive, <code>missing</code> drops; either way <code>need</code> drops.', '<code>s[hi]</code> ယူသည်။ <code>need</code> အပေါင်းဖြစ်ခဲ့လျှင် <code>missing</code> ကျပြီး မည်သို့ပင်ဖြစ်စေ <code>need</code> ကျသည်။'),
       t('While <code>missing == 0</code>: record the window, give <code>s[lo]</code> back to <code>need</code>, and if that made it positive, <code>missing</code> rises; <code>lo += 1</code>.',
-        '<code>missing == 0</code> ဖြစ်နေသမျှ — window ကို မှတ်၊ <code>s[lo]</code> ကို <code>need</code> သို့ ပြန်ပေး၊ ၎င်းကြောင့် အပေါင်းဖြစ်လာလျှင် <code>missing</code> တက်၊ <code>lo += 1</code>။'),
+        '<code>missing == 0</code> ဖြစ်နေသမျှ window ကို မှတ်၊ <code>s[lo]</code> ကို <code>need</code> သို့ ပြန်ပေးပြီး ၎င်းကြောင့် အပေါင်းဖြစ်လာလျှင် <code>missing</code> တက်သည်။ ပြီးလျှင် <code>lo += 1</code>။'),
     ],
     cost: t('hi and lo each move right at most m times, and each move is O(1): O(m + n), the follow-up\'s target.',
-            'hi နှင့် lo တစ်ခုစီသည် ညာဘက်သို့ အများဆုံး m ကြိမ် ရွေ့ပြီး ရွေ့ခြင်းတိုင်း O(1) — O(m + n)၊ follow-up ၏ ပန်းတိုင်။'),
+            'hi နှင့် lo တစ်ခုစီသည် ညာဘက်သို့ အများဆုံး m ကြိမ် ရွေ့ပြီး ရွေ့ခြင်းတိုင်း O(1) ဖြစ်သည်: O(m + n)၊ follow-up ၏ ပန်းတိုင်။'),
   },
 };
 
@@ -549,7 +549,7 @@ mountLesson({
       cost: 'O(m²) time · O(1) extra', build: buildBrute },
     { id: 'window', name: 'Grow and shrink',
       sub: t('sliding window', 'sliding window'),
-      desc: t('One window: grow right until covered, shrink left while covered.', 'window တစ်ခု — ဖုံးသည်အထိ ညာတွင် ကြီး၊ ဖုံးနေသမျှ ဘယ်တွင် ချုံ့။'),
+      desc: t('One window: grow right until covered, shrink left while covered.', 'window တစ်ခု ထားပြီး ဖုံးသည်အထိ ညာတွင် ကြီး၍ ဖုံးနေသမျှ ဘယ်တွင် ချုံ့သည်။'),
       cost: 'O(m + n) time · O(1) extra', build: buildWindow },
   ],
   languages: LANGUAGES,
@@ -560,7 +560,7 @@ mountLesson({
       desc: t('Correct and easy to trust, but each start rebuilds the counts from nothing, so it is quadratic in s.', 'မှန်ပြီး ယုံရလွယ်သည်၊ သို့သော် အစတိုင်းက အရေအတွက်ကို အစမှ ပြန်တည်ဆောက်သဖြင့် s ၌ quadratic ဖြစ်သည်။') },
     window: { approach: APPROACH.window,
       desc: t('The O(m + n) answer. One table does double duty: positive entries are owed, negative ones are spares, and <code>missing</code> counts only what is owed.',
-              'O(m + n) အဖြေ။ table တစ်ခုက တာဝန်နှစ်ခု ထမ်းသည် — အပေါင်းသည် ပေးရန်ကျန်၊ အနုတ်သည် ပို၊ <code>missing</code> သည် ပေးရန်ကျန်ကိုသာ ရေတွက်သည်။') },
+              'O(m + n) အဖြေ။ table တစ်ခုက တာဝန်နှစ်ခု ထမ်းသည်: အပေါင်းသည် ပေးရန်ကျန်၊ အနုတ်သည် ပို၊ <code>missing</code> သည် ပေးရန်ကျန်ကိုသာ ရေတွက်သည်။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the 3 examples, 7 edges, 15,000 random pairs over two or three
@@ -575,7 +575,7 @@ mountLesson({
     go: { brute: 'ran here · 20,010 cases, not the five at m = 10⁵ · Go 1.23', window: 'ran here · 20,015 cases · Go 1.23' },
     rust: { brute: 'ran here · 20,010 cases, not the five at m = 10⁵ · rustc 1.98', window: 'ran here · 20,015 cases · rustc 1.98' },
   },
-  stripLabel: t('s, the window lit', 's — window ကို လင်းပြ'),
+  stripLabel: t('s, with the window lit', 's၊ window ကို လင်းပြထားသည်'),
   strip,
   draw,
   answer,

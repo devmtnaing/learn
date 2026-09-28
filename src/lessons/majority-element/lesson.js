@@ -422,14 +422,14 @@ const APPROACH = {
       t("Start with no <code>candidate</code> and <code>count = 0</code>.",
         "<code>candidate</code> မရှိဘဲ <code>count = 0</code> ဖြင့် စသည်။"),
       t("For each <code>x</code>: if <code>count</code> is 0, <code>x</code> becomes the <code>candidate</code>.",
-        "<code>x</code> တစ်ခုစီအတွက် — <code>count</code> သည် 0 ဖြစ်လျှင် <code>x</code> သည် <code>candidate</code> ဖြစ်လာသည်။"),
+        "<code>x</code> တစ်ခုစီအတွက်: <code>count</code> သည် 0 ဖြစ်လျှင် <code>x</code> သည် <code>candidate</code> ဖြစ်လာသည်။"),
       t("Add one to <code>count</code> if <code>x</code> is the candidate; subtract one otherwise.",
         "<code>x</code> သည် candidate ဖြစ်လျှင် <code>count</code> ကို တစ်ပေါင်း၊ မဟုတ်လျှင် တစ်နုတ်သည်။"),
       t("Return <code>candidate</code>.",
         "<code>candidate</code> ကို ပြန်ပေးသည်။"),
     ],
-    cost: t("one pass and two variables — correct only because the statement guarantees a majority.",
-        "တစ်ကြိမ် ဖြတ်ခြင်းနှင့် variable နှစ်ခု — မေးခွန်းက majority ရှိကြောင်း အာမခံထားသောကြောင့်သာ မှန်သည်။"),
+    cost: t("One pass and two variables. Correct only because the statement guarantees a majority.",
+        "တစ်ကြိမ် ဖြတ်ခြင်းနှင့် variable နှစ်ခု။ မေးခွန်းက majority ရှိကြောင်း အာမခံထားသောကြောင့်သာ မှန်သည်။"),
   },
 };
 
@@ -457,7 +457,7 @@ mountLesson({
       load: { nums: [3, 2, 3] } },
     { title: exampleTitle(2), inputHtml: '<code>nums = [2,2,1,1,1,2,2]</code>', output: '2',
       why: [t('n = 7, so the majority needs more than ⌊7/2⌋ = 3. 2 appears 4 times; 1 appears 3 times, which is not enough.',
-              'n = 7 ဖြစ်သဖြင့် majority သည် ⌊7/2⌋ = 3 ထက် ပိုရမည်။ 2 သည် 4 ကြိမ် ပါသည် — 1 သည် 3 ကြိမ်သာ ပါပြီး မလောက်ပါ။')],
+              'n = 7 ဖြစ်သဖြင့် majority သည် ⌊7/2⌋ = 3 ထက် ပိုရမည်။ 2 သည် 4 ကြိမ် ပါသည်။ 1 သည် 3 ကြိမ်သာ ပါပြီး မလောက်ပါ။')],
       load: { nums: [2, 2, 1, 1, 1, 2, 2] } },
   ],
   modes: [
@@ -465,16 +465,16 @@ mountLesson({
       desc: t('Tally every value; stop when one passes half.', 'value တိုင်းကို ရေတွက်၊ တစ်ခုက တစ်ဝက်ကျော်လျှင် ရပ်။'),
       cost: 'O(n) time · O(n) space', build: buildCount },
     { id: 'vote', name: 'Boyer–Moore vote',
-      desc: t('One candidate; other values cancel its votes.', 'candidate တစ်ခု — အခြား value များက ၎င်း၏ မဲကို ချေဖျက်သည်။'),
+      desc: t('One candidate; other values cancel its votes.', 'candidate တစ်ခု ထားပြီး အခြား value များက ၎င်း၏ မဲကို ချေဖျက်သည်။'),
       cost: 'O(n) time · O(1) space', build: buildVote },
   ],
   languages: LANGUAGES,
   code: CODE,
   solutions: {
-    count: { approach: APPROACH.count, desc: t('The direct reading of the statement: count, and return the first value whose count passes ⌊n/2⌋. Linear, but the map can grow to 25,000 rows at the constraint — the follow-up asks for O(1) space.',
-                     'မေးခွန်းကို တိုက်ရိုက် ဖတ်ခြင်း — ရေတွက်ပြီး count က ⌊n/2⌋ ကျော်သော ပထမ value ကို ပြန်ပေးသည်။ linear ဖြစ်သော်လည်း ကန့်သတ်ချက်အထိ map သည် row 25,000 အထိ ကြီးနိုင်သည် — follow-up က O(1) space ကို တောင်းသည်။') },
-    vote: { approach: APPROACH.vote, desc: t('Pairs of different values cancel, and a majority cannot be cancelled away. Two variables, one pass — and only correct because the statement guarantees a majority exists.',
-                    'မတူသော value အတွဲများ ချေဖျက်ကြပြီး majority ကို ချေဖျက်၍ မကုန်နိုင်ပါ။ variable နှစ်ခု၊ တစ်ကြိမ်တည်း ဖြတ်သည် — မေးခွန်းက majority ရှိကြောင်း အာမခံထားသောကြောင့်သာ မှန်သည်။') },
+    count: { approach: APPROACH.count, desc: t('The direct reading of the statement: count, and return the first value whose count passes ⌊n/2⌋. Linear, but the map can grow to 25,000 rows at the constraint, and the follow-up asks for O(1) space.',
+                     'မေးခွန်းကို တိုက်ရိုက် ဖတ်ခြင်း ဖြစ်သည်။ ရေတွက်ပြီး count က ⌊n/2⌋ ကျော်သော ပထမ value ကို ပြန်ပေးသည်။ linear ဖြစ်သော်လည်း ကန့်သတ်ချက်အထိ map သည် row 25,000 အထိ ကြီးနိုင်သည်။ follow-up က O(1) space ကို တောင်းသည်။') },
+    vote: { approach: APPROACH.vote, desc: t('Pairs of different values cancel, and a majority cannot be cancelled away. Two variables and one pass, correct only because the statement guarantees a majority exists.',
+                    'မတူသော value အတွဲများ ချေဖျက်ကြပြီး majority ကို ချေဖျက်၍ မကုန်နိုင်ပါ။ variable နှစ်ခု၊ တစ်ကြိမ်တည်း ဖြတ်သည်။ မေးခွန်းက majority ရှိကြောင်း အာမခံထားသောကြောင့်သာ မှန်သည်။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the 2 examples, 4 edges, 15,000 random arrays of up to 9

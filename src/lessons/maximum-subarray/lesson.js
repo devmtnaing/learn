@@ -397,18 +397,18 @@ const APPROACH = {
         'start <code>i</code> တစ်ခုစီအတွက် <code>sum</code> ကို 0 ပြန်ထားပြီး end <code>j</code> တစ်ခုစီအတွက် <code>nums[j]</code> ကို ပေါင်းသည်။'),
       t('Keep the largest <code>sum</code> seen in <code>best</code>.', 'တွေ့ခဲ့သမျှ အကြီးဆုံး <code>sum</code> ကို <code>best</code> တွင် ထားသည်။'),
     ],
-    cost: t('n(n + 1)/2 subarrays: about 5 × 10⁹ additions at n = 10⁵.', 'subarray n(n + 1)/2 ခု — n = 10⁵ တွင် ပေါင်းခြင်း 5 × 10⁹ ခန့်။'),
+    cost: t('n(n + 1)/2 subarrays: about 5 × 10⁹ additions at n = 10⁵.', 'subarray n(n + 1)/2 ခု၊ n = 10⁵ တွင် ပေါင်းခြင်း 5 × 10⁹ ခန့်။'),
   },
   kadane: {
-    idea: t('The best subarray ending at i is either nums[i] alone or nums[i] added to the best ending at i − 1 — and adding is only worse when that best is negative. Carry that one number forward.',
-            'i တွင် ဆုံးသော အကောင်းဆုံး subarray သည် nums[i] တစ်ခုတည်း သို့မဟုတ် i − 1 တွင် ဆုံးသော အကောင်းဆုံးထဲ nums[i] ပေါင်းထည့်ခြင်း ဖြစ်သည် — ထိုအကောင်းဆုံးသည် အနုတ် ဖြစ်မှသာ ပေါင်းခြင်းက ပိုဆိုးသည်။ ထိုကိန်းတစ်လုံးကို ရှေ့သို့ သယ်သွားသည်။'),
+    idea: t('The best subarray ending at i is either nums[i] alone or nums[i] added to the best ending at i − 1, and adding is only worse when that best is negative. Carry that one number forward.',
+            'i တွင် ဆုံးသော အကောင်းဆုံး subarray သည် nums[i] တစ်ခုတည်း သို့မဟုတ် i − 1 တွင် ဆုံးသော အကောင်းဆုံးထဲ nums[i] ပေါင်းထည့်ခြင်း ဖြစ်သည်။ ထိုအကောင်းဆုံးသည် အနုတ် ဖြစ်မှသာ ပေါင်းခြင်းက ပိုဆိုးသည်။ ထိုကိန်းတစ်လုံးကို ရှေ့သို့ သယ်သွားသည်။'),
     steps: [
       t('Start <code>cur</code> and <code>best</code> at <code>nums[0]</code>.', '<code>cur</code> နှင့် <code>best</code> ကို <code>nums[0]</code> ဖြင့် စသည်။'),
-      t('For each later <code>i</code>: <code>cur = max(nums[i], cur + nums[i])</code> — start over if the run behind is negative.',
-        'နောက်ထပ် <code>i</code> တစ်ခုစီအတွက် <code>cur = max(nums[i], cur + nums[i])</code> — နောက်က run အနုတ် ဖြစ်လျှင် ပြန်စသည်။'),
+      t('For each later <code>i</code>: <code>cur = max(nums[i], cur + nums[i])</code>. Start over if the run behind is negative.',
+        'နောက်ထပ် <code>i</code> တစ်ခုစီအတွက် <code>cur = max(nums[i], cur + nums[i])</code>။ နောက်က run အနုတ် ဖြစ်လျှင် ပြန်စသည်။'),
       t('<code>best = max(best, cur)</code>.', '<code>best = max(best, cur)</code>။'),
     ],
-    cost: t('one pass and two numbers: n − 1 decisions.', 'တစ်ကြိမ်တည်း ဖြတ်ခြင်းနှင့် ကိန်းနှစ်လုံး — ဆုံးဖြတ်ချက် n − 1 ခု။'),
+    cost: t('One pass and two numbers: n − 1 decisions.', 'တစ်ကြိမ်တည်း ဖြတ်ခြင်းနှင့် ကိန်းနှစ်လုံး: ဆုံးဖြတ်ချက် n − 1 ခု။'),
   },
 };
 
@@ -431,14 +431,14 @@ mountLesson({
   examples: [
     { title: exampleTitle(1), inputHtml: '<code>nums = [-2,1,-3,4,-1,2,1,-5,4]</code>', output: '6',
       why: [t('[4,-1,2,1] sums to 6. The −1 inside it is worth keeping: dropping it would split the run.',
-              '[4,-1,2,1] ၏ ပေါင်းလဒ် 6။ ၎င်းအတွင်းရှိ −1 ကို ထားသင့်သည် — ပယ်လျှင် run ကွဲသွားမည်။')],
+              '[4,-1,2,1] ၏ ပေါင်းလဒ် 6။ ၎င်းအတွင်းရှိ −1 ကို ထားသင့်သည်။ ပယ်လျှင် run ကွဲသွားမည်။')],
       load: { nums: [-2, 1, -3, 4, -1, 2, 1, -5, 4] } },
     { title: exampleTitle(2), inputHtml: '<code>nums = [1]</code>', output: '1',
       why: [t('One value, one subarray.', 'value တစ်ခု၊ subarray တစ်ခု။')],
       load: { nums: [1] } },
     { title: exampleTitle(3), inputHtml: '<code>nums = [5,4,-1,7,8]</code>', output: '23',
       why: [t('The whole array: the −1 costs less than the 7 and 8 after it are worth.',
-              'array တစ်ခုလုံး — −1 ၏ ကုန်ကျမှုသည် ၎င်းနောက်ရှိ 7 နှင့် 8 ၏ တန်ဖိုးထက် နည်းသည်။')],
+              'array တစ်ခုလုံး ဖြစ်သည်။ −1 ၏ ကုန်ကျမှုသည် ၎င်းနောက်ရှိ 7 နှင့် 8 ၏ တန်ဖိုးထက် နည်းသည်။')],
       load: { nums: [5, 4, -1, 7, 8] } },
   ],
   modes: [
@@ -453,11 +453,11 @@ mountLesson({
   code: CODE,
   solutions: {
     brute: { approach: APPROACH.brute,
-      desc: t('Every start, with a running sum across the ends. Correct, and quadratic — too slow for n = 10⁵.',
+      desc: t('Every start, with a running sum across the ends. Correct, but quadratic, and too slow for n = 10⁵.',
               'start တိုင်း၊ end များအပေါ် running sum ဖြင့်။ မှန်သည်၊ သို့သော် quadratic ဖြစ်၍ n = 10⁵ အတွက် နှေးလွန်းသည်။') },
     kadane: { approach: APPROACH.kadane,
-      desc: t('The submission worth writing: the best sum ending at each index, carried in one variable. Starting both at <code>nums[0]</code> is what keeps an all-negative array right.',
-              'ရေးသင့်သည့် submission — index တစ်ခုစီတွင် ဆုံးသော အကောင်းဆုံး ပေါင်းလဒ်ကို variable တစ်ခုဖြင့် သယ်သည်။ နှစ်ခုလုံးကို <code>nums[0]</code> ဖြင့် စခြင်းက အားလုံး အနုတ် array ကို မှန်စေသည်။') },
+      desc: t('The one to submit: the best sum ending at each index, carried in one variable. Starting both at <code>nums[0]</code> is what keeps an all-negative array right.',
+              'တင်သင့်သည့် ဗားရှင်း: index တစ်ခုစီတွင် ဆုံးသော အကောင်းဆုံး ပေါင်းလဒ်ကို variable တစ်ခုဖြင့် သယ်သည်။ နှစ်ခုလုံးကို <code>nums[0]</code> ဖြင့် စခြင်းက အားလုံး အနုတ် array ကို မှန်စေသည်။') },
   },
   // How each language was actually checked, printed as the part 3 badges.
   // The corpus: the 3 examples, 5 edges, 15,000 random arrays of 1–9 values

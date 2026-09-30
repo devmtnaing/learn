@@ -13,6 +13,8 @@ dist/
 *.webp
 !public/**/*.png
 !src/**/*.png
+# the README's screenshots are kept on purpose
+!docs/screenshots/*.png
 
 # verification scratch space (scripts/verify/run.py)
 .verify-cache/

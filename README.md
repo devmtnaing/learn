@@ -1,5 +1,9 @@
 # LeetCode solution pages
 
+**Live: [learn.devmtnaing.com](https://learn.devmtnaing.com).** Open any problem and step through its solution.
+
+[![Lowest Common Ancestor, step 4 of 7: the tree with the call stack beside it and the Ruby line that is running highlighted](docs/screenshots/walkthrough.png)](https://learn.devmtnaing.com/leetcode/lowest-common-ancestor-of-a-binary-tree)
+
 Interactive solutions to interview problems. Each page quotes the problem,
 steps through the algorithm one state change at a time, and ends with complete
 solutions in Ruby, Python, JavaScript, Go and Rust. Every one of those
@@ -17,7 +21,22 @@ Every page follows the same three parts:
 3. **The whole solution.** Paste-ready code for every approach and language,
    each with a badge saying exactly how it was checked.
 
-The pages are bilingual, English and မြန်မာ (Burmese).
+The pages are bilingual, English and မြန်မာ (Burmese), in a light and a dark
+theme. The screenshots below are all in the dark one.
+
+## Screenshots
+
+**The question.** The statement next to a widget for the one idea it turns on.
+
+[![The top of the Two Sum page: the statement on the left, a target slider on the right](docs/screenshots/question.png)](https://learn.devmtnaing.com/leetcode/two-sum)
+
+**The problem list.** 47 problems grouped by pattern, with search, a difficulty filter and ⌘K from any page.
+
+[![The home page: patterns down the side, problems with difficulty and acceptance rate](docs/screenshots/home.png)](https://learn.devmtnaing.com)
+
+**In Burmese.** Trapping Rain Water with two pointers, finished.
+
+[![Trapping Rain Water with Burmese chrome and narration, the answer of 6 units filled in](docs/screenshots/burmese.png)](https://learn.devmtnaing.com/leetcode/trapping-rain-water?approach=pointers)
 
 ## Run it
 
@@ -32,25 +51,15 @@ npm run refresh-problems   # re-read titles, tags and acceptance rates from Leet
 
 The home page lists 45 interview problems, 15 each of easy, medium and hard,
 chosen where three of LeetCode's own study plans agree
-([how](docs/problem-list.md)), grouped by pattern (Arrays & Hashing, Two
-Pointers, Trees, …) with search and a difficulty filter. A problem with an
-interactive solution opens it; every problem also links to LeetCode. **Most don't yet, and adding one is the
-main way to contribute.** See [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## Deploying
-
-The site is static and is served by Cloudflare Workers from `dist/`
-(`wrangler.jsonc`) at https://learn.devmtnaing.com. Cloudflare builds it from
-this repo on every push to `main` (build command `npm run build`, deploy
-command `npx wrangler deploy`); `public/_redirects` and `public/_headers` set
-redirects and caching. `npm run serve` runs the same thing locally after a
-build, and `npm run deploy` deploys by hand.
+([how](docs/problem-list.md)), plus 2 from outside that list, grouped by
+pattern (Arrays & Hashing, Two Pointers, Trees, …). Every one of them has a
+solution page. To add a problem or fix a page, see
+[CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## What is in the repo
 
 ```
 src/pages/index.astro           the problem list
-wrangler.jsonc                  Cloudflare: serve dist/ at learn.devmtnaing.com
 src/pages/leetcode/[slug].astro renders every lesson folder
 src/lessons/<slug>/             one folder per solution page
 src/lib/                        the shared kit: stepper, stage shapes, trees, i18n
@@ -60,7 +69,8 @@ scripts/audit.mjs               drives every built page in Chromium
 scripts/refresh-problems.mjs    refreshes src/data/problems.json from LeetCode
 scripts/verify/                 runs every listing in five languages
 verify/<slug>/                  each lesson's test corpus and drivers
-docs/                           how the problem list was chosen; translation notes
+docs/                           how the problem list was chosen; translation notes; screenshots
+wrangler.jsonc                  Cloudflare: serve dist/ at learn.devmtnaing.com
 ```
 
 The site is fully static: every page is prerendered and served as a file, so
@@ -71,10 +81,13 @@ and layout. Every lesson has a spec in `verify/`, so `npm run verify --
 
 ## Deploying
 
-Build command `npm run build`, output directory `dist`, no environment
-variables. `public/_headers` sets the cache policy for Cloudflare Pages or
-Netlify: hashed assets forever, HTML always revalidated. Set the real domain as
-`site` in `astro.config.mjs` so canonical URLs are right.
+Cloudflare Workers serves `dist/` (`wrangler.jsonc`) at
+https://learn.devmtnaing.com, and builds it from this repo on every push to
+`main`: build command `npm run build`, deploy command `npx wrangler deploy`,
+no environment variables. `public/_redirects` sets redirects, and
+`public/_headers` sets the cache policy: hashed assets forever, HTML always
+revalidated. `npm run serve` runs the same thing locally after a build, and
+`npm run deploy` deploys by hand.
 
 ## License
 

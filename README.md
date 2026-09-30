@@ -79,16 +79,6 @@ per approach. The kit supplies the transport, code panel, language switching
 and layout. Every lesson has a spec in `verify/`, so `npm run verify --
 <slug>` reruns exactly what its badges claim.
 
-## Deploying
-
-Cloudflare Workers serves `dist/` (`wrangler.jsonc`) at
-https://learn.devmtnaing.com, and builds it from this repo on every push to
-`main`: build command `npm run build`, deploy command `npx wrangler deploy`,
-no environment variables. `public/_redirects` sets redirects, and
-`public/_headers` sets the cache policy: hashed assets forever, HTML always
-revalidated. `npm run serve` runs the same thing locally after a build, and
-`npm run deploy` deploys by hand.
-
 ## License
 
 [MIT](LICENSE).

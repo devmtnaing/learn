@@ -22,7 +22,7 @@ Every page follows the same three parts:
    each with a badge saying exactly how it was checked.
 
 The pages are bilingual, English and မြန်မာ (Burmese), in a light and a dark
-theme.
+theme. The screenshots below are all in the dark one.
 
 ## Screenshots
 
@@ -34,9 +34,9 @@ theme.
 
 [![The home page: patterns down the side, problems with difficulty and acceptance rate](docs/screenshots/home.png)](https://learn.devmtnaing.com)
 
-**Dark theme, in Burmese.** Trapping Rain Water with two pointers, finished.
+**In Burmese.** Trapping Rain Water with two pointers, finished.
 
-[![Trapping Rain Water in the dark theme with Burmese chrome and narration, the answer of 6 units filled in](docs/screenshots/dark-burmese.png)](https://learn.devmtnaing.com/leetcode/trapping-rain-water?approach=pointers)
+[![Trapping Rain Water with Burmese chrome and narration, the answer of 6 units filled in](docs/screenshots/burmese.png)](https://learn.devmtnaing.com/leetcode/trapping-rain-water?approach=pointers)
 
 ## Run it
 

@@ -56,10 +56,10 @@ const my = (v?: T) => (v == null || typeof v === 'string' ? undefined : v.my);
 const plain = (v: T) => en(v).replace(/<[^>]+>/g, '');
 const lcUrl = (slug: string) => `https://leetcode.com/problems/${slug}/`;
 ---
-<Base title={`${plain(p.title)} · ${SITE_NAME}`} description={p.summary}>
+<Base section="leetcode" where="LeetCode" title={`${plain(p.title)} · ${SITE_NAME}`} description={p.summary}>
 <div class="shell">
   <nav class="crumbs" aria-label="Breadcrumb">
-    <a href="/">LeetCode</a><span>/</span>
+    <a href="/leetcode">LeetCode</a><span>/</span>
     <span>{plain(p.title)}</span>
   </nav>
 </div>
@@ -201,7 +201,7 @@ const lcUrl = (slug: string) => `https://leetcode.com/problems/${slug}/`;
 
 <div class="shell">
   <nav class="pager" aria-label="Lesson navigation">
-    <a class="up" href="/"><span class="dir">Back to</span><span>All problems</span></a>
+    <a class="up" href="/leetcode"><span class="dir">Back to</span><span>All problems</span></a>
   </nav>
 </div>
 </Base>

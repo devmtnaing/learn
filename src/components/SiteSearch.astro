@@ -16,20 +16,20 @@
   <kbd class="sb-key" data-key aria-hidden="true"></kbd>
 </button>
 
-<dialog class="kdlg" id="search-dlg" aria-label="Search problems">
+<dialog class="kdlg" id="search-dlg" aria-label="Search the site">
   <div class="k-field">
     <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5 14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
     <input type="text" role="combobox" enterkeyhint="go" aria-expanded="true" aria-controls="k-list" aria-autocomplete="list"
-           aria-label="Search problems" placeholder="Search by name, number or pattern"
+           aria-label="Search problems and modules" placeholder="Search problems and AI Engineer modules"
            autocomplete="off" spellcheck="false">
   </div>
   <p class="k-head" data-head></p>
-  <div class="k-list" id="k-list" role="listbox" aria-label="Problems"></div>
+  <div class="k-list" id="k-list" role="listbox" aria-label="Results"></div>
   <p class="k-status" data-status aria-live="polite"></p>
 </dialog>
 
 <script>
-  interface Row { id: number; title: string; difficulty: string; category: string; href: string; page: boolean; text: string }
+  interface Row { id: number | string; title: string; difficulty: string; category: string; href: string; page: boolean; text: string; kind?: 'module' }
 
   const btn = document.getElementById('search-btn') as HTMLButtonElement;
   const dlg = document.getElementById('search-dlg') as HTMLDialogElement;
@@ -60,7 +60,7 @@
     if (!rows) return [];
     const typed = q.trim().toLowerCase();
     const terms = typed.split(/\s+/).filter(Boolean);
-    if (!terms.length) return rows.filter((r) => r.page);
+    if (!terms.length) return rows.filter((r) => r.page && r.kind !== 'module');
     const rank = (r: Row) => (String(r.id) === typed ? 0 : r.title.toLowerCase().startsWith(typed) ? 2 : 4) + (r.page ? 0 : 1);
     return rows
       .filter((r) => terms.every((t) => r.text.includes(t)))
@@ -86,7 +86,8 @@
     part('k-num', String(r.id));
     part('k-title', r.title);
     part('k-sub', r.page ? r.category : 'LeetCode ↗');
-    part(`diff ${r.difficulty.toLowerCase()}`, r.difficulty);
+    if (r.kind === 'module') part('diff ai', 'AI');
+    else part(`diff ${r.difficulty.toLowerCase()}`, r.difficulty);
     return a;
   }
 
@@ -100,8 +101,8 @@
     status.textContent = !rows
       ? (loading ? 'Loading…' : 'Could not load the problem list.')
       : shown.length
-        ? `${shown.length} ${shown.length === 1 ? 'problem' : 'problems'} · ↑ ↓ to move, Enter to open, Esc to close`
-        : 'No problems match.';
+        ? `${shown.length} ${shown.length === 1 ? 'result' : 'results'} · ↑ ↓ to move, Enter to open, Esc to close`
+        : 'Nothing matches.';
     mark();
   }
 

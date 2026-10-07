@@ -1,0 +1,30 @@
+---
+import AiLayout from '../../../layouts/AiLayout.astro';
+import Stepper from '../../../components/ai/Stepper.astro';
+import Icon from '../../../components/Icon.astro';
+import { moduleUrl, tracks, trackUrl, type Module, type Track } from '../../../lib/ai/course';
+
+export function getStaticPaths() {
+  return tracks.flatMap((t) =>
+    t.modules.map((m, i) => ({ params: { track: t.slug, module: m.slug }, props: { track: t, module: m, prev: t.modules[i - 1], next: t.modules[i + 1] } })),
+  );
+}
+const { track, module: m, prev, next } = Astro.props as { track: Track; module: Module; prev?: Module; next?: Module };
+---
+<AiLayout title={`${m.label} ${m.title}`} description={`${track.title}, ${m.label}: ${m.title}`}>
+  <a href={trackUrl(track)} class="optional-toggle" style="margin-top:0"><Icon name="back" size={16} /> {track.short}: {track.title}</a>
+  <div class={`tc-${track.color}`} data-ai-track={track.id}>
+    <div class="guide-hero">
+      <div class="kicker">{track.short} · {m.label}{m.weeks && ` · ${m.weeks} wk${m.weeks === '1' ? '' : 's'}`}</div>
+      <h1>{m.title}</h1>
+    </div>
+    <div class="card" style="padding:4px 18px 16px;margin-bottom:26px" data-mod={m.id}>
+      <Stepper track={track} module={m} />
+    </div>
+    <div class="prose" set:html={m.guideHtml} />
+    <nav class="pager" aria-label="Modules" style="margin-top:32px">
+      {prev ? <a class="up" href={moduleUrl(track, prev)}><span class="dir">Previous</span><span>{prev.label} {prev.title}</span></a> : <span />}
+      {next && <a href={moduleUrl(track, next)}><span class="dir">Next →</span><span>{next.label} {next.title}</span></a>}
+    </nav>
+  </div>
+</AiLayout>

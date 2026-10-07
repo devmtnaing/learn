@@ -11,7 +11,7 @@
 .g-head.hot{fill:var(--amber)}
 .g-head.bad{fill:var(--down)}
 .g-node circle{fill:var(--surface);stroke:var(--line-2);stroke-width:1.5}
-.g-node text{fill:var(--ink);font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:500}
+.g-node text{fill:var(--ink);font-family:var(--mono);font-size:13px;font-weight:500}
 .g-node.on circle{fill:var(--amber-soft);stroke:var(--amber)}
 .g-node.done circle{fill:var(--up-soft);stroke:var(--up)}
 .g-node.queued circle{fill:var(--accent-soft);stroke:var(--accent)}

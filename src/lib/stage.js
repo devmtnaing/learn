@@ -155,10 +155,10 @@ export function tree(root, o = {}) {
       return `<g>
         <circle cx="${x(n)}" cy="${y(n)}" r="17" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>
         <text x="${x(n)}" y="${y(n) + 4.5}" text-anchor="middle" fill="${ink}"
-              font-family="IBM Plex Mono, monospace" font-size="13">${esc(n.value)}</text>
+              font-family="JetBrains Mono, monospace" font-size="13">${esc(n.value)}</text>
         ${badges[n.key] != null
           ? `<text x="${x(n) + 23}" y="${y(n) - 10}" fill="var(--accent)"
-                  font-family="IBM Plex Mono, monospace" font-size="11">${esc(badges[n.key])}</text>`
+                  font-family="JetBrains Mono, monospace" font-size="11">${esc(badges[n.key])}</text>`
           : ''}
       </g>`;
     })

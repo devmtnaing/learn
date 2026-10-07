@@ -1,7 +1,7 @@
 # Contributing a solution page
 
 The most useful contribution is a new solution page for a problem on the list
-that doesn't have one yet: any row on the home page marked *Solution coming
+that doesn't have one yet: any row on the problem list (`/leetcode`) marked *Solution coming
 soon*. Fixes to existing pages, including better Burmese, are just as welcome.
 
 Before you start, open a page or two to see what one looks like:
@@ -35,7 +35,7 @@ code they can trust. So three rules are firm:
 ## Building a page, step by step
 
 A page is one folder, `src/lessons/<leetcode-slug>/`. The route finds it and
-the home page links it automatically, so there is nothing else to register.
+the problem list links it automatically, so there is nothing else to register.
 
 ```
 src/lessons/<slug>/statement.html   LeetCode's statement, verbatim
@@ -137,7 +137,7 @@ Every prop is required, and `npm run check` names any that are missing:
 `title`, `summary`, `eyebrow`, `lede`, `links`, `constraints`, `part1Sub`,
 `widgetTitle`, `traps`, `part2Sub`, `notes`, `cost`, `part3Sub`, `playHint`.
 `links` carries the LeetCode problem id, and that id is what links the
-problem's row on the home page to your page. `playHint` is the line under the
+problem's row on the problem list to your page. `playHint` is the line under the
 player in 2·2: the keys, what the reader can edit above it and within what
 limits, and what rebuilds.
 

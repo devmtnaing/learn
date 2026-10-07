@@ -2,20 +2,30 @@
 import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/site.css';
-import Masthead from '../components/Masthead.astro';
+import '../styles/app.css';
+import AppSidebar from '../components/AppSidebar.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import SiteSearch from '../components/SiteSearch.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
 
 interface Props {
   title: string;
   description: string;
+  /** Picks the accent: LeetCode pages are teal, the hub and AI Engineer indigo. */
+  section?: 'hub' | 'leetcode' | 'ai';
+  /** Shown at the left of the top bar. */
+  where?: string;
+  /** A focused page (a lesson session) with no sidebar, top bar or footer. */
+  bare?: boolean;
 }
-const { title, description } = Astro.props;
+const { title, description, section = 'hub', where, bare = false } = Astro.props;
 // Pages build as .html files (astro.config.mjs) but are served without the
 // extension, so the canonical address drops it: /leetcode/two-sum, not .html.
 const canonical = new URL(Astro.url.pathname.replace(/(index)?\.html$/, ''), Astro.site);
+const hasRail = Astro.slots.has('rail');
 ---
 <!doctype html>
-<html lang="en">
+<html lang="en" data-section={section}>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -25,21 +35,36 @@ const canonical = new URL(Astro.url.pathname.replace(/(index)?\.html$/, ''), Ast
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:type" content="website" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='52' font-size='52'>📐</text></svg>" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;450;500;600&family=Noto+Sans+Myanmar:wght@400;500;600&display=swap" />
-  <!-- Blocking on purpose: a stored theme has to land on <html> before the
-       first paint, or every visit starts with a flash of the wrong one. -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@600;700&display=swap" />
+  <!-- Blocking on purpose: a stored theme and sidebar state have to land on
+       <html> before the first paint, or every visit starts with a flash. -->
   <script is:inline>
     try {
       var t = localStorage.getItem('learn-theme');
       if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
+      if (localStorage.getItem('learn-nav') === 'collapsed') document.documentElement.setAttribute('data-nav', 'collapsed');
     } catch (e) {}
   </script>
 </head>
-<body>
-  <Masthead />
-  <main><slot /></main>
-  <SiteFooter />
-</body>
+{bare ? (
+  <body class="bare"><slot /></body>
+) : (
+  <body>
+    <div class:list={['app', hasRail && 'has-rail']}>
+      <AppSidebar />
+      <div class="app-main">
+        <header class="app-top">
+          <span class="app-where">{where}</span>
+          <SiteSearch />
+          <ThemeToggle />
+        </header>
+        <main><slot /></main>
+        <SiteFooter />
+      </div>
+      {hasRail && <aside class="app-rail" aria-label="Your progress"><slot name="rail" /></aside>}
+    </div>
+  </body>
+)}
 </html>

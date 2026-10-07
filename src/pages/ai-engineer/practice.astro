@@ -1,0 +1,12 @@
+---
+import AiLayout from '../../layouts/AiLayout.astro';
+import Practice from '../../components/ai/Practice';
+import { tracks } from '../../lib/ai/course';
+const titles = Object.fromEntries(tracks.flatMap((t) => t.modules.map((m) => [m.id, m.title])));
+---
+<AiLayout title="Practice" description="Spaced-repetition flashcards and mixed quiz review for the AI Engineer course." where="AI Engineer · Practice">
+  <div class="kicker">Practice</div>
+  <h1 class="page-h">Keep it fresh</h1>
+  <p class="page-sub">Spaced repetition keeps the vocabulary fresh. Cards unlock as you start each module.</p>
+  <Practice client:only="preact" titles={titles} />
+</AiLayout>

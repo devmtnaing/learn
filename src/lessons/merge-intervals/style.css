@@ -5,7 +5,7 @@
    inline styles. */
 .tl{display:flex;flex-direction:column;gap:5px;overflow-x:auto;padding-bottom:2px}
 .tl-row{display:flex;align-items:center;gap:8px}
-.tl-lab{flex:none;min-width:4.6em;text-align:right;font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-2)}
+.tl-lab{flex:none;min-width:4.6em;text-align:right;font-family:var(--mono);font-size:11.5px;color:var(--ink-2)}
 .tl-cells{display:flex}
 .tl-c{display:block;flex:none;width:6px;height:14px}
 .tl-c.on{background:var(--line-2)}
@@ -21,5 +21,5 @@
 .tl-row.clear .tl-c.on{background:var(--accent);opacity:.55}
 .tl-row.cur .tl-lab{color:var(--amber);font-weight:600}
 /* the axis: a number under every fifth point */
-.tl-axis .tl-c{height:auto;position:relative;overflow:visible;white-space:nowrap;font-family:"IBM Plex Mono",monospace;font-size:9.5px;color:var(--ink-3)}
+.tl-axis .tl-c{height:auto;position:relative;overflow:visible;white-space:nowrap;font-family:var(--mono);font-size:9.5px;color:var(--ink-3)}
 .tl-sep{height:1px;background:var(--line);margin:2px 0}

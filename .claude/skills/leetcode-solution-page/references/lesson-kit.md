@@ -65,7 +65,7 @@ right.
   not a row), transport with the narration under it, then the stage and ✓ the
   answer beside "The code, live" with hoverable variables and any `caveats`
   note under it. Don't add boxes inside the player. The transport and
-  narration stay under the masthead while the reader scrolls the stage and
+  narration stay under the top bar while the reader scrolls the stage and
   code, and the strip wraps onto more rows on a narrow screen. ✓ Under the player, the
   `playHint` line from `page.js`: the keys (`←` `→` step · `space`
   play/pause), what the reader can edit "above" and any limits ("up to 12
@@ -86,12 +86,12 @@ reader should meet first.
 ## The folder a lesson writes
 
 Everything for a lesson is one folder; `src/pages/leetcode/[slug].astro`
-renders every folder that has a `page.js`, and the home page lists problems
+renders every folder that has a `page.js`, and the problem list (`/leetcode`) lists problems
 only: a problem whose id is in some lesson's `links` gets its title linked
 (the whole row opens the page), the rest say "Solution coming soon", and every
 row has a "View on LeetCode ↗" link. Problems are grouped by the `category`
 each has in `src/data/problems.json`; a problem added there needs one of the
-categories listed in `src/pages/index.astro`. There is no page file and no index entry to add.
+categories listed in `src/pages/leetcode/index.astro`. There is no page file and no index entry to add.
 
 ```
 src/lessons/<slug>/page.js           the static prose, as Walkthrough props

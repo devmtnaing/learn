@@ -1,0 +1,9 @@
+---
+import Base from '../../layouts/Base.astro';
+import Review from '../../components/ai/Review';
+import { SITE_NAME } from '../../data/site';
+import '../../styles/ai.css';
+---
+<Base bare section="ai" title={`Mixed review · ${SITE_NAME}`} description="Eight random questions from the quizzes you have finished.">
+  <div class="tc-indigo"><Review client:only="preact" /></div>
+</Base>

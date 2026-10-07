@@ -1,0 +1,24 @@
+---
+/* Every AI Engineer page except the full-screen lesson steps: the app shell,
+ * the indigo accent, the progress rail (or the stat strip on narrower
+ * screens) and the script that paints progress onto the static markup. */
+import Base from './Base.astro';
+import Rail, { StatStrip } from '../components/ai/Rail';
+import { units } from '../lib/ai/course';
+import { SITE_NAME } from '../data/site';
+import '../styles/ai.css';
+
+interface Props { title: string; description: string; where?: string; section?: 'ai' | 'hub' }
+const { title, description, where = 'AI Engineer', section = 'ai' } = Astro.props;
+---
+<Base section={section} where={where} title={`${title} · ${SITE_NAME}`} description={description}>
+  <div class="ai-page">
+    <StatStrip client:only="preact" />
+    <slot />
+  </div>
+  <Rail slot="rail" units={units} client:only="preact" />
+</Base>
+
+<script>
+  import '../lib/ai/decorate';
+</script>

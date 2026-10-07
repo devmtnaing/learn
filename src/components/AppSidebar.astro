@@ -1,0 +1,96 @@
+---
+/* The dark sidebar on every page. On a phone it becomes a bottom tab bar
+ * holding only the links marked .tab; between 720px and 1024px it shows
+ * icons only. The daily goal at its foot is filled in from progress.ts. */
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import { REPO, SITE_NAME } from '../data/site';
+import type { IconName } from '../lib/icons';
+
+const path = Astro.url.pathname.replace(/(index)?\.html$/, '').replace(/\/$/, '') || '/';
+const aiSub = path.startsWith('/ai-engineer') ? (path.split('/')[2] ?? '') : null;
+
+type Item = { href: string; label: string; icon: IconName; active: boolean; tab?: string; accent?: 'teal' | 'indigo' };
+const groups: { label?: string; items: Item[] }[] = [
+  { items: [{ href: '/', label: 'Home', icon: 'home', active: path === '/', tab: 'Home' }] },
+  {
+    label: 'LeetCode',
+    items: [{ href: '/leetcode', label: 'Problems', icon: 'code', active: path.startsWith('/leetcode'), tab: 'LeetCode', accent: 'teal' }],
+  },
+  {
+    label: 'AI Engineer',
+    items: [
+      { href: '/ai-engineer', label: 'Path', icon: 'route', active: aiSub !== null && !['practice', 'papers', 'projects'].includes(aiSub), tab: 'AI path', accent: 'indigo' },
+      { href: '/ai-engineer/practice', label: 'Practice', icon: 'refresh', active: aiSub === 'practice', tab: 'Practice', accent: 'indigo' },
+      { href: '/ai-engineer/papers', label: 'Papers', icon: 'file', active: aiSub === 'papers', accent: 'indigo' },
+      { href: '/ai-engineer/projects', label: 'Projects', icon: 'hammer', active: aiSub === 'projects', accent: 'indigo' },
+    ],
+  },
+  { label: 'You', items: [{ href: '/profile', label: 'Profile', icon: 'user', active: path === '/profile', tab: 'Profile' }] },
+];
+---
+<nav class="app-side" aria-label="Main">
+  <a class="app-brand" href="/">
+    <Logo size={34} />
+    <span class="app-brand-text"><b>{SITE_NAME}</b><small>devmtnaing.com</small></span>
+  </a>
+  {groups.map((g) => (
+    <>
+      {g.label && <div class="app-label">{g.label}</div>}
+      {g.items.map((it) => (
+        <a
+          class:list={['app-nav', it.accent && `acc-${it.accent}`, it.tab && 'tab']}
+          href={it.href}
+          aria-current={it.active ? 'page' : undefined}
+          title={it.label}
+        >
+          <Icon name={it.icon} />
+          <span class="app-nav-text">{it.label}</span>
+          {it.tab && <span class="app-tab-text">{it.tab}</span>}
+        </a>
+      ))}
+    </>
+  ))}
+  <a class="app-nav" href={REPO} target="_blank" rel="noopener" title="Source on GitHub">
+    <Icon name="github" />
+    <span class="app-nav-text">GitHub ↗</span>
+  </a>
+  <div class="app-spacer"></div>
+  <a class="app-goal" href="/profile" data-goal>
+    <span class="app-goal-row"><b>Daily goal</b><small data-goal-streak></small></span>
+    <small data-goal-text>0 / 30 XP</small>
+    <span class="app-meter"><i data-goal-bar style="width:0%"></i></span>
+  </a>
+  <button class="app-collapse" type="button" data-collapse aria-label="Collapse the sidebar">
+    <Icon name="panel" size={18} />
+    <span class="app-nav-text">Collapse</span>
+  </button>
+</nav>
+
+<script>
+  import { get, subscribe, streak, xpToday } from '../lib/progress';
+
+  const goal = () => {
+    const p = get();
+    const xp = xpToday(p);
+    const s = streak(p);
+    const text = document.querySelector('[data-goal-text]');
+    const bar = document.querySelector<HTMLElement>('[data-goal-bar]');
+    const st = document.querySelector('[data-goal-streak]');
+    if (text) text.textContent = `${xp} / ${p.dailyGoal} XP today`;
+    if (bar) bar.style.width = `${Math.min((xp / p.dailyGoal) * 100, 100)}%`;
+    if (st) st.textContent = s ? `${s}-day streak` : '';
+  };
+  goal();
+  subscribe(goal);
+
+  document.querySelector('[data-collapse]')?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const on = root.dataset.nav !== 'collapsed';
+    if (on) root.dataset.nav = 'collapsed';
+    else delete root.dataset.nav;
+    try {
+      localStorage.setItem('learn-nav', on ? 'collapsed' : '');
+    } catch {}
+  });
+</script>

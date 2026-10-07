@@ -1,6 +1,6 @@
 /* Reset, body type, headings. Loaded on every page including the ones
    with no interactive stage. */
-/* Clear the sticky masthead so an anchor jump doesn't land underneath it.
+/* Clear the sticky top bar (app.css) so an anchor jump doesn't land underneath it.
    Also covers keyboard focus scrolling, which a :target offset would not. */
 html{scroll-padding-top:76px}
 @media (max-width:560px){html{scroll-padding-top:96px}}
@@ -13,30 +13,30 @@ body{
   margin:0;
   background:var(--ground);
   color:var(--ink);
-  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-family:var(--font);
   font-size:15px;
   line-height:1.55;
   -webkit-font-smoothing:antialiased;
 }
-.wrap{max-width:1140px;margin:0 auto;padding-inline:20px;padding-block:32px 56px}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:clamp(16px,3vw,40px);padding-block:32px 56px}
 /* .as-h2 and .as-h3 give a deeper heading the look of a shallower one, so the
    outline can nest properly without the page changing how it looks. */
-h1,h2,h3,.as-h2,.as-h3{font-family:Archivo,"IBM Plex Sans",sans-serif;font-weight:700;text-wrap:balance;margin:0}
+h1,h2,h3,.as-h2,.as-h3{font-family:var(--display);font-weight:700;text-wrap:balance;margin:0}
 h1{font-size:clamp(28px,4.6vw,42px);letter-spacing:-.022em;line-height:1.05}
 h2,.as-h2{font-size:19px;letter-spacing:-.01em}
 h3,.as-h3{font-size:14px;letter-spacing:-.005em;font-weight:600}
 p{margin:0}
 /* Read by a screen reader, not shown. */
 .vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
-code,.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
+code,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
 .eyebrow{
-  font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.14em;
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--accent);font-weight:500;
 }
 
 
-/* The shell is a column so a short page still pins its footer to the bottom. */
-body{min-height:100vh;display:flex;flex-direction:column}
+/* The page column (app.css) is a flex column, so a short page still pins its
+   footer to the bottom. */
 main{flex:1}
 a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{
   outline:2px solid var(--accent);outline-offset:2px;border-radius:4px;

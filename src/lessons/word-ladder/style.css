@@ -3,6 +3,6 @@
 .wl .cell.set{background:var(--accent-soft);border-color:var(--accent);color:var(--ink)}
 .wl-w{margin-bottom:10px}
 .wl-w .q-arr{align-items:center;margin-bottom:6px}
-.wl-lv{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-3);width:18px;flex:none}
+.wl-lv{font-family:var(--mono);font-size:11px;color:var(--ink-3);width:18px;flex:none}
 .wl-list{flex-wrap:wrap;gap:6px}
-.wl-lab{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-3);margin-right:4px}
+.wl-lab{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-right:4px}

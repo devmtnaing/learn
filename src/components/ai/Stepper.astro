@@ -1,0 +1,29 @@
+---
+/* The five steps of one module. Static links; decorate.ts marks progress. */
+import Icon from '../Icon.astro';
+import { UNIT_LABEL, unitKinds, unitUrl, type Module, type Track, type UnitKind } from '../../lib/ai/course';
+import type { IconName } from '../../lib/icons';
+
+interface Props { track: Track; module: Module }
+const { track, module: m } = Astro.props;
+const KIND_ICON: Record<UnitKind, IconName> = { concepts: 'bulb', resources: 'bookOpen', build: 'code', quiz: 'help', checkpoint: 'trophy' };
+---
+<div class="stepper">
+  {unitKinds(m).map((k) => (
+    <a
+      class:list={['step', k === 'checkpoint' && 'trophy']}
+      href={unitUrl(track, m, k)}
+      data-unit={`${m.id}/${k}`}
+      data-label={`${m.title}: ${UNIT_LABEL[k]}`}
+      data-kind-label={UNIT_LABEL[k]}
+      data-mod-label={m.label}
+      aria-label={`${m.title}: ${UNIT_LABEL[k]}`}
+    >
+      <span class="step-dot">
+        <Icon name={KIND_ICON[k]} class="ic-kind" />
+        {k !== 'checkpoint' && <Icon name="check" class="ic-done" />}
+      </span>
+      <span class="step-label">{UNIT_LABEL[k]}</span>
+    </a>
+  ))}
+</div>

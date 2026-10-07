@@ -1,0 +1,32 @@
+---
+/* One lesson step, full screen. Built for every step of every module. */
+import Base from '../../../../layouts/Base.astro';
+import Session from '../../../../components/ai/Session';
+import { moduleUrl, tracks, trackUrl, unitKinds, UNIT_LABEL, UNIT_SLUG, type Module, type Track, type UnitKind } from '../../../../lib/ai/course';
+import { quizzes } from '../../../../lib/ai/quizzes';
+import { SITE_NAME } from '../../../../data/site';
+import '../../../../styles/ai.css';
+
+export function getStaticPaths() {
+  return tracks.flatMap((t) =>
+    t.modules.flatMap((m) => unitKinds(m).map((k) => ({ params: { track: t.slug, module: m.slug, unit: UNIT_SLUG[k] }, props: { track: t, module: m, kind: k } }))),
+  );
+}
+const { track, module: m, kind } = Astro.props as { track: Track; module: Module; kind: UnitKind };
+const label = UNIT_LABEL[kind];
+---
+<Base bare section="ai" title={`${label} · ${m.title} · ${SITE_NAME}`} description={`${track.title}, ${m.label} ${m.title}: ${label}`}>
+  <div class={`tc-${track.color}`}>
+    <Session
+      client:only="preact"
+      unitId={`${m.id}/${kind}`}
+      kind={kind}
+      module={{ id: m.id, label: m.label, title: m.title, why: m.why, concepts: m.concepts, notes: m.notes, guideHtml: kind === 'concepts' ? m.guideHtml : '', resources: m.resources, build: m.build, checkpoint: m.checkpoint }}
+      track={{ id: track.id, short: track.short, subtitle: track.subtitle }}
+      questions={kind === 'quiz' ? quizzes[m.id] : undefined}
+      backUrl={`${trackUrl(track)}#${m.slug}`}
+      guideUrl={moduleUrl(track, m)}
+    />
+    <noscript><main class="session-body"><h1>{m.title}</h1><p class="lead">This step needs JavaScript. The full module text is on the <a href={moduleUrl(track, m)}>guide page</a>.</p></main></noscript>
+  </div>
+</Base>

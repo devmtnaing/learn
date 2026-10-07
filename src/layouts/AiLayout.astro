@@ -16,7 +16,7 @@ const { title, description, where = 'AI Engineer', section = 'ai' } = Astro.prop
     <StatStrip client:only="preact" />
     <slot />
   </div>
-  <Rail slot="rail" units={units} client:only="preact" />
+  <Rail slot="rail" units={units} mode={section === 'ai' ? 'ai' : 'site'} client:only="preact" />
 </Base>
 
 <script>

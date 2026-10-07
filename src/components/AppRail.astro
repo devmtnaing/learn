@@ -1,0 +1,46 @@
+---
+/* The section rail: one icon per section, always on screen, so moving between
+ * courses is one click from anywhere. On a phone it is the bottom tab bar. */
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import { REPO, SITE_NAME } from '../data/site';
+import { SECTIONS } from '../data/sections';
+
+interface Props { section: string; hasNav: boolean }
+const { section, hasNav } = Astro.props;
+const path = Astro.url.pathname.replace(/(index)?\.html$/, '').replace(/\/$/, '') || '/';
+---
+<nav class="app-rail-nav" aria-label="Sections">
+  <a class="rail-brand" href="/" aria-label={`${SITE_NAME}: home`}><Logo size={36} /></a>
+  <a class="rail-item tab" href="/" aria-current={path === '/' ? 'page' : undefined} data-tip="Home" aria-label="Home">
+    <Icon name="home" /><span class="rail-label">Home</span>
+  </a>
+  <span class="rail-sep" aria-hidden="true"></span>
+  {SECTIONS.map((s) => (
+    <a class:list={['rail-item tab', `acc-${s.accent}`]} href={s.href} aria-current={section === s.id ? 'true' : undefined} data-tip={s.label} aria-label={s.label}>
+      <Icon name={s.icon} /><span class="rail-label">{s.id === 'ai' ? 'AI' : s.label}</span>
+    </a>
+  ))}
+  <span class="rail-spacer"></span>
+  <a class="rail-item tab" href="/profile" aria-current={path === '/profile' ? 'page' : undefined} data-tip="Profile" aria-label="Profile">
+    <Icon name="user" /><span class="rail-label">Profile</span>
+  </a>
+  <a class="rail-item" href={REPO} target="_blank" rel="noopener" data-tip="Source on GitHub" aria-label="Source on GitHub">
+    <Icon name="github" />
+  </a>
+  {hasNav && (
+    <button class="rail-item" type="button" data-collapse data-tip="Hide the section menu" aria-label="Show or hide the section menu" aria-controls="section-nav">
+      <Icon name="panel" />
+    </button>
+  )}
+</nav>
+
+<script>
+  document.querySelector('[data-collapse]')?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const on = root.dataset.nav !== 'collapsed';
+    if (on) root.dataset.nav = 'collapsed';
+    else delete root.dataset.nav;
+    try { localStorage.setItem('learn-nav', on ? 'collapsed' : ''); } catch {}
+  });
+</script>

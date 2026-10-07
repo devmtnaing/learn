@@ -2,6 +2,7 @@
 /* The hub: the two sections of the site, and where to pick up. */
 import AiLayout from '../layouts/AiLayout.astro';
 import Icon from '../components/Icon.astro';
+import JumpBackIn from '../components/ai/JumpBackIn';
 import { all, PAGE } from '../data/catalog';
 import { tracks, units } from '../lib/ai/course';
 import { quizzes } from '../lib/ai/quizzes';
@@ -17,6 +18,8 @@ const questions = Object.values(quizzes).reduce((a, q) => a + q.length, 0);
     LeetCode problems you can step through one state change at a time, and a self-study path from backend engineer
     to AI research engineer. XP, streaks and your daily goal count across both.
   </p>
+  <JumpBackIn client:only="preact" units={units} />
+  <h2 class="section-title">Sections</h2>
   <div class="hub-sections">
     <a class="hub-card tc-teal" href="/leetcode">
       <div class="kicker" style="color:var(--ct)">LeetCode</div>
@@ -40,12 +43,5 @@ const questions = Object.values(quizzes).reduce((a, q) => a + q.length, 0);
       </div>
       <span class="go">Open the path <Icon name="chevron" size={16} /></span>
     </a>
-  </div>
-  <div class="track-hero" style="margin-top:28px">
-    <div><div class="kicker">AI Engineer · pick up where you left off</div></div>
-    <a class="btn" href={units[0].url} data-continue hidden><Icon name="play" size={14} fill="currentColor" /> Continue: <span data-continue-label></span></a>
-  </div>
-  <div hidden>
-    {units.map((u) => <a href={u.url} data-unit={u.id} data-label={u.label} data-kind-label={u.label} data-mod-label={u.moduleLabel}></a>)}
   </div>
 </AiLayout>

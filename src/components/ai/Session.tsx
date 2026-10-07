@@ -3,7 +3,7 @@ import type { ComponentChildren } from 'preact'
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
 import type { Question } from '../../lib/ai/quizzes'
 import type { BuildItem, Resource, UnitKind } from '../../lib/ai/course'
-import { addXp, markDone, toggleChecked, totalXp, update, get } from '../../lib/progress'
+import { addXp, markDone, toggleChecked, totalXp, touch, update, get } from '../../lib/progress'
 import { Icon, shuffle, useProgress, XP } from './ui'
 
 export type SessionModule = {
@@ -449,6 +449,7 @@ export default function Session(s: SessionProps) {
   useEffect(() => {
     // opening a track's lesson makes it the track "up next" follows
     update((x) => (x.aiTrack === s.track.id ? x : { ...x, aiTrack: s.track.id }))
+    touch('ai', { url: location.pathname, title: s.module.title, sub: `${s.track.short} · ${s.module.label}` })
   }, [s.track.id])
 
   if (finished) return <DoneScreen {...finished} xp={totalXp(p) - startXp} onContinue={exit} />

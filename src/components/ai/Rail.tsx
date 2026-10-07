@@ -34,9 +34,10 @@ function Week({ p }: { p: Progress }) {
   )
 }
 
-export default function Rail({ units }: { units: UnitRef[] }) {
+/** `site` (hub, profile) shows only site-wide stats; `ai` adds what's next in the course. */
+export default function Rail({ units, mode = 'ai' }: { units: UnitRef[]; mode?: 'ai' | 'site' }) {
   const p = useProgress()
-  const next = nextUnit(p, units)
+  const next = mode === 'ai' ? nextUnit(p, units) : null
   const due = dueCount(p)
   const xp = xpToday(p)
   return (
@@ -90,6 +91,7 @@ export default function Rail({ units }: { units: UnitRef[] }) {
           <Icon name="chevron" />
         </a>
       )}
+      {mode === 'ai' && (
       <a href="/ai-engineer/practice" class="card row">
         <span class="chip-icon" style={{ background: 'var(--accent-soft)', color: 'var(--accent)' }}>
           <Icon name="refresh" />
@@ -100,6 +102,7 @@ export default function Rail({ units }: { units: UnitRef[] }) {
         </span>
         <Icon name="chevron" />
       </a>
+      )}
       <div class="card">
         <div class="panel-title">
           <span class="kicker">This week</span>

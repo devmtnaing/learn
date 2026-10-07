@@ -308,3 +308,9 @@ a.card.upnext{color:var(--on-accent)}
 .ai-page .prose a,.session .prose a{color:var(--accent)}
 .prose li:has(> .task){list-style:none;margin-left:-20px}
 .prose .task{color:var(--muted);font-size:1.05em}
+
+/* ───────── hub: jump back in ───────── */
+.jbi{border-left:4px solid var(--c);display:flex;flex-direction:column;gap:2px}
+.jbi-title{font-family:var(--display);font-size:18px;font-weight:600;margin-top:6px}
+.jbi-sub{color:var(--muted);font-size:13px}
+.jbi-other{color:var(--ink-2);font-weight:600;font-size:13px}

@@ -1,61 +1,97 @@
-/* The app shell shared by every section: a dark sidebar, the page column
-   (a sticky 56px top bar, the page, the footer) and, on pages that have one,
-   a progress rail on the right. Lesson CSS offsets its sticky parts by the
-   56px bar, so keep that height.
+/* The app shell shared by every section:
+     section rail · section sidebar · page column · progress rail
+   The section rail (icons) is always there, so switching courses is one
+   click. The section sidebar shows only the current section's menu; the hub
+   and the profile have none. The page column is a sticky 56px top bar, the
+   page and the footer; lesson CSS offsets its sticky parts by that 56px.
 
-   ≥1440px  sidebar · page · rail
-   <1440px  the rail is hidden; pages show a compact stat strip instead
-   <1024px  the sidebar shrinks to icons
-   <720px   the sidebar becomes a bottom tab bar */
-.app{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100vh}
-.app.has-rail{grid-template-columns:248px minmax(0,1fr) 340px}
-:root[data-nav="collapsed"] .app{grid-template-columns:76px minmax(0,1fr)}
-:root[data-nav="collapsed"] .app.has-rail{grid-template-columns:76px minmax(0,1fr) 340px}
+   ≥1440px  all four columns (the progress rail only on pages that have one)
+   <1440px  the progress rail is hidden; AI pages show a stat strip instead
+   <1024px  the section sidebar becomes a strip of links under the top bar
+   <720px   the section rail becomes a bottom tab bar */
+.app{display:grid;grid-template-columns:68px minmax(0,1fr);min-height:100vh}
+.app.has-nav{grid-template-columns:68px 244px minmax(0,1fr)}
+.app.has-rail{grid-template-columns:68px minmax(0,1fr) 340px}
+.app.has-nav.has-rail{grid-template-columns:68px 244px minmax(0,1fr) 340px}
+:root[data-nav="collapsed"] .app.has-nav{grid-template-columns:68px minmax(0,1fr)}
+:root[data-nav="collapsed"] .app.has-nav.has-rail{grid-template-columns:68px minmax(0,1fr) 340px}
+:root[data-nav="collapsed"] .section-nav{display:none}
 .app-main{min-width:0;display:flex;flex-direction:column}
 
-/* ---------- sidebar ---------- */
-.app-side{
-  background:var(--side-bg);color:var(--side-ink);
-  display:flex;flex-direction:column;gap:2px;padding:18px 12px 14px;
+/* ---------- section rail ---------- */
+.app-rail-nav{
+  background:#0B0A16;display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 0;
+  position:sticky;top:0;height:100vh;z-index:31;
+}
+.rail-brand{display:grid;place-items:center;margin-bottom:8px;border-radius:11px}
+.rail-sep{width:28px;height:1px;background:var(--side-line);margin:4px 0}
+.rail-spacer{flex:1}
+.rail-item{
+  width:44px;height:44px;border-radius:12px;display:grid;place-items:center;position:relative;
+  color:var(--side-dim);background:none;border:0;cursor:pointer;text-decoration:none;font:inherit;padding:0;
+}
+.rail-item:hover{color:#fff;background:var(--side-hover)}
+.rail-item[aria-current]{color:#fff;background:#2A2650}
+.rail-item.acc-teal[aria-current]{background:#123A3F;color:#7FE0E7}
+.rail-item.acc-indigo[aria-current]{background:#2A2650;color:#C2BBFF}
+.rail-item[aria-current]::before{content:"";position:absolute;left:-12px;top:10px;bottom:10px;width:3px;border-radius:0 3px 3px 0;background:currentColor}
+.rail-label{display:none}
+/* a label beside the icon on hover or keyboard focus */
+.rail-item[data-tip]:hover::after,.rail-item[data-tip]:focus-visible::after{
+  content:attr(data-tip);position:absolute;left:54px;top:50%;transform:translateY(-50%);white-space:nowrap;
+  background:#0B0A16;color:#fff;font-size:12.5px;font-weight:600;padding:5px 10px;border-radius:8px;
+  box-shadow:0 4px 14px rgba(0,0,0,.35);pointer-events:none;z-index:50;
+}
+.app-rail-nav a:focus-visible,.app-rail-nav button:focus-visible{outline:2px solid #7B6DFF;outline-offset:2px}
+:root[data-nav="collapsed"] [data-collapse]{color:#C2BBFF}
+
+/* ---------- section sidebar ---------- */
+.section-nav{
+  background:var(--side-bg);color:var(--side-ink);border-right:1px solid var(--side-line);
+  display:flex;flex-direction:column;gap:2px;padding:16px 12px 14px;
   position:sticky;top:0;height:100vh;overflow-y:auto;scrollbar-width:none;z-index:30;
 }
-.app-brand{display:flex;gap:11px;align-items:center;padding:2px 8px 16px;text-decoration:none;color:#fff}
-.app-brand b{display:block;font-family:var(--display);font-size:17px;font-weight:700;line-height:1.1;letter-spacing:-.02em}
-.app-brand small{font-family:var(--mono);font-size:10.5px;color:var(--side-dim)}
-.app-label{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--side-dim);padding:14px 12px 6px}
-.app-nav{
-  display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:10px;
-  text-decoration:none;font-weight:600;font-size:14px;color:var(--side-ink);position:relative;
-}
-.app-nav svg{flex:none}
-.app-nav:hover{background:var(--side-hover);color:#fff}
-.app-nav[aria-current="page"]{background:linear-gradient(90deg,rgba(123,109,255,.24),rgba(123,109,255,.06));color:#fff}
-.app-nav.acc-teal[aria-current="page"]{background:linear-gradient(90deg,rgba(79,192,201,.22),rgba(79,192,201,.05))}
-.app-nav[aria-current="page"]::before{
-  content:"";position:absolute;left:-12px;top:7px;bottom:7px;width:3px;border-radius:3px;
-  background:#7B6DFF;box-shadow:0 0 12px #7B6DFF;
-}
-.app-nav.acc-teal[aria-current="page"]::before{background:#4FC0C9;box-shadow:0 0 12px #4FC0C9}
-.app-tab-text{display:none}
-.app-spacer{flex:1;min-height:12px}
-.app-goal{display:block;border:1px solid var(--side-line);border-radius:12px;padding:11px 12px;margin-bottom:6px;text-decoration:none;color:var(--side-ink)}
-.app-goal:hover{border-color:#3a3860}
+.sn-head{display:flex;gap:11px;align-items:center;padding:4px 8px 14px;text-decoration:none;color:#fff}
+.sn-head b{display:block;font-family:var(--display);font-size:16px;font-weight:700;line-height:1.15;letter-spacing:-.01em}
+.sn-head small{font-size:11.5px;color:var(--side-dim)}
+.sn-icon{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:none}
+.acc-teal .sn-icon{background:#123A3F;color:#7FE0E7}
+.acc-indigo .sn-icon{background:#2A2650;color:#C2BBFF}
+.sn-group{display:flex;flex-direction:column;gap:1px;margin-bottom:6px}
+.sn-label{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--side-dim);padding:12px 10px 6px}
+.sn-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;text-decoration:none;color:var(--side-ink);font-size:13.5px;font-weight:500;position:relative}
+.sn-item svg{flex:none;opacity:.85}
+.sn-item:hover{background:var(--side-hover);color:#fff}
+.sn-item[aria-current]{background:var(--side-hover);color:#fff;font-weight:600}
+.acc-teal .sn-item[aria-current]{box-shadow:inset 3px 0 0 #4FC0C9}
+.acc-indigo .sn-item[aria-current]{box-shadow:inset 3px 0 0 #7B6DFF}
+.sn-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.sn-text > span:first-of-type{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sn-text small{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--side-dim)}
+.sn-count{font-family:var(--mono);font-size:10.5px;color:var(--side-dim)}
+.sn-dot{width:10px;height:10px;border-radius:3px;background:var(--c);flex:none;align-self:flex-start;margin-top:4px}
+.sn-meter{display:block;height:4px;border-radius:4px;background:#26243F;overflow:hidden;margin-top:5px}
+.sn-meter i{display:block;height:100%;background:var(--c);border-radius:4px;transition:width .4s}
+.sn-spacer{flex:1;min-height:12px}
+.section-nav a:focus-visible{outline:2px solid #7B6DFF;outline-offset:2px}
+
+.app-goal{display:block;border:1px solid var(--side-line);border-radius:12px;padding:11px 12px;text-decoration:none;color:var(--side-ink)}
+.app-goal:hover{border-color:#3A3860}
 .app-goal-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .app-goal b{color:#fff;font-size:13px}
 .app-goal small{font-family:var(--mono);font-size:10.5px;color:var(--side-dim)}
 .app-meter{display:block;height:6px;border-radius:9px;background:#26243F;overflow:hidden;margin-top:8px}
 .app-meter i{display:block;height:100%;background:#7B6DFF;border-radius:9px;transition:width .4s}
-.app-collapse{display:flex;align-items:center;gap:10px;background:none;border:0;padding:9px 12px;color:var(--side-dim);font:inherit;font-weight:600;font-size:13px;border-radius:10px;cursor:pointer}
-.app-collapse:hover{color:#fff;background:var(--side-hover)}
-.app-side a:focus-visible,.app-side button:focus-visible{outline:2px solid #7B6DFF;outline-offset:2px}
 
-:root[data-nav="collapsed"] .app-brand-text,
-:root[data-nav="collapsed"] .app-nav-text,
-:root[data-nav="collapsed"] .app-label,
-:root[data-nav="collapsed"] .app-goal{display:none}
-:root[data-nav="collapsed"] .app-nav,
-:root[data-nav="collapsed"] .app-collapse,
-:root[data-nav="collapsed"] .app-brand{justify-content:center;padding-inline:0}
+/* ---------- section strip (narrow screens) ---------- */
+.section-strip{
+  display:none;position:relative;gap:6px;overflow-x:auto;scrollbar-width:none;padding:10px clamp(16px,3vw,40px);
+  border-bottom:1px solid var(--line);background:var(--surface);
+}
+.section-strip::-webkit-scrollbar{display:none}
+.ss-item{flex:none;padding:6px 12px;border-radius:999px;border:1px solid var(--line);font-size:13px;font-weight:600;color:var(--ink-2);text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.ss-item[aria-current]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.ss-head{border-color:transparent;color:var(--ink);padding-left:0}
 
 /* ---------- top bar ---------- */
 .app-top{
@@ -66,32 +102,36 @@
 }
 .app-where{flex:1;min-width:0;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-/* ---------- rail ---------- */
+/* ---------- progress rail ---------- */
 .app-rail{padding:24px 24px 32px 0;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;scrollbar-width:thin}
 
-/* ---------- bare pages (lesson sessions) ---------- */
+/* ---------- bare pages (lesson steps) ---------- */
 body.bare{min-height:100vh}
 
 /* ---------- responsive ---------- */
 @media (max-width:1439px){
-  .app.has-rail{grid-template-columns:248px minmax(0,1fr)}
-  :root[data-nav="collapsed"] .app.has-rail{grid-template-columns:76px minmax(0,1fr)}
+  .app.has-rail{grid-template-columns:68px minmax(0,1fr)}
+  .app.has-nav.has-rail{grid-template-columns:68px 244px minmax(0,1fr)}
+  :root[data-nav="collapsed"] .app.has-nav.has-rail{grid-template-columns:68px minmax(0,1fr)}
   .app-rail{display:none}
 }
 @media (max-width:1023px){
-  .app,.app.has-rail,:root[data-nav="collapsed"] .app,:root[data-nav="collapsed"] .app.has-rail{grid-template-columns:72px minmax(0,1fr)}
-  .app-brand-text,.app-nav-text,.app-label,.app-goal,.app-collapse{display:none}
-  .app-nav,.app-brand{justify-content:center;padding-inline:0}
+  .app,.app.has-nav,.app.has-rail,.app.has-nav.has-rail,
+  :root[data-nav="collapsed"] .app.has-nav,:root[data-nav="collapsed"] .app.has-nav.has-rail{grid-template-columns:68px minmax(0,1fr)}
+  .section-nav,[data-collapse]{display:none}
+  .section-strip{display:flex}
 }
 @media (max-width:719px){
-  .app,.app.has-rail,:root[data-nav="collapsed"] .app,:root[data-nav="collapsed"] .app.has-rail{display:block}
+  .app,.app.has-nav,.app.has-rail,.app.has-nav.has-rail,
+  :root[data-nav="collapsed"] .app.has-nav,:root[data-nav="collapsed"] .app.has-nav.has-rail{display:block}
   .app-main{min-height:100vh;padding-bottom:64px}
-  .app-side{
+  .app-rail-nav{
     position:fixed;inset:auto 0 0 0;height:auto;flex-direction:row;justify-content:space-around;gap:0;
-    padding:6px 4px calc(6px + env(safe-area-inset-bottom));overflow:visible;border-top:1px solid var(--side-line);
+    padding:6px 4px calc(6px + env(safe-area-inset-bottom));border-top:1px solid var(--side-line);
   }
-  .app-side > :not(.tab){display:none}
-  .app-nav.tab{flex:1;flex-direction:column;gap:3px;padding:6px 2px;font-size:10.5px;border-radius:10px}
-  .app-nav.tab .app-tab-text{display:block}
-  .app-nav[aria-current="page"]::before{left:25%;right:25%;top:-6px;bottom:auto;width:auto;height:3px}
+  .app-rail-nav > :not(.tab){display:none}
+  .rail-item.tab{flex:1;width:auto;height:auto;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;font-size:10.5px;font-weight:600}
+  .rail-item.tab .rail-label{display:block}
+  .rail-item[aria-current]::before{left:30%;right:30%;top:-6px;bottom:auto;width:auto;height:3px;border-radius:0 0 3px 3px}
+  .rail-item[data-tip]::after{display:none}
 }

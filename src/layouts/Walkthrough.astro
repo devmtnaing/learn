@@ -208,5 +208,10 @@ const lcUrl = (slug: string) => `https://leetcode.com/problems/${slug}/`;
 
 <script>
   import { initLangSwitch } from '../lib/i18n.js';
+  import { touch } from '../lib/progress';
   initLangSwitch();
+  // the hub's "jump back in" offers the last problem opened
+  const title = document.querySelector('.wrap h1')?.textContent?.trim();
+  const sub = document.querySelector('.wrap header .eyebrow')?.textContent?.replace(/\s+/g, ' ').trim();
+  if (title) touch('leetcode', { url: location.pathname, title, sub: sub ?? 'LeetCode' });
 </script>

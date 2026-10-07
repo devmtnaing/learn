@@ -3,7 +3,9 @@ import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/site.css';
 import '../styles/app.css';
-import AppSidebar from '../components/AppSidebar.astro';
+import AppRail from '../components/AppRail.astro';
+import SectionNav from '../components/SectionNav.astro';
+import { sectionOf } from '../data/sections';
 import SiteFooter from '../components/SiteFooter.astro';
 import SiteSearch from '../components/SiteSearch.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
@@ -23,6 +25,8 @@ const { title, description, section = 'hub', where, bare = false } = Astro.props
 // extension, so the canonical address drops it: /leetcode/two-sum, not .html.
 const canonical = new URL(Astro.url.pathname.replace(/(index)?\.html$/, ''), Astro.site);
 const hasRail = Astro.slots.has('rail');
+// the hub and the profile belong to no section, so they have no section menu
+const current = sectionOf(section);
 ---
 <!doctype html>
 <html lang="en" data-section={section}>
@@ -52,14 +56,16 @@ const hasRail = Astro.slots.has('rail');
   <body class="bare"><slot /></body>
 ) : (
   <body>
-    <div class:list={['app', hasRail && 'has-rail']}>
-      <AppSidebar />
+    <div class:list={['app', current && 'has-nav', hasRail && 'has-rail']}>
+      <AppRail section={section} hasNav={!!current} />
+      {current && <SectionNav section={current} />}
       <div class="app-main">
         <header class="app-top">
           <span class="app-where">{where}</span>
           <SiteSearch />
           <ThemeToggle />
         </header>
+        {current && <SectionNav section={current} variant="strip" />}
         <main><slot /></main>
         <SiteFooter />
       </div>

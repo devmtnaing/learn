@@ -6,6 +6,8 @@
 // "t2-2.7/quiz", papers "paper:<id>", projects "project:<id>".
 
 export type CardState = { box: number; due: string }
+/** The last thing opened in a section, for "jump back in" on the hub. */
+export type Recent = { url: string; title: string; sub: string; at: number }
 export type Progress = {
   dailyGoal: number
   /** Whether the AI Engineer "where are you starting?" question was answered. */
@@ -17,6 +19,8 @@ export type Progress = {
   crowns: Record<string, true>
   quizBest: Record<string, number>
   cards: Record<string, CardState>
+  /** keyed by section id: 'leetcode', 'ai' */
+  recent: Record<string, Recent>
 }
 
 const KEY = 'learn-progress-v1'
@@ -30,6 +34,7 @@ const EMPTY: Progress = {
   crowns: {},
   quizBest: {},
   cards: {},
+  recent: {},
 }
 
 function load(): Progress {
@@ -114,6 +119,11 @@ export function markDone(unitId: string, xp = 0) {
   const first = !get().done[unitId]
   update((p) => ({ ...p, done: { ...p.done, [unitId]: true } }))
   if (first) addXp(xp)
+}
+
+/** Remember the last thing opened in a section. */
+export function touch(section: string, item: Omit<Recent, 'at'>) {
+  update((p) => ({ ...p, recent: { ...p.recent, [section]: { ...item, at: Date.now() } } }))
 }
 
 export const exportProgress = () => JSON.stringify(get(), null, 2)

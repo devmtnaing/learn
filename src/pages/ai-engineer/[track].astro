@@ -1,6 +1,5 @@
 ---
 import AiLayout from '../../layouts/AiLayout.astro';
-import TrackTabs from '../../components/ai/TrackTabs.astro';
 import Stepper from '../../components/ai/Stepper.astro';
 import Icon from '../../components/Icon.astro';
 import { moduleUrl, tracks, unitUrl, unitKinds, type Track } from '../../lib/ai/course';
@@ -12,7 +11,6 @@ const { track } = Astro.props as { track: Track };
 const first = track.modules[0];
 ---
 <AiLayout title={`${track.short}: ${track.title}`} description={`${track.title}: ${track.subtitle}`}>
-  <TrackTabs current={track.id} />
   <div class={`track-hero tc-${track.color}`} data-ai-track={track.id}>
     <div>
       <div class="kicker" style="color:var(--ct)">{track.short} · {track.modules.length} modules</div>

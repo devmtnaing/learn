@@ -50,7 +50,7 @@ const block = (md: string) =>
 
 const TRACKS = [
   { id: 'setup', slug: 'setup', file: '00-setup/README.md', title: 'Setup', short: 'Setup', subtitle: 'Tools, GPUs and notes. Week 0.', color: 'slate', heading: /^## (?!Checkpoint)(\d+)\. (.+)$/ },
-  { id: 't1', slug: 'track-1', file: 'track-1-ai-application-engineer/README.md', title: 'AI Application Engineer', short: 'Track 1', subtitle: 'Use models well: APIs, RAG, agents, MCP, evals.', color: 'teal', heading: /^## (1\.\d+) (.+)$/ },
+  { id: 't1', slug: 'track-1', file: 'track-1-ai-application-engineer/README.md', title: 'AI Application Engineer', short: 'Track 1', subtitle: 'Use models well: APIs, RAG, agents, MCP, evals.', color: 'sky', heading: /^## (1\.\d+) (.+)$/ },
   { id: 't2', slug: 'track-2', file: 'track-2-ml-systems-engineer/README.md', title: 'ML / AI Systems Engineer', short: 'Track 2', subtitle: 'Train, tune, optimise and serve models.', color: 'indigo', heading: /^### (2\.\d+) (.+)$/ },
   { id: 't3', slug: 'track-3', file: 'track-3-research-engineer/README.md', title: 'AI Research Engineer', short: 'Track 3', subtitle: 'Understand and improve models.', color: 'rose', heading: /^### (3\.\d+) (.+)$/ },
   { id: 'math', slug: 'math', file: 'math/README.md', title: 'Math Track', short: 'Math', subtitle: 'Runs alongside all three tracks.', color: 'amber', heading: /^## Level (\d): (.+)$/ },

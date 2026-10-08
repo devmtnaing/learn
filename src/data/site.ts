@@ -2,4 +2,4 @@
 export const SITE_NAME = 'learn';
 
 /** Where the source lives: it is public, and issues are open to anyone. */
-export const REPO = 'https://github.com/devmtnaing/leetcode-solutions';
+export const REPO = 'https://github.com/devmtnaing/learn';

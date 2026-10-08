@@ -11,7 +11,7 @@ const STARTS: { id: string; icon: IconName; t: string; s: string }[] = [
   { id: 'setup', icon: 'code', t: 'Set up first', s: 'Python, PyTorch, GPU access and notes (week 0)' },
   { id: 't1', icon: 'bulb', t: 'New to building with LLMs', s: 'Start with Track 1: AI Application Engineer' },
   { id: 't2', icon: 'bolt', t: 'I already ship LLM apps', s: 'Jump to Track 2: ML / AI Systems Engineer' },
-  { id: 't3', icon: 'sparkle', t: 'I already train models', s: 'Jump to Track 3: Research Engineer' },
+  { id: 't3', icon: 'sparkle', t: 'I already train models', s: 'Jump to Track 3: AI Research Engineer' },
 ]
 
 export default function Onboard({ tracks }: { tracks: TrackPlan[] }) {

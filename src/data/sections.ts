@@ -46,7 +46,7 @@ export const SECTIONS: Section[] = [
   {
     id: 'ai',
     label: 'AI Engineer',
-    tagline: 'Backend → research',
+    tagline: 'Backend → AI research',
     href: '/ai-engineer',
     icon: 'sparkle',
     accent: 'indigo',

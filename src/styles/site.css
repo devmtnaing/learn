@@ -181,3 +181,14 @@ a.ptitle::after{content:"";position:absolute;inset:0;border-radius:inherit}
   .search-btn{height:40px;min-width:40px}
   .k-opt{min-height:44px}
 }
+
+/* "Mark as solved" beside the language switch at the top of a lesson */
+.solve-top{
+  margin-left:auto;display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;
+  border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:var(--surface);color:var(--ink-2);
+}
+.solve-top > span:first-child{color:var(--ink-3)}
+.solve-top:hover{border-color:var(--up);color:var(--up)}
+.solve-top[aria-pressed="true"]{background:var(--up-soft);border-color:var(--up);color:var(--up)}
+.solve-top[aria-pressed="true"] > span:first-child{color:var(--up)}
+.solve-top + .lang-switch{margin-left:0}

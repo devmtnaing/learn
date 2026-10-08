@@ -4,7 +4,7 @@ A self-study curriculum in three tracks. Each track is a career step you can be 
 
 ```
  Track 1                     Track 2                          Track 3
- AI Application Engineer ──► ML / AI Systems Engineer ──────► Research Engineer
+ AI Application Engineer ──► ML / AI Systems Engineer ──────► AI Research Engineer
  (use models well)           (train, tune, serve models)      (understand & improve models)
  ~3.5–4 months               ~7–9 months                      ~8–12 months, then ongoing
 
@@ -42,7 +42,7 @@ A self-study curriculum in three tracks. Each track is a career step you can be 
 | 5–7 | **Track 2**: modules 2.1–2.5 (from scratch → fine-tuning) | Level 2 (linear algebra, calculus, probability, optimization) | – |
 | 8–12 | **Track 2**: modules 2.6–2.10 (GPUs, inference, distributed, platform, Kubernetes) + capstones, Ops Agent v2 | Level 2 finish | **ML Platform / ML Infrastructure / Inference Engineer** |
 | 13–18 | **Track 3**: modules 3.1–3.5 | Level 3 (deeper probability, optimization, information theory) | – |
-| 19–24+ | **Track 3**: modules 3.6–3.7, paper reproductions, original work | Level 3 ongoing | **Research Engineer** (lab, applied research team, or fellowship such as MATS or Anthropic Fellows) |
+| 19–24+ | **Track 3**: modules 3.6–3.7, paper reproductions, original work | Level 3 ongoing | **AI Research Engineer** (lab, applied research team, or fellowship such as MATS or Anthropic Fellows) |
 
 You don't have to finish everything before moving on. Get a job at the Track 1 or Track 2 level and keep going while employed. That's the normal route.
 

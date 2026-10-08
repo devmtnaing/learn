@@ -1,6 +1,6 @@
-# Track 3 · Research Engineer
+# Track 3 · AI Research Engineer
 
-**Goal:** understand *why* models work, run rigorous experiments, read and reproduce papers, and add new findings. A research engineer is the strong engineer on a research team. They turn ideas into experiments that run at scale and produce trustworthy results.
+**Goal:** understand *why* models work, run rigorous experiments, read and reproduce papers, and add new findings. An AI research engineer is the strong engineer on a research team. They turn ideas into experiments that run at scale and produce trustworthy results.
 
 **Duration:** ~8–12 months to be credible, then ongoing for the rest of your career.
 
@@ -8,7 +8,7 @@
 
 **Why this comes last:** research needs everything before it. Track 1 gives you evals and product sense, Track 2 gives you training and systems skill. Track 3 adds theory, rigor and taste.
 
-**A realistic note:** research engineer roles at frontier labs are very competitive. Your systems background is valued there, because many research teams are short on people who can make experiments run fast and reliably. Common routes in are fellowships (MATS, Anthropic Fellows), open-source contributions (EleutherAI, Hugging Face), and publishing strong reproductions and small studies.
+**A realistic note:** AI research engineer roles at frontier labs are very competitive. Your systems background is valued there, because many research teams are short on people who can make experiments run fast and reliably. Common routes in are fellowships (MATS, Anthropic Fellows), open-source contributions (EleutherAI, Hugging Face), and publishing strong reproductions and small studies.
 
 | # | Module | Weeks |
 |---|---|---|
@@ -196,4 +196,4 @@
 - [ ] One merged open-source contribution
 - [ ] Math Level 3 core done
 
-**Roles you can target now:** Research Engineer, Member of Technical Staff (research-adjacent), Applied Research Scientist, AI research fellowships.
+**Roles you can target now:** AI Research Engineer, Member of Technical Staff (research-adjacent), Applied Research Scientist, AI research fellowships.

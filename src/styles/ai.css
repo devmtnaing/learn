@@ -314,3 +314,34 @@ a.card.upnext{color:var(--on-accent)}
 .jbi-title{font-family:var(--display);font-size:18px;font-weight:600;margin-top:6px}
 .jbi-sub{color:var(--muted);font-size:13px}
 .jbi-other{color:var(--ink-2);font-weight:600;font-size:13px}
+
+/* ───────── rail: sections, goal, stacked week ───────── */
+.week .stack-bar{flex:1;width:100%;max-width:26px;display:flex;flex-direction:column-reverse;justify-content:flex-start;align-items:stretch;gap:2px}
+.week .stack-bar i{width:100%;max-width:none;border-radius:4px;min-height:3px}
+.week .stack-bar i.empty{height:4px;background:var(--bg-2)}
+.week .today span:last-child{color:var(--ink);font-weight:700}
+.by-section{display:flex;flex-direction:column;gap:6px;margin-top:14px}
+.bs-row{display:grid;grid-template-columns:10px 1fr;column-gap:10px;align-items:center;padding:8px 10px;border-radius:10px;background:var(--bg-2);text-decoration:none;color:var(--ink)}
+.bs-row i{width:10px;height:10px;border-radius:3px;grid-row:span 2}
+.bs-row b{font-size:13.5px}
+.bs-row small{color:var(--muted);font-size:12px}
+.rail-note{display:block;margin-top:10px;color:var(--muted);font-size:12px;line-height:1.5}
+.rail-note a{color:var(--accent);font-weight:600}
+.legend{display:inline-flex;align-items:center;gap:5px}
+.legend i{width:8px;height:8px;border-radius:2px;display:inline-block}
+a.s{text-decoration:none;color:var(--ink)}
+
+/* ───────── study plan ───────── */
+.onb-h{font-size:22px;margin:6px 0 4px}
+.pace-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(170px,100%),1fr));gap:10px;margin-top:14px}
+.pace{display:flex;flex-direction:column;gap:2px;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:0 3px 0 var(--line);font:inherit;color:var(--ink);cursor:pointer}
+.pace:hover{border-color:var(--accent)}
+.pace.on{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 3px 0 var(--accent)}
+.pace b{font-size:15px}
+.pace .pace-h{font-family:var(--display);font-size:20px;font-weight:700}
+.pace small{color:var(--muted);font-size:12px}
+.plan-card{display:flex;align-items:center;gap:16px;border-left:4px solid var(--c);margin-bottom:24px;flex-wrap:wrap}
+.plan-main{flex:1;min-width:240px;display:flex;flex-direction:column;gap:2px}
+.plan-title{font-family:var(--display);font-size:18px;margin-top:4px}
+.plan-main small{color:var(--muted);line-height:1.5}
+.linkish{background:none;border:0;padding:0;font:inherit;color:var(--accent);font-weight:600;cursor:pointer;text-decoration:underline}

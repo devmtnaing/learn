@@ -1,16 +1,18 @@
 ---
 import AiLayout from '../layouts/AiLayout.astro';
 import Profile from '../components/ai/Profile';
-import { tracks, trackUrl, units } from '../lib/ai/course';
+import { tracks, trackUrl, trackWeeks, units } from '../lib/ai/course';
+import { all } from '../data/catalog';
 const summary = tracks.map((t) => ({
   id: t.id, url: trackUrl(t), short: t.short, title: t.title, color: t.color,
   units: units.filter((u) => u.track === t.id).map((u) => u.id),
   modules: t.modules.map((m) => m.id),
+  weeks: trackWeeks(t),
 }));
 ---
 <AiLayout section="hub" title="Profile" description="Your progress across the site." where="Profile">
   <div class="kicker">Profile</div>
   <h1 class="page-h">Your progress</h1>
-  <p class="page-sub">XP and streaks count across the whole site.</p>
-  <Profile client:only="preact" tracks={summary} />
+  <p class="page-sub">Your streaks and XP, overall and for each section, and the study plan that sets your daily goal.</p>
+  <Profile client:only="preact" tracks={summary} problems={all.length} />
 </AiLayout>

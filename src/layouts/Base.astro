@@ -66,10 +66,12 @@ const current = sectionOf(section);
           <ThemeToggle />
         </header>
         {current && <SectionNav section={current} variant="strip" />}
-        <main><slot /></main>
+        <div class="app-body">
+          <main><slot /></main>
+          {hasRail && <aside class="app-rail" aria-label="Your progress"><slot name="rail" /></aside>}
+        </div>
         <SiteFooter />
       </div>
-      {hasRail && <aside class="app-rail" aria-label="Your progress"><slot name="rail" /></aside>}
     </div>
   </body>
 )}

@@ -202,16 +202,34 @@ const lcUrl = (slug: string) => `https://leetcode.com/problems/${slug}/`;
 <div class="shell">
   <nav class="pager" aria-label="Lesson navigation">
     <a class="up" href="/leetcode"><span class="dir">Back to</span><span>All problems</span></a>
+    <button class="solve-btn" type="button" data-solve={p.slug} aria-pressed="false" hidden>
+      <span class="dir">Your progress</span><span data-solve-label>Mark as solved</span>
+    </button>
   </nav>
 </div>
 </Base>
 
 <script>
   import { initLangSwitch } from '../lib/i18n.js';
-  import { touch } from '../lib/progress';
+  import { get, subscribe, toggleChecked, touch } from '../lib/progress';
   initLangSwitch();
   // the hub's "jump back in" offers the last problem opened
   const title = document.querySelector('.wrap h1')?.textContent?.trim();
   const sub = document.querySelector('.wrap header .eyebrow')?.textContent?.replace(/\s+/g, ' ').trim();
   if (title) touch('leetcode', { url: location.pathname, title, sub: sub ?? 'LeetCode' });
+
+  // "Mark as solved": a tick on the problem list and LeetCode XP
+  const solve = document.querySelector<HTMLButtonElement>('[data-solve]');
+  if (solve) {
+    const id = `leetcode:${solve.dataset.solve}`;
+    const paint = () => {
+      const on = !!get().checked[id];
+      solve.setAttribute('aria-pressed', String(on));
+      solve.querySelector('[data-solve-label]')!.textContent = on ? 'Solved ✓' : 'Mark as solved (+20 XP)';
+    };
+    solve.hidden = false;
+    solve.addEventListener('click', () => toggleChecked(id, 20, 'leetcode'));
+    paint();
+    subscribe(paint);
+  }
 </script>

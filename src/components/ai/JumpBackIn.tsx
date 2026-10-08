@@ -21,7 +21,7 @@ export default function JumpBackIn({ units }: { units: UnitRef[] }) {
       other: { href: '/leetcode', label: 'All problems' },
       at: lc.at,
     })
-  const aiUsed = p.recent.ai || Object.keys(p.done).length > 0
+  const aiUsed = p.recent.ai || p.aiOnboarded || Object.keys(p.done).length > 0
   const next = aiUsed ? nextUnit(p, units) : null
   if (next)
     cards.push({

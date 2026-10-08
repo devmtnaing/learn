@@ -3,29 +3,30 @@ import AiLayout from '../../layouts/AiLayout.astro';
 import TrackTabs from '../../components/ai/TrackTabs.astro';
 import Onboard from '../../components/ai/Onboard';
 import Icon from '../../components/Icon.astro';
-import { tracks, trackUrl, units } from '../../lib/ai/course';
+import { tracks, trackUrl, trackWeeks, units } from '../../lib/ai/course';
 
-const weeks = tracks.map((t) => t.modules.reduce((a, m) => a + (Number(m.weeks?.split(/[–-]/).at(-1)) || 0), 0));
+const plans = tracks.map((t) => ({ id: t.id, url: trackUrl(t), short: t.short, title: t.title, color: t.color, weeks: trackWeeks(t) }));
 ---
 <AiLayout title="AI Engineer" description="A self-study path from backend engineer to AI research engineer: three tracks, a math track, quizzes, flashcards and portfolio projects.">
-  <div class="kicker">AI Engineer</div>
-  <h1 class="page-h">From backend engineer to research engineer</h1>
+  <div class="track-hero" style="margin-bottom:14px">
+    <div>
+      <div class="kicker">AI Engineer</div>
+      <h1 class="page-h">From backend engineer to research engineer</h1>
+    </div>
+    <a class="btn" href={units[0].url} data-continue hidden><Icon name="play" size={14} fill="currentColor" /> Continue: <span data-continue-label></span></a>
+  </div>
   <p class="page-sub">
     Three tracks, each one a job you can be hired for, with math running alongside. Every module has five steps:
     concepts, resources, hands-on builds, a quiz and a checkpoint that earns a crown.
   </p>
-  <Onboard client:only="preact" />
-  <div class="track-hero">
-    <div><div class="kicker">Pick up where you left off</div></div>
-    <a class="btn" href={units[0].url} data-continue hidden><Icon name="play" size={14} fill="currentColor" /> Continue: <span data-continue-label></span></a>
-  </div>
+  <Onboard client:only="preact" tracks={plans} />
   <TrackTabs />
-  <div class="section-title">The tracks</div>
+  <h2 class="section-title">What each track covers</h2>
   <div class="grid-cards">
-    {tracks.map((t, i) => (
+    {tracks.map((t) => (
       <a class={`card tc-${t.color}`} href={trackUrl(t)} style="border-top:4px solid var(--c)">
-        <div class="kicker" style="color:var(--ct)">{t.short}{weeks[i] ? ` · ~${weeks[i]} weeks` : ''}</div>
-        <h2 style="font-size:19px;margin:6px 0">{t.title}</h2>
+        <div class="kicker" style="color:var(--ct)">{t.short}{trackWeeks(t) > 0 && <> · <span data-course-weeks={trackWeeks(t)}>{trackWeeks(t)} wks</span> at your pace</>}</div>
+        <h3 style="font-size:19px;margin:6px 0">{t.title}</h3>
         <p class="page-sub" style="margin:0 0 10px">{t.subtitle}</p>
         <ol style="margin:0;padding-left:18px;color:var(--ink-2);font-size:14px;line-height:1.7">
           {t.modules.map((m) => <li>{m.title}</li>)}
@@ -33,7 +34,7 @@ const weeks = tracks.map((t) => t.modules.reduce((a, m) => a + (Number(m.weeks?.
       </a>
     ))}
   </div>
-  {/* the steps, hidden, so decorate.ts can find the first unfinished one for Continue */}
+  {/* the steps, hidden, so the progress script can find the first unfinished one for Continue */}
   <div hidden>
     {units.map((u) => <a href={u.url} data-unit={u.id} data-label={u.label} data-kind-label={u.label} data-mod-label={u.moduleLabel}></a>)}
   </div>

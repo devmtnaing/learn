@@ -2,9 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import { SITE_NAME } from '../../data/site';
 import { asOf } from '../../data/problems-meta.json';
-import { all, groups, haystack, leetcodeUrl, PAGE as WALKTHROUGH } from '../../data/catalog';
-
-const worked = all.filter((p) => WALKTHROUGH[p.id]).length;
+import { all, groups, leetcodeUrl, PAGE as WALKTHROUGH } from '../../data/catalog';
 ---
 <Base
   section="leetcode"
@@ -21,40 +19,17 @@ const worked = all.filter((p) => WALKTHROUGH[p.id]).length;
       </p>
     </div>
 
-    <div class="plist">
-      <aside class="cats">
-        <nav aria-label="Patterns">
-          <a class="cat" href="#top" data-cat="" aria-current="true">
-            <span>All problems</span><span class="cat-n">{all.length}</span>
-          </a>
-          {groups.map((g) => (
-            <a class="cat" href={`#${g.id}`} data-cat={g.id}>
-              <span>{g.name}</span><span class="cat-n">{g.rows.length}</span>
-            </a>
-          ))}
-        </nav>
-      </aside>
-
-      <div class="plist-main" id="top">
-        <form class="filters" role="search" data-filters hidden>
-          <label class="search">
-            <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5 14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            <input type="search" name="q" placeholder="Search by name, number or pattern" aria-label="Search problems" autocomplete="off" spellcheck="false">
-          </label>
-          <select name="d" aria-label="Difficulty">
-            <option value="">All difficulties</option>
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-          </select>
-          <label class="only">
-            <input type="checkbox" name="solved" value="1">
-            <span>With a solution</span>
-          </label>
-        </form>
-        <p class="plist-count" aria-live="polite" data-summary>
-          {all.length} problems · {worked} with an interactive solution
-        </p>
+    <div class="plist-main" id="top">
+        <div class="filters" role="group" aria-label="Difficulty" data-filters hidden>
+          <div class="seg-d">
+            <button type="button" data-d="" aria-pressed="true">All</button>
+            <button type="button" data-d="easy" aria-pressed="false">Easy</button>
+            <button type="button" data-d="medium" aria-pressed="false">Medium</button>
+            <button type="button" data-d="hard" aria-pressed="false">Hard</button>
+          </div>
+          <span class="plist-count" aria-live="polite" data-summary>{all.length} problems</span>
+          <span class="plist-solved" data-solved-count hidden></span>
+        </div>
 
         {groups.map((g) => (
           <section class="cat-sec" id={g.id} data-sec={g.id}>
@@ -67,10 +42,9 @@ const worked = all.filter((p) => WALKTHROUGH[p.id]).length;
                 <li
                   class={WALKTHROUGH[p.id] ? 'prow has-page' : 'prow'}
                   data-d={p.difficulty.toLowerCase()}
-                  data-text={haystack(p)}
-                  data-solved={WALKTHROUGH[p.id] ? '1' : undefined}
+                  data-slug={p.slug}
                 >
-                  <span class="pnum">{p.id}</span>
+                  <span class="pnum"><span class="ptick" aria-hidden="true">✓</span><span class="pid">{p.id}</span></span>
                   <div class="pmain">
                     {WALKTHROUGH[p.id]
                       ? <a class="ptitle" href={WALKTHROUGH[p.id]}>{p.title}</a>
@@ -90,101 +64,70 @@ const worked = all.filter((p) => WALKTHROUGH[p.id]).length;
           </section>
         ))}
 
-        <p class="plist-empty" data-empty hidden>
-          No problems match. <button type="button" data-clear>Clear the filters</button>
-        </p>
         <p class="plist-foot">Difficulty, tags and acceptance rates from LeetCode, as of {asOf}.</p>
-      </div>
     </div>
   </div>
 </Base>
 
 <script>
-  // Search, difficulty and pattern filters. Everything is in the markup
-  // already, so without JavaScript the full list shows and the pattern links
-  // scroll to their section; this only hides rows. State lives in the URL
-  // (?q=&d=&solved=1#pattern) so a filtered list can be shared.
-  const form = document.querySelector<HTMLFormElement>('[data-filters]')!;
-  const q = form.elements.namedItem('q') as HTMLInputElement;
-  const d = form.elements.namedItem('d') as HTMLSelectElement;
-  const solved = form.elements.namedItem('solved') as HTMLInputElement;
-  const cats = [...document.querySelectorAll<HTMLAnchorElement>('.cat')];
+  // The difficulty filter, the pattern highlight in the section menu, and the
+  // ticks on problems marked solved. Everything is in the markup already, so
+  // without JavaScript the full list shows and the pattern links still jump.
+  // ⌘K is the search. The difficulty lives in the URL (?d=) so it can be shared.
+  import { get, subscribe } from '../../lib/progress';
+
+  const bar = document.querySelector<HTMLElement>('[data-filters]')!;
+  const buttons = [...bar.querySelectorAll<HTMLButtonElement>('[data-d]')];
   const secs = [...document.querySelectorAll<HTMLElement>('[data-sec]')];
   const summary = document.querySelector('[data-summary]')!;
-  const empty = document.querySelector<HTMLElement>('[data-empty]')!;
-  let cat = '';
-
-  const params = new URLSearchParams(location.search);
-  q.value = params.get('q') ?? '';
-  d.value = params.get('d') ?? '';
-  solved.checked = params.get('solved') === '1';
-  const fromHash = location.hash.slice(1);
-  if (secs.some((s) => s.dataset.sec === fromHash)) cat = fromHash;
-  form.hidden = false;
-
   const plural = (n: number) => `${n} ${n === 1 ? 'problem' : 'problems'}`;
+  let d = new URLSearchParams(location.search).get('d') ?? '';
+  bar.hidden = false;
 
   function apply() {
-    const terms = q.value.toLowerCase().split(/\s+/).filter(Boolean);
-    const counts: Record<string, number> = {};
-    let shown = 0, shownSolved = 0;
+    let shown = 0;
     for (const sec of secs) {
       let n = 0;
       for (const row of sec.querySelectorAll<HTMLElement>('.prow')) {
-        const hit = (!d.value || row.dataset.d === d.value)
-          && (!solved.checked || row.dataset.solved)
-          && terms.every((t) => row.dataset.text!.includes(t));
-        row.hidden = !hit;
-        if (hit) { n++; if (row.dataset.solved) shownSolved++; }
+        row.hidden = !!d && row.dataset.d !== d;
+        if (!row.hidden) n++;
       }
-      counts[sec.dataset.sec!] = n;
-      const inCat = !cat || sec.dataset.sec === cat;
-      sec.hidden = !inCat || n === 0;
+      sec.hidden = n === 0;
       sec.querySelector('[data-sec-count]')!.textContent = plural(n);
-      if (inCat) shown += n;
+      shown += n;
     }
-    // Sidebar counts follow the search and difficulty, not the chosen pattern.
-    let total = 0;
-    for (const a of cats) {
-      const id = a.dataset.cat!;
-      const n = id ? counts[id] : 0;
-      total += n;
-      if (id) {
-        a.querySelector('.cat-n')!.textContent = String(n);
-        a.classList.toggle('none', n === 0);
-      }
-      a.setAttribute('aria-current', String(id === cat));
-    }
-    cats[0].querySelector('.cat-n')!.textContent = String(total);
-    summary.textContent = shown
-      ? `${plural(shown)} · ${shownSolved} with an interactive solution`
-      : 'No problems match';
-    empty.hidden = shown > 0;
-
-    const next = new URLSearchParams();
-    if (q.value) next.set('q', q.value);
-    if (d.value) next.set('d', d.value);
-    if (solved.checked) next.set('solved', '1');
-    const url = `${location.pathname}${next.size ? `?${next}` : ''}${cat ? `#${cat}` : ''}`;
-    // Safari throws once a page calls replaceState too often (a held key in
-    // the search box); the filter has already applied, so only the URL lags.
+    for (const b of buttons) b.setAttribute('aria-pressed', String(b.dataset.d === d));
+    summary.textContent = plural(shown);
+    const url = `${location.pathname}${d ? `?d=${d}` : ''}${location.hash}`;
     try { history.replaceState(null, '', url); } catch { /* rate-limited */ }
   }
-
-  form.addEventListener('input', apply);
-  form.addEventListener('submit', (e) => e.preventDefault());
-  for (const a of cats) {
-    a.addEventListener('click', (e) => {
-      e.preventDefault();
-      cat = a.dataset.cat!;
-      apply();
-      document.getElementById('top')!.scrollIntoView({ block: 'start' });
-    });
-  }
-  document.querySelector('[data-clear]')!.addEventListener('click', () => {
-    q.value = ''; d.value = ''; solved.checked = false; cat = '';
-    apply();
-    q.focus();
-  });
+  for (const b of buttons) b.addEventListener('click', () => { d = b.dataset.d!; apply(); });
   apply();
+
+  // solved ticks
+  const solved = () => {
+    const p = get();
+    let n = 0;
+    for (const row of document.querySelectorAll<HTMLElement>('.prow[data-slug]')) {
+      const on = !!p.checked[`leetcode:${row.dataset.slug}`];
+      row.classList.toggle('solved', on);
+      if (on) n++;
+    }
+    const c = document.querySelector<HTMLElement>('[data-solved-count]')!;
+    c.hidden = !n;
+    c.textContent = `${n} solved`;
+  };
+  solved();
+  subscribe(solved);
+
+  // highlight the pattern being read in the section menu
+  const links = new Map([...document.querySelectorAll<HTMLAnchorElement>('.section-nav a[href^="/leetcode#"]')].map((a) => [a.hash.slice(1), a]));
+  const spy = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (!e.isIntersecting) continue;
+      links.forEach((a) => a.removeAttribute('aria-current'));
+      links.get((e.target as HTMLElement).dataset.sec!)?.setAttribute('aria-current', 'location');
+    }
+  }, { rootMargin: '-80px 0px -70% 0px' });
+  secs.forEach((s) => spy.observe(s));
 </script>

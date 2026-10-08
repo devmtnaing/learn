@@ -9,8 +9,9 @@
  *   [data-meter-of="id,id,…"]           width set to that %
  *   [data-crowns-of="mod,mod,…"]        text set to "n/total"
  *   [data-continue]                     link pointed at the first unfinished step
- *   [data-ai-track="t1"]                visiting the page makes it the current track */
-import { get, subscribe, update } from '../progress'
+ *   [data-ai-track="t1"]                visiting the page makes it the current track
+ *   [data-course-weeks="4"]             text set to that estimate at your study pace */
+import { formatWeeks, get, subscribe, update, weeksAtPace } from '../progress'
 
 function paint() {
   const p = get()
@@ -42,6 +43,10 @@ function paint() {
   document.querySelectorAll<HTMLElement>('[data-crowns-of]').forEach((e) => {
     const mods = e.dataset.crownsOf!.split(',').filter(Boolean)
     e.textContent = `${mods.filter((m) => p.crowns[m]).length}/${mods.length}`
+  })
+  document.querySelectorAll<HTMLElement>('[data-course-weeks]').forEach((e) => {
+    e.textContent = formatWeeks(weeksAtPace(Number(e.dataset.courseWeeks), p.pace))
+    e.title = `At your pace. The course itself plans ${e.dataset.courseWeeks} week(s) at ~13.5 h a week.`
   })
   document.querySelectorAll<HTMLAnchorElement>('[data-continue]').forEach((a) => {
     if (!current) return void (a.hidden = true)

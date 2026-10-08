@@ -42,11 +42,19 @@
   btn.querySelector('[data-key]')!.textContent = mac ? '⌘K' : 'Ctrl K';
   btn.hidden = false;
 
+  // Search stays inside the section you're in: LeetCode finds problems, AI
+  // Engineer finds modules, the hub and profile find both.
+  const section = document.documentElement.dataset.section;
+  const inScope = (r: Row) => (section === 'leetcode' ? r.kind !== 'module' : section === 'ai' ? r.kind === 'module' : true);
+  field.placeholder = section === 'leetcode' ? 'Search problems by name, number or pattern'
+    : section === 'ai' ? 'Search AI Engineer modules and concepts' : 'Search problems and AI Engineer modules';
+  field.setAttribute('aria-label', field.placeholder);
+
   let rows: Row[] | null = null;
   let loading: Promise<void> | null = null;
   const load = () => (loading ??= fetch('/search.json')
     .then((r) => r.json())
-    .then((data: Row[]) => { rows = data; })
+    .then((data: Row[]) => { rows = data.filter(inScope); })
     .catch(() => { loading = null; }));
 
   let shown: Row[] = [];
@@ -60,7 +68,8 @@
     if (!rows) return [];
     const typed = q.trim().toLowerCase();
     const terms = typed.split(/\s+/).filter(Boolean);
-    if (!terms.length) return rows.filter((r) => r.page && r.kind !== 'module');
+    // an empty field lists the pages: every solution, or every module
+    if (!terms.length) return section === 'ai' ? rows : rows.filter((r) => r.page && r.kind !== 'module');
     const rank = (r: Row) => (String(r.id) === typed ? 0 : r.title.toLowerCase().startsWith(typed) ? 2 : 4) + (r.page ? 0 : 1);
     return rows
       .filter((r) => terms.every((t) => r.text.includes(t)))
@@ -96,7 +105,7 @@
     active = 0;
     list.replaceChildren(...shown.map(option));
     const typed = field.value.trim();
-    head.textContent = typed ? '' : 'Problems with a solution page';
+    head.textContent = typed ? '' : section === 'ai' ? 'AI Engineer modules' : 'Problems with a solution page';
     head.hidden = !!typed;
     status.textContent = !rows
       ? (loading ? 'Loading…' : 'Could not load the problem list.')

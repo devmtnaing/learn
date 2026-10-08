@@ -242,3 +242,8 @@ export const units: UnitRef[] = tracks.flatMap((t) =>
 )
 
 export const trackColor = (trackId: string) => tracks.find((t) => t.id === trackId)?.color ?? 'indigo'
+
+/** Weeks a track takes at the course's own pace (~13.5 h/week): its modules' estimates, upper end of a range. */
+export const trackWeeks = (t: Track) => t.modules.reduce((a, m) => a + (Number(m.weeks?.split(/[–-]/).at(-1)) || 0), 0)
+/** Upper end of a module's estimate, in course weeks, or 0 when it has none. */
+export const moduleWeeks = (m: Module) => Number(m.weeks?.split(/[–-]/).at(-1)) || 0

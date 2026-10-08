@@ -1,11 +1,28 @@
-/** Site-wide progress: stats, the AI Engineer tracks, daily goal, and moving data between browsers. */
+/** Site-wide progress: totals, each section, the study plan, and moving data between browsers. */
 import { useRef, useState } from 'preact/hooks'
-import { crownCount, exportProgress, importProgress, resetProgress, streak, totalXp, update } from '../../lib/progress'
+import {
+  crownCount, exportProgress, formatWeeks, importProgress, PACES, resetProgress, solvedCount, streak, totalXp, update, weeksAtPace,
+} from '../../lib/progress'
+import { PacePicker } from './Plan'
 import { Icon, useProgress } from './ui'
 
-export type TrackSummary = { id: string; url: string; short: string; title: string; color: string; units: string[]; modules: string[] }
+export type TrackSummary = { id: string; url: string; short: string; title: string; color: string; units: string[]; modules: string[]; weeks: number }
 
-export default function Profile({ tracks }: { tracks: TrackSummary[] }) {
+function Stat({ icon, color, n, l }: { icon: 'flame' | 'bolt' | 'crown' | 'check'; color: string; n: number; l: string }) {
+  return (
+    <div class="card row">
+      <span class="chip-icon" style={{ background: `color-mix(in srgb, ${color} 16%, transparent)`, color }}>
+        <Icon name={icon} />
+      </span>
+      <span class="grow">
+        <b style={{ fontFamily: 'var(--display)', fontSize: '22px' }}>{n}</b>
+        <small>{l}</small>
+      </span>
+    </div>
+  )
+}
+
+export default function Profile({ tracks, problems }: { tracks: TrackSummary[]; problems: number }) {
   const p = useProgress()
   const file = useRef<HTMLInputElement>(null)
   const [msg, setMsg] = useState('')
@@ -26,25 +43,27 @@ export default function Profile({ tracks }: { tracks: TrackSummary[] }) {
   }
   return (
     <>
-      <div class="grid-cards" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}>
-        {[
-          { icon: 'flame' as const, color: 'var(--streak)', n: streak(p), l: 'day streak' },
-          { icon: 'bolt' as const, color: 'var(--xp)', n: totalXp(p), l: 'total XP' },
-          { icon: 'crown' as const, color: 'var(--accent)', n: crownCount(p), l: 'modules crowned' },
-        ].map((s) => (
-          <div class="card row" key={s.l}>
-            <span class="chip-icon" style={{ background: `color-mix(in srgb, ${s.color} 16%, transparent)`, color: s.color }}>
-              <Icon name={s.icon} />
-            </span>
-            <span class="grow">
-              <b style={{ fontFamily: 'var(--display)', fontSize: '22px' }}>{s.n}</b>
-              <small>{s.l}</small>
-            </span>
-          </div>
-        ))}
+      <h2 class="section-title" style={{ marginTop: 0 }}>
+        All sections
+      </h2>
+      <div class="grid-cards" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(min(200px, 100%), 1fr))' }}>
+        <Stat icon="flame" color="var(--streak)" n={streak(p)} l="day streak, any section" />
+        <Stat icon="bolt" color="var(--xp)" n={totalXp(p)} l="total XP" />
       </div>
 
-      <div class="section-title">AI Engineer</div>
+      <h2 class="section-title">LeetCode</h2>
+      <div class="grid-cards" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(min(200px, 100%), 1fr))' }}>
+        <Stat icon="check" color="var(--teal)" n={solvedCount(p)} l={`of ${problems} problems solved`} />
+        <Stat icon="flame" color="var(--streak)" n={streak(p, 'leetcode')} l="day streak" />
+        <Stat icon="bolt" color="var(--xp)" n={totalXp(p, 'leetcode')} l="XP" />
+      </div>
+
+      <h2 class="section-title">AI Engineer</h2>
+      <div class="grid-cards" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(min(200px, 100%), 1fr))', marginBottom: '12px' }}>
+        <Stat icon="crown" color="var(--indigo)" n={crownCount(p)} l="modules crowned" />
+        <Stat icon="flame" color="var(--streak)" n={streak(p, 'ai')} l="day streak" />
+        <Stat icon="bolt" color="var(--xp)" n={totalXp(p, 'ai')} l="XP" />
+      </div>
       <div class="grid-cards">
         {tracks.map((t) => {
           const pct = t.units.length ? Math.round((t.units.filter((u) => p.done[u]).length / t.units.length) * 100) : 0
@@ -57,6 +76,7 @@ export default function Profile({ tracks }: { tracks: TrackSummary[] }) {
                   </b>
                   <small>
                     {t.modules.filter((m) => p.crowns[m]).length} / {t.modules.length} modules crowned
+                    {t.weeks ? ` · ${formatWeeks(weeksAtPace(t.weeks, p.pace))} at your pace` : ''}
                   </small>
                 </span>
                 <b>{pct}%</b>
@@ -69,21 +89,27 @@ export default function Profile({ tracks }: { tracks: TrackSummary[] }) {
         })}
       </div>
 
-      <div class="section-title">LeetCode</div>
-      <p class="page-sub">Problem progress isn't tracked yet. It arrives with sign-in, and will share this XP and streak.</p>
-
-      <div class="section-title">Daily goal</div>
-      <div class="seg" role="group" aria-label="Daily goal">
-        {[10, 30, 50, 100].map((g) => (
-          <button key={g} class={p.dailyGoal === g ? 'on' : ''} aria-pressed={p.dailyGoal === g} onClick={() => update((s) => ({ ...s, dailyGoal: g }))}>
-            {g} XP
+      <h2 class="section-title" id="plan">
+        Study plan
+      </h2>
+      <p class="page-sub" style={{ marginBottom: 0 }}>
+        How many hours a week you can study. It sets your daily goal ({PACES[p.pace].xp} XP at {PACES[p.pace].label}) and every time estimate in the AI Engineer course.
+      </p>
+      <PacePicker value={p.pace} />
+      <p class="page-sub" style={{ margin: '16px 0 8px' }}>
+        Current AI Engineer track ("up next" follows it; opening a lesson in another track switches it):
+      </p>
+      <div class="seg" role="radiogroup" aria-label="Current track">
+        {tracks.map((t) => (
+          <button key={t.id} role="radio" aria-checked={p.aiTrack === t.id} class={p.aiTrack === t.id ? 'on' : ''} onClick={() => update((x) => ({ ...x, aiTrack: t.id, aiOnboarded: true }))}>
+            {t.short}
           </button>
         ))}
       </div>
 
-      <div class="section-title">Your data</div>
+      <h2 class="section-title">Your data</h2>
       <p class="page-sub" style={{ marginBottom: '12px' }}>
-        Progress is saved in this browser only. Export it to back it up or move it to another device. Files exported from the standalone AI Engineer site import too.
+        Progress is saved in this browser only, until sign-in arrives. Export it to back it up or move it to another device. Files exported from the standalone AI Engineer site import too.
       </p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button class="btn ghost sm" onClick={download}>

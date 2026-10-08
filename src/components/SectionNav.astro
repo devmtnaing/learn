@@ -50,13 +50,15 @@ const items = s.groups.flatMap((g) => g.items);
 )}
 
 <script>
-  import { get, subscribe, streak, xpToday } from '../lib/progress';
+  import { dailyGoal, get, PACES, subscribe, streak, xpToday } from '../lib/progress';
+  // the daily goal counts XP from every section; the pace sets its size
   const goal = () => {
     const p = get();
     const xp = xpToday(p);
     const s = streak(p);
-    document.querySelectorAll('[data-goal-text]').forEach((e) => (e.textContent = `${xp} / ${p.dailyGoal} XP today`));
-    document.querySelectorAll<HTMLElement>('[data-goal-bar]').forEach((e) => (e.style.width = `${Math.min((xp / p.dailyGoal) * 100, 100)}%`));
+    const g = dailyGoal(p);
+    document.querySelectorAll('[data-goal-text]').forEach((e) => (e.textContent = `${xp} / ${g} XP today · ${PACES[p.pace].label}`));
+    document.querySelectorAll<HTMLElement>('[data-goal-bar]').forEach((e) => (e.style.width = `${Math.min((xp / g) * 100, 100)}%`));
     document.querySelectorAll('[data-goal-streak]').forEach((e) => (e.textContent = s ? `${s}-day streak` : ''));
   };
   goal();

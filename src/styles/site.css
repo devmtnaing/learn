@@ -87,35 +87,19 @@ html:has(.kdlg[open]){overflow:hidden}
 .crumbs a:hover{color:var(--accent)}
 
 /* ---------- the problem list ---------- */
-/* A pattern sidebar beside the list; on a narrow screen it becomes a row of
-   chips above it. */
-.plist{display:grid;grid-template-columns:210px minmax(0,1fr);gap:28px;align-items:start;padding-bottom:56px}
-.cats{position:sticky;top:calc(56px + 18px);max-height:calc(100vh - 56px - 36px);overflow-y:auto;
-  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:8px}
-.cats nav{display:flex;flex-direction:column;gap:1px}
-.cat{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 10px;border-radius:7px;
-  color:var(--ink-2);text-decoration:none;font-size:13.5px}
-.cat:hover{background:var(--sunk);color:var(--ink)}
-.cat[aria-current="true"]{background:var(--accent-soft);color:var(--accent);font-weight:600}
-.cat:first-child{margin-bottom:6px}
-.cat-n{font-family:var(--mono);font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums}
-.cat[aria-current="true"] .cat-n{color:var(--accent)}
-.cat.none{opacity:.45}
-
-.plist-main{min-width:0;scroll-margin-top:calc(56px + 18px)}
-.filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}
-.filters .search{flex:1 1 260px;display:flex;align-items:center;gap:8px;padding:0 12px;
-  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);color:var(--ink-3)}
-.filters .search:focus-within{border-color:var(--accent)}
-.filters .search svg{width:15px;height:15px;flex:none}
-.filters input[type=search]{flex:1;min-width:0;border:0;background:none;color:var(--ink);font:inherit;font-size:14px;padding:10px 0;outline:none}
-.filters select{font:inherit;font-size:13.5px;color:var(--ink);background:var(--surface);border:1px solid var(--line);
-  border-radius:var(--radius);padding:9px 12px;cursor:pointer}
-.filters select:focus-visible,.filters .only:focus-within{outline:2px solid var(--accent);outline-offset:1px}
-.filters .only{display:flex;align-items:center;gap:7px;font-size:13.5px;color:var(--ink-2);cursor:pointer;
-  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:0 12px}
-.filters .only input{accent-color:var(--accent);margin:0}
-.plist-count{font-size:12.5px;color:var(--ink-3);margin:0 0 22px}
+/* Patterns are in the section menu (which highlights the one being read) and
+   ⌘K is the search, so the page is just the list and a difficulty filter. */
+.plist-main{min-width:0;padding-bottom:56px}
+.filters{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-bottom:22px}
+.seg-d{display:inline-flex;background:var(--sunk);border-radius:10px;padding:3px;gap:2px}
+.seg-d button{font:inherit;font-size:13px;font-weight:600;color:var(--ink-2);background:none;border:0;border-radius:8px;padding:6px 14px;cursor:pointer}
+.seg-d button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.plist-count,.plist-solved{font-family:var(--mono);font-size:12px;color:var(--ink-3)}
+.plist-solved{color:var(--up)}
+.cat-sec{scroll-margin-top:76px}
+.ptick{display:none;color:var(--up);font-weight:700;margin-right:4px}
+.prow.solved .ptick{display:inline}
+.prow.solved{border-color:color-mix(in srgb,var(--up) 40%,var(--line))}
 
 .cat-sec{margin-bottom:34px}
 .cat-sec header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
@@ -145,23 +129,15 @@ a.ptitle::after{content:"";position:absolute;inset:0;border-radius:inherit}
 .prow .diff{justify-self:center}
 .prate{font-family:var(--mono);font-size:12px;color:var(--ink-2);text-align:right;font-variant-numeric:tabular-nums}
 .plist-foot{font-size:12.5px;color:var(--ink-3);margin-top:8px}
-.plist-empty{color:var(--ink-2);font-size:14px;padding:24px 0}
-.plist-empty button{font:inherit;color:var(--accent);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
 
 @media (max-width:980px){
   .ptags{display:none}
   .prow{grid-template-columns:3.2em minmax(0,1fr) 4.6em 3.6em}
 }
 @media (max-width:760px){
-  .plist{grid-template-columns:minmax(0,1fr);gap:16px}
-  .cats{position:static;max-height:none;overflow:visible;background:none;border:0;padding:0}
-  .cats nav{flex-direction:row;gap:6px;overflow-x:auto;scrollbar-width:none}
-  .cats nav::-webkit-scrollbar{display:none}
-  .cat{flex:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 11px;font-size:12.5px}
-  .cat:first-child{margin-bottom:0}
-  .cat.none{display:none}
   .prow{grid-template-columns:minmax(0,1fr) auto;gap:10px;padding:10px 12px}
   .prow .pnum,.prow .prate{display:none}
+  .prow.solved .ptitle::after{content:" ✓";color:var(--up)}
 }
 
 .diff{
@@ -182,6 +158,13 @@ a.ptitle::after{content:"";position:absolute;inset:0;border-radius:inherit}
 .pager a:hover{border-color:var(--accent);color:var(--accent)}
 .pager .dir{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
 .pager .up .dir::before{content:"\2190\00a0"}
+.solve-btn{
+  display:flex;flex-direction:column;align-items:flex-end;gap:3px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);border-radius:var(--radius);padding:11px 15px;background:var(--surface);color:var(--ink);
+}
+.solve-btn:hover{border-color:var(--up)}
+.solve-btn[aria-pressed="true"]{background:var(--up-soft);border-color:var(--up);color:var(--up);font-weight:600}
+.solve-btn .dir{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
 
 /* ---------- footer ---------- */
 .site-foot{border-top:1px solid var(--line);margin-top:auto;padding-block:26px 40px;color:var(--ink-3);font-size:12.5px}

@@ -12,11 +12,8 @@
 // own: assets stay at the top level and are uploaded from the branch, and
 // the production route is not applied to Previews.
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  // The Worker keeps the name it was created with (the repo was renamed from
-  // leetcode-solutions to learn): renaming it would deploy a new Worker and
-  // move the custom domain, for nothing a reader would see.
-  "name": "leetcode-solutions",
+  "$schema": "node_modules/wrangler/config-schema.json"
+  "name": "learn",
   "compatibility_date": "2026-09-25",
   "assets": {
     "directory": "./dist",

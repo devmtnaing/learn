@@ -1,0 +1,133 @@
+---
+import Base from '../../layouts/Base.astro';
+import { SITE_NAME } from '../../data/site';
+import { asOf } from '../../data/problems-meta.json';
+import { all, groups, leetcodeUrl, PAGE as WALKTHROUGH } from '../../data/catalog';
+---
+<Base
+  section="leetcode"
+  where="LeetCode"
+  title={`LeetCode · ${SITE_NAME}`}
+  description="LeetCode interview problems grouped by pattern, with step-by-step walkthroughs and tested code in five languages."
+>
+  <div class="shell">
+    <div class="page-head">
+      <h1>LeetCode</h1>
+      <p class="lede">
+        Interview problems, grouped by pattern. Open one to step through the solution,
+        with code in Ruby, Python, JavaScript, Go and Rust.
+      </p>
+    </div>
+
+    <div class="plist-main" id="top">
+        <div class="filters" role="group" aria-label="Difficulty" data-filters hidden>
+          <div class="seg-d">
+            <button type="button" data-d="" aria-pressed="true">All</button>
+            <button type="button" data-d="easy" aria-pressed="false">Easy</button>
+            <button type="button" data-d="medium" aria-pressed="false">Medium</button>
+            <button type="button" data-d="hard" aria-pressed="false">Hard</button>
+          </div>
+          <span class="plist-count" aria-live="polite" data-summary>{all.length} problems</span>
+          <span class="plist-solved" data-solved-count hidden></span>
+        </div>
+
+        {groups.map((g) => (
+          <section class="cat-sec" id={g.id} data-sec={g.id}>
+            <header>
+              <h2>{g.name}</h2>
+              <span data-sec-count>{g.rows.length} {g.rows.length === 1 ? 'problem' : 'problems'}</span>
+            </header>
+            <ul class="prows">
+              {g.rows.map((p) => (
+                <li
+                  class={WALKTHROUGH[p.id] ? 'prow has-page' : 'prow'}
+                  data-d={p.difficulty.toLowerCase()}
+                  data-slug={p.slug}
+                >
+                  <span class="pnum"><span class="ptick" aria-hidden="true">✓</span><span class="pid">{p.id}</span></span>
+                  <div class="pmain">
+                    {WALKTHROUGH[p.id]
+                      ? <a class="ptitle" href={WALKTHROUGH[p.id]}>{p.title}</a>
+                      : <span class="ptitle">{p.title}</span>}
+                    <span class="psub">
+                      {!WALKTHROUGH[p.id] && <span class="soon">Solution coming soon</span>}
+                      {p.extra && <span>Outside the core list</span>}
+                      <a class="lc" href={leetcodeUrl(p.slug)} target="_blank" rel="noopener">View on LeetCode ↗</a>
+                    </span>
+                  </div>
+                  <span class="ptags">{p.tags.slice(0, 3).join(' · ')}</span>
+                  <span class={`diff ${p.difficulty.toLowerCase()}`}>{p.difficulty}</span>
+                  <span class="prate" title={`Acceptance rate on LeetCode, as of ${asOf}`}>{p.acRate}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+
+        <p class="plist-foot">Difficulty, tags and acceptance rates from LeetCode, as of {asOf}.</p>
+    </div>
+  </div>
+</Base>
+
+<script>
+  // The difficulty filter, the pattern highlight in the section menu, and the
+  // ticks on problems marked solved. Everything is in the markup already, so
+  // without JavaScript the full list shows and the pattern links still jump.
+  // ⌘K is the search. The difficulty lives in the URL (?d=) so it can be shared.
+  import { get, subscribe } from '../../lib/progress';
+
+  const bar = document.querySelector<HTMLElement>('[data-filters]')!;
+  const buttons = [...bar.querySelectorAll<HTMLButtonElement>('[data-d]')];
+  const secs = [...document.querySelectorAll<HTMLElement>('[data-sec]')];
+  const summary = document.querySelector('[data-summary]')!;
+  const plural = (n: number) => `${n} ${n === 1 ? 'problem' : 'problems'}`;
+  let d = new URLSearchParams(location.search).get('d') ?? '';
+  bar.hidden = false;
+
+  function apply() {
+    let shown = 0;
+    for (const sec of secs) {
+      let n = 0;
+      for (const row of sec.querySelectorAll<HTMLElement>('.prow')) {
+        row.hidden = !!d && row.dataset.d !== d;
+        if (!row.hidden) n++;
+      }
+      sec.hidden = n === 0;
+      sec.querySelector('[data-sec-count]')!.textContent = plural(n);
+      shown += n;
+    }
+    for (const b of buttons) b.setAttribute('aria-pressed', String(b.dataset.d === d));
+    summary.textContent = plural(shown);
+    const url = `${location.pathname}${d ? `?d=${d}` : ''}${location.hash}`;
+    try { history.replaceState(null, '', url); } catch { /* rate-limited */ }
+  }
+  for (const b of buttons) b.addEventListener('click', () => { d = b.dataset.d!; apply(); });
+  apply();
+
+  // solved ticks
+  const solved = () => {
+    const p = get();
+    let n = 0;
+    for (const row of document.querySelectorAll<HTMLElement>('.prow[data-slug]')) {
+      const on = !!p.checked[`leetcode:${row.dataset.slug}`];
+      row.classList.toggle('solved', on);
+      if (on) n++;
+    }
+    const c = document.querySelector<HTMLElement>('[data-solved-count]')!;
+    c.hidden = !n;
+    c.textContent = `${n} solved`;
+  };
+  solved();
+  subscribe(solved);
+
+  // highlight the pattern being read in the section menu
+  const links = new Map([...document.querySelectorAll<HTMLAnchorElement>('.section-nav a[href^="/leetcode#"]')].map((a) => [a.hash.slice(1), a]));
+  const spy = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (!e.isIntersecting) continue;
+      links.forEach((a) => a.removeAttribute('aria-current'));
+      links.get((e.target as HTMLElement).dataset.sec!)?.setAttribute('aria-current', 'location');
+    }
+  }, { rootMargin: '-80px 0px -70% 0px' });
+  secs.forEach((s) => spy.observe(s));
+</script>

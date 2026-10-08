@@ -1,0 +1,41 @@
+---
+import AiLayout from '../../layouts/AiLayout.astro';
+import { projects } from '../../lib/ai/course';
+---
+<AiLayout title="Projects" description="Portfolio capstone projects for the AI Engineer course." where="AI Engineer · Projects">
+  <div class="kicker">Projects</div>
+  <h1 class="page-h">Portfolio</h1>
+  <p class="page-sub">The capstones are your portfolio. Mark one published once its write-up is public.</p>
+  <div class="stack">
+    {projects.map((x, i) => (
+      <details class="card" open={i === 0} data-project={x.template ? undefined : x.id}>
+        <summary><span>{x.title}</span>{!x.template && <span class="badge tc-teal" data-published hidden>published</span>}</summary>
+        <div class="prose" set:html={x.html} />
+        {!x.template && (
+          <div style="padding:0 22px 18px">
+            <button class="btn sm" type="button" data-publish aria-pressed="false">Mark as published (+100 XP)</button>
+          </div>
+        )}
+      </details>
+    ))}
+  </div>
+</AiLayout>
+
+<script>
+  import { get, subscribe, toggleChecked } from '../../lib/progress';
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-project]')];
+  const paint = () => {
+    const p = get();
+    for (const c of cards) {
+      const on = !!p.checked[c.dataset.project!];
+      const btn = c.querySelector<HTMLButtonElement>('[data-publish]')!;
+      btn.textContent = on ? 'Mark as not published' : 'Mark as published (+100 XP)';
+      btn.classList.toggle('ghost', on);
+      btn.setAttribute('aria-pressed', String(on));
+      c.querySelector<HTMLElement>('[data-published]')!.hidden = !on;
+    }
+  };
+  for (const c of cards) c.querySelector('[data-publish]')?.addEventListener('click', () => toggleChecked(c.dataset.project!, 100));
+  paint();
+  subscribe(paint);
+</script>

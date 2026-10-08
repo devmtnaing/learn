@@ -1,0 +1,53 @@
+---
+import AiLayout from '../../layouts/AiLayout.astro';
+import Stepper from '../../components/ai/Stepper.astro';
+import Icon from '../../components/Icon.astro';
+import { moduleUrl, moduleWeeks, tracks, trackWeeks, unitUrl, unitKinds, type Track } from '../../lib/ai/course';
+
+export function getStaticPaths() {
+  return tracks.map((t) => ({ params: { track: t.slug }, props: { track: t } }));
+}
+const { track } = Astro.props as { track: Track };
+const first = track.modules[0];
+---
+<AiLayout title={`${track.short}: ${track.title}`} description={`${track.title}: ${track.subtitle}`}>
+  <div class={`track-hero tc-${track.color}`} data-ai-track={track.id}>
+    <div>
+      <div class="kicker" style="color:var(--ct)">{track.short} · {track.modules.length} modules{trackWeeks(track) > 0 && <> · <span data-course-weeks={trackWeeks(track)}>{trackWeeks(track)} wks</span> at your pace</>}</div>
+      <h1>{track.title}</h1>
+      <p>{track.subtitle}</p>
+    </div>
+    <a class="btn track" href={unitUrl(track, first, unitKinds(first)[0])} data-continue>
+      <Icon name="play" size={14} fill="currentColor" /> Continue: <span data-continue-label>{first.label} Concepts</span>
+    </a>
+  </div>
+  <ol class={`timeline tc-${track.color}`}>
+    {track.modules.map((m) => {
+      const meta = [m.resources.length && `${m.resources.length} resources`, m.build.length && `${m.build.length} builds`].filter(Boolean).join(' · ');
+      const blurb = m.why || m.concepts.slice(0, 6).join(' · ');
+      return (
+        <li class="mod" id={m.slug} data-mod={m.id}>
+          <div class="spine-dot" aria-hidden="true">
+            <span class="ic-kind">{m.key === 'ck' ? '✓' : m.key}</span>
+          </div>
+          <article class="mod-card" aria-labelledby={`h-${m.slug}`}>
+            <div class="mod-head">
+              <div style="min-width:0">
+                <div class="kicker">
+                  {m.label}{moduleWeeks(m) > 0 && <> · <span data-course-weeks={moduleWeeks(m)}>{m.weeks} wks</span></>}{meta && ` · ${meta}`}
+                  {m.star && <span class="badge">★ key</span>}
+                </div>
+                <h2 id={`h-${m.slug}`}><a href={moduleUrl(track, m)} style="color:inherit;text-decoration:none">{m.title}</a></h2>
+                {blurb && <p class="mod-why" set:html={blurb} />}
+              </div>
+              <div class="mod-actions">
+                <a href={moduleUrl(track, m)} class="btn ghost sm"><Icon name="book" size={15} /> Guide</a>
+              </div>
+            </div>
+            <Stepper track={track} module={m} />
+          </article>
+        </li>
+      );
+    })}
+  </ol>
+</AiLayout>

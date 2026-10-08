@@ -1,4 +1,2 @@
-# Served by Cloudflare before any file. The problem list moved to the home
-# page; a real 301 here, where the static build can only write a meta refresh.
-/leetcode    /    301
-/leetcode/   /    301
+# Served by Cloudflare before any file. Nothing to redirect right now: the
+# problem list lives at /leetcode again and the home page is the hub.

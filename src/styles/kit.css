@@ -9,7 +9,7 @@
 /* ---------- stage shapes ---------- */
 .st-box{display:flex;flex-direction:column;gap:7px;min-width:0}
 .st-label{
-  font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
   text-transform:uppercase;color:var(--ink-3);font-weight:600;
 }
 .st-panels{display:flex;flex-wrap:wrap;gap:20px 26px;align-items:flex-start}
@@ -23,12 +23,12 @@
   border-radius:7px;flex:0 0 auto;
 }
 .st-cell.on{background:var(--accent-soft);border-color:var(--accent)}
-.st-val{font-family:"IBM Plex Mono",monospace;font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums}
+.st-val{font-family:var(--mono);font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums}
 .st-cell.on .st-val{color:var(--accent);font-weight:600}
-.st-idx{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-3);margin-top:2px}
+.st-idx{font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-top:2px}
 .st-mark{
   position:absolute;top:100%;margin-top:3px;white-space:nowrap;
-  font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--accent);font-weight:600;
+  font-family:var(--mono);font-size:10.5px;color:var(--accent);font-weight:600;
 }
 .t-up{background:var(--up-soft);border-color:var(--up)}
 .t-up .st-val{color:var(--up)}
@@ -43,7 +43,7 @@
 /* key/value */
 .st-kv{border:1px solid var(--line);border-radius:7px;overflow:hidden;min-width:150px}
 .st-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;padding:5px 11px;
-  font-family:"IBM Plex Mono",monospace;font-size:12.5px;border-top:1px solid var(--line);background:var(--sunk)}
+  font-family:var(--mono);font-size:12.5px;border-top:1px solid var(--line);background:var(--sunk)}
 .st-row:first-child{border-top:0}
 .st-row.head{background:var(--surface);color:var(--ink-3);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase}
 .st-row.on{background:var(--accent-soft)}
@@ -64,7 +64,7 @@
 .st-slot{
   display:flex;align-items:center;justify-content:space-between;gap:10px;
   background:var(--sunk);border:1px solid var(--line);border-radius:6px;padding:6px 11px;
-  font-family:"IBM Plex Mono",monospace;font-size:14px;color:var(--ink);
+  font-family:var(--mono);font-size:14px;color:var(--ink);
 }
 .st-slot.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:600}
 .st-top{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
@@ -78,8 +78,8 @@
 .st-node.on{background:var(--accent-soft);border-color:var(--accent)}
 .st-node.on .st-val{color:var(--accent);font-weight:600}
 .st-arrow{color:var(--ink-3);font-size:14px}
-.st-arrow.cyc{color:var(--amber);font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:600}
-.st-null{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-3)}
+.st-arrow.cyc{color:var(--amber);font-family:var(--mono);font-size:11.5px;font-weight:600}
+.st-null{font-family:var(--mono);font-size:12px;color:var(--ink-3)}
 
 /* tree */
 .st-tree{overflow-x:auto}
@@ -88,7 +88,7 @@
 /* bars */
 .st-bars{display:flex;align-items:flex-end;gap:5px;overflow-x:auto;padding-bottom:20px;margin-bottom:-14px;min-height:var(--bar-h)}
 .st-bar{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;flex:0 0 auto;min-width:34px;justify-content:flex-end}
-.st-barval{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.st-barval{font-family:var(--mono);font-size:11px;color:var(--ink-2);font-variant-numeric:tabular-nums}
 .st-fill{width:100%;background:var(--line-2);border-radius:4px 4px 0 0;display:block}
 .st-bar.on .st-fill{background:var(--accent)}
 .st-bar.on .st-barval{color:var(--accent);font-weight:600}
@@ -98,7 +98,7 @@
 /* scalar readouts */
 .st-reads{display:flex;flex-wrap:wrap;gap:7px}
 .st-read{
-  font-family:"IBM Plex Mono",monospace;font-size:13px;background:var(--sunk);
+  font-family:var(--mono);font-size:13px;background:var(--sunk);
   border:1px solid var(--line);border-radius:7px;padding:5px 11px;color:var(--ink);font-variant-numeric:tabular-nums;
 }
 .st-read b{color:var(--ink-3);font-weight:500;margin-right:7px}
@@ -117,7 +117,7 @@
 /* Stage data stays in the Latin monospace face in both languages. */
 :root[data-ui="my"] .st-cell,:root[data-ui="my"] .st-kv,:root[data-ui="my"] .st-node,
 :root[data-ui="my"] .st-read,:root[data-ui="my"] .st-slot,:root[data-ui="my"] .st-barval{
-  font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  font-family:var(--mono);
 }
 
 
@@ -125,7 +125,7 @@
 .strip .cell,.q-arr .cell{position:relative}
 .cell .ptr{
   position:absolute;top:100%;margin-top:4px;white-space:nowrap;
-  font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;color:var(--accent);
+  font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--accent);
 }
 .player .strip:has(.ptr),.strip.has-ptr{padding-bottom:24px}
 .cell.done{background:transparent;border-style:dotted}
@@ -156,10 +156,10 @@
    A lesson sets only its cell size. */
 .rows.grid{gap:6px}
 .rows.grid .row{flex-wrap:nowrap}
-.row-label{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-3);min-width:42px}
+.row-label{font-family:var(--mono);font-size:12px;color:var(--ink-3);min-width:42px}
 /* The same, as rows of the part 1 widget. */
-.q-row-label{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-3);align-self:center;min-width:38px}
-.q-empty{font-family:"IBM Plex Mono",monospace;align-self:center;color:var(--ink-3)}
+.q-row-label{font-family:var(--mono);font-size:11px;color:var(--ink-3);align-self:center;min-width:38px}
+.q-empty{font-family:var(--mono);align-self:center;color:var(--ink-3)}
 
 /* The widget cell the reader has picked. */
 .q-arr .cell.picked{outline:2px solid var(--accent);outline-offset:2px}
@@ -176,13 +176,13 @@
 .approach ol{margin:4px 0 0;padding-left:22px;display:flex;flex-direction:column;gap:3px}
 .approach li::marker{color:var(--accent);font-weight:600}
 .approach .mono{color:var(--ink)}
-.approach-label{display:inline-block;min-width:52px;margin-right:8px;font-family:"IBM Plex Mono",monospace;
+.approach-label{display:inline-block;min-width:52px;margin-right:8px;font-family:var(--mono);
   font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
 :root[data-ui="my"] .approach{line-height:1.85;overflow-wrap:break-word}
 
 /* A trie as an outline, one row per node indented by depth: trieOutline() in
    stage.js (Implement Trie, Word Search II). */
-.trie{display:flex;flex-direction:column;gap:3px;font-family:"IBM Plex Mono",monospace;font-size:13px}
+.trie{display:flex;flex-direction:column;gap:3px;font-family:var(--mono);font-size:13px}
 .tr-row{display:flex;align-items:center;gap:8px;min-height:26px}
 .tr-row.d1{margin-left:14px}.tr-row.d2{margin-left:28px}.tr-row.d3{margin-left:42px}
 .tr-row.d4{margin-left:56px}.tr-row.d5{margin-left:70px}.tr-row.d6{margin-left:84px}

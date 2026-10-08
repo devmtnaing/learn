@@ -1,0 +1,71 @@
+---
+/* The current section's own menu. As a sidebar (≥1024px) it has the section
+ * header, the menu and the daily goal; as a strip (narrower screens) it is the
+ * same links in one scrolling row at the top of the page. */
+import Icon from './Icon.astro';
+import type { Section } from '../data/sections';
+
+interface Props { section: Section; variant?: 'sidebar' | 'strip' }
+const { section: s, variant = 'sidebar' } = Astro.props;
+const path = Astro.url.pathname.replace(/(index)?\.html$/, '').replace(/\/$/, '') || '/';
+const active = (href: string, prefix?: boolean) => !href.includes('#') && (path === href || (!!prefix && path.startsWith(href + '/')));
+const items = s.groups.flatMap((g) => g.items);
+---
+{variant === 'sidebar' ? (
+  <nav class={`section-nav acc-${s.accent}`} id="section-nav" aria-label={`${s.label} menu`}>
+    <a class="sn-head" href={s.href}>
+      <span class="sn-icon"><Icon name={s.icon} size={18} /></span>
+      <span><b>{s.label}</b><small>{s.tagline}</small></span>
+    </a>
+    {s.groups.map((g) => (
+      <div class="sn-group">
+        {g.label && <div class="sn-label">{g.label}</div>}
+        {g.items.map((it) => (
+          <a class:list={['sn-item', it.color && `tc-${it.color}`]} href={it.href} aria-current={active(it.href, it.prefix) ? 'page' : undefined}>
+            {it.icon ? <Icon name={it.icon} size={17} /> : it.color ? <span class="sn-dot" aria-hidden="true"></span> : null}
+            <span class="sn-text">
+              {it.kicker && <small>{it.kicker}</small>}
+              <span>{it.label}</span>
+              {it.meterOf && <span class="sn-meter" aria-hidden="true"><i data-meter-of={it.meterOf} style="width:0%"></i></span>}
+            </span>
+            {it.count != null && <span class="sn-count">{it.count}</span>}
+          </a>
+        ))}
+      </div>
+    ))}
+    <span class="sn-spacer"></span>
+    <a class="app-goal" href="/profile">
+      <span class="app-goal-row"><b>Daily goal</b><small data-goal-streak></small></span>
+      <small data-goal-text>0 / 30 XP today</small>
+      <span class="app-meter"><i data-goal-bar style="width:0%"></i></span>
+    </a>
+  </nav>
+) : (
+  <nav class={`section-strip acc-${s.accent}`} aria-label={`${s.label} menu`}>
+    <a class="ss-item ss-head" href={s.href}><Icon name={s.icon} size={15} /> {s.label}</a>
+    {items.filter((it) => !it.href.includes('#')).map((it) => (
+      <a class="ss-item" href={it.href} aria-current={active(it.href, it.prefix) ? 'page' : undefined}>{it.kicker ?? it.label}</a>
+    ))}
+  </nav>
+)}
+
+<script>
+  import { dailyGoal, get, PACES, subscribe, streak, xpToday } from '../lib/progress';
+  // the daily goal counts XP from every section; the pace sets its size
+  const goal = () => {
+    const p = get();
+    const xp = xpToday(p);
+    const s = streak(p);
+    const g = dailyGoal(p);
+    document.querySelectorAll('[data-goal-text]').forEach((e) => (e.textContent = `${xp} / ${g} XP today · ${PACES[p.pace].label}`));
+    document.querySelectorAll<HTMLElement>('[data-goal-bar]').forEach((e) => (e.style.width = `${Math.min((xp / g) * 100, 100)}%`));
+    document.querySelectorAll('[data-goal-streak]').forEach((e) => (e.textContent = s ? `${s}-day streak` : ''));
+  };
+  goal();
+  subscribe(goal);
+
+  // on narrow screens, show the current page's link in the strip
+  const strip = document.querySelector<HTMLElement>('.section-strip');
+  const cur = strip?.querySelector<HTMLElement>('[aria-current]');
+  if (strip && cur) strip.scrollLeft = cur.offsetLeft - (strip.clientWidth - cur.clientWidth) / 2;
+</script>

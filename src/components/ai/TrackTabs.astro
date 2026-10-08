@@ -1,0 +1,20 @@
+---
+/* The five tracks as cards; the current one is highlighted. Progress filled in by decorate.ts. */
+import { tracks, trackUrl, units } from '../../lib/ai/course';
+interface Props { current?: string }
+const { current } = Astro.props;
+---
+<nav class="track-tabs" aria-label="Tracks">
+  {tracks.map((t) => {
+    const ids = units.filter((u) => u.track === t.id).map((u) => u.id).join(',');
+    const mods = t.modules.map((m) => m.id).join(',');
+    return (
+      <a class:list={['track-tab', `tc-${t.color}`, t.id === current && 'on']} href={trackUrl(t)} aria-current={t.id === current ? 'page' : undefined}>
+        <span class="kicker">{t.short}</span>
+        <b>{t.title}</b>
+        <div class="meter"><i data-meter-of={ids} style="width:0%"></i></div>
+        <small><span data-pct-of={ids}>0%</span> · <span data-crowns-of={mods}>0/{t.modules.length}</span> modules</small>
+      </a>
+    );
+  })}
+</nav>

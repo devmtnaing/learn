@@ -1,0 +1,136 @@
+/* The app shell shared by every section:
+     section rail · section sidebar · page column · progress rail
+   The section rail (icons) is always there, so switching courses is one
+   click. The section sidebar shows only the current section's menu; the hub
+   and the profile have none. The page column is a sticky 56px top bar, the
+   page and the footer; lesson CSS offsets its sticky parts by that 56px.
+
+   ≥1440px  all of it (the progress rail only on pages that have one; it sits
+            under the top bar, and the footer runs under page and rail)
+   <1440px  the progress rail is hidden; AI pages show a stat strip instead
+   <1024px  the section sidebar becomes a strip of links under the top bar
+   <720px   the section rail becomes a bottom tab bar */
+.app{display:grid;grid-template-columns:68px minmax(0,1fr);min-height:100vh}
+.app.has-nav{grid-template-columns:68px 244px minmax(0,1fr)}
+:root[data-nav="collapsed"] .app.has-nav{grid-template-columns:68px minmax(0,1fr)}
+:root[data-nav="collapsed"] .section-nav{display:none}
+/* the page column: top bar, then the page beside the progress rail, then the
+   footer under both, so the bar and footer run the full width */
+.app-main{min-width:0;display:flex;flex-direction:column}
+.app-body{flex:1;display:grid;grid-template-columns:minmax(0,1fr)}
+.app.has-rail .app-body{grid-template-columns:minmax(0,1fr) 340px}
+.app-body > main{min-width:0}
+
+/* ---------- section rail ---------- */
+.app-rail-nav{
+  background:#0B0A16;display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 0;
+  position:sticky;top:0;height:100vh;z-index:31;
+}
+.rail-brand{display:grid;place-items:center;margin-bottom:8px;border-radius:11px}
+.rail-sep{width:28px;height:1px;background:var(--side-line);margin:4px 0}
+.rail-spacer{flex:1}
+.rail-item{
+  width:44px;height:44px;border-radius:12px;display:grid;place-items:center;position:relative;
+  color:var(--side-dim);background:none;border:0;cursor:pointer;text-decoration:none;font:inherit;padding:0;
+}
+.rail-item:hover{color:#fff;background:var(--side-hover)}
+.rail-item[aria-current]{color:#fff;background:#2A2650}
+.rail-item.acc-teal[aria-current]{background:#123A3F;color:#7FE0E7}
+.rail-item.acc-indigo[aria-current]{background:#2A2650;color:#C2BBFF}
+.rail-item[aria-current]::before{content:"";position:absolute;left:-12px;top:10px;bottom:10px;width:3px;border-radius:0 3px 3px 0;background:currentColor}
+.rail-label{display:none}
+/* a label beside the icon on hover or keyboard focus */
+.rail-item[data-tip]:hover::after,.rail-item[data-tip]:focus-visible::after{
+  content:attr(data-tip);position:absolute;left:54px;top:50%;transform:translateY(-50%);white-space:nowrap;
+  background:#0B0A16;color:#fff;font-size:12.5px;font-weight:600;padding:5px 10px;border-radius:8px;
+  box-shadow:0 4px 14px rgba(0,0,0,.35);pointer-events:none;z-index:50;
+}
+.app-rail-nav a:focus-visible,.app-rail-nav button:focus-visible{outline:2px solid #7B6DFF;outline-offset:2px}
+:root[data-nav="collapsed"] [data-collapse]{color:#C2BBFF}
+
+/* ---------- section sidebar ---------- */
+.section-nav{
+  background:var(--side-bg);color:var(--side-ink);border-right:1px solid var(--side-line);
+  display:flex;flex-direction:column;gap:2px;padding:16px 12px 14px;
+  position:sticky;top:0;height:100vh;overflow-y:auto;scrollbar-width:none;z-index:30;
+}
+.sn-head{display:flex;gap:11px;align-items:center;padding:4px 8px 14px;text-decoration:none;color:#fff}
+.sn-head b{display:block;font-family:var(--display);font-size:16px;font-weight:700;line-height:1.15;letter-spacing:-.01em}
+.sn-head small{font-size:11.5px;color:var(--side-dim)}
+.sn-icon{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:none}
+.acc-teal .sn-icon{background:#123A3F;color:#7FE0E7}
+.acc-indigo .sn-icon{background:#2A2650;color:#C2BBFF}
+.sn-group{display:flex;flex-direction:column;gap:1px;margin-bottom:6px}
+.sn-label{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--side-dim);padding:12px 10px 6px}
+.sn-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;text-decoration:none;color:var(--side-ink);font-size:13.5px;font-weight:500;position:relative}
+.sn-item svg{flex:none;opacity:.85}
+.sn-item:hover{background:var(--side-hover);color:#fff}
+.sn-item[aria-current]{background:var(--side-hover);color:#fff;font-weight:600}
+.acc-teal .sn-item[aria-current]{box-shadow:inset 3px 0 0 #4FC0C9}
+.acc-indigo .sn-item[aria-current]{box-shadow:inset 3px 0 0 #7B6DFF}
+.sn-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.sn-text > span:first-of-type{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sn-text small{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--side-dim)}
+.sn-count{font-family:var(--mono);font-size:10.5px;color:var(--side-dim)}
+.sn-dot{width:10px;height:10px;border-radius:3px;background:var(--c);flex:none;align-self:flex-start;margin-top:4px}
+.sn-meter{display:block;height:4px;border-radius:4px;background:#26243F;overflow:hidden;margin-top:5px}
+.sn-meter i{display:block;height:100%;background:var(--c);border-radius:4px;transition:width .4s}
+.sn-spacer{flex:1;min-height:12px}
+.section-nav a:focus-visible{outline:2px solid #7B6DFF;outline-offset:2px}
+
+.app-goal{display:block;border:1px solid var(--side-line);border-radius:12px;padding:11px 12px;text-decoration:none;color:var(--side-ink)}
+.app-goal:hover{border-color:#3A3860}
+.app-goal-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.app-goal b{color:#fff;font-size:13px}
+.app-goal small{font-family:var(--mono);font-size:10.5px;color:var(--side-dim)}
+.app-meter{display:block;height:6px;border-radius:9px;background:#26243F;overflow:hidden;margin-top:8px}
+.app-meter i{display:block;height:100%;background:#7B6DFF;border-radius:9px;transition:width .4s}
+
+/* ---------- section strip (narrow screens) ---------- */
+.section-strip{
+  display:none;position:relative;gap:6px;overflow-x:auto;scrollbar-width:none;padding:10px clamp(16px,3vw,40px);
+  border-bottom:1px solid var(--line);background:var(--surface);
+}
+.section-strip::-webkit-scrollbar{display:none}
+.ss-item{flex:none;padding:6px 12px;border-radius:999px;border:1px solid var(--line);font-size:13px;font-weight:600;color:var(--ink-2);text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.ss-item[aria-current]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.ss-head{border-color:transparent;color:var(--ink);padding-left:0}
+
+/* ---------- top bar ---------- */
+.app-top{
+  position:sticky;top:0;z-index:20;height:56px;display:flex;align-items:center;gap:10px;
+  padding-inline:clamp(16px,3vw,40px);
+  background:color-mix(in srgb,var(--ground) 86%,transparent);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.app-where{flex:1;min-width:0;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ---------- progress rail ---------- */
+.app-rail{padding:28px 24px 32px 0;position:sticky;top:56px;align-self:start;max-height:calc(100vh - 56px);overflow-y:auto;scrollbar-width:thin}
+
+/* ---------- bare pages (lesson steps) ---------- */
+body.bare{min-height:100vh}
+
+/* ---------- responsive ---------- */
+@media (max-width:1439px){
+  .app.has-rail .app-body{grid-template-columns:minmax(0,1fr)}
+  .app-rail{display:none}
+}
+@media (max-width:1023px){
+  .app,.app.has-nav,:root[data-nav="collapsed"] .app.has-nav{grid-template-columns:68px minmax(0,1fr)}
+  .section-nav,[data-collapse]{display:none}
+  .section-strip{display:flex}
+}
+@media (max-width:719px){
+  .app,.app.has-nav,:root[data-nav="collapsed"] .app.has-nav{display:block}
+  .app-main{min-height:100vh;padding-bottom:64px}
+  .app-rail-nav{
+    position:fixed;inset:auto 0 0 0;height:auto;flex-direction:row;justify-content:space-around;gap:0;
+    padding:6px 4px calc(6px + env(safe-area-inset-bottom));border-top:1px solid var(--side-line);
+  }
+  .app-rail-nav > :not(.tab){display:none}
+  .rail-item.tab{flex:1;width:auto;height:auto;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;font-size:10.5px;font-weight:600}
+  .rail-item.tab .rail-label{display:block}
+  .rail-item[aria-current]::before{left:30%;right:30%;top:-6px;bottom:auto;width:auto;height:3px;border-radius:0 0 3px 3px}
+  .rail-item[data-tip]::after{display:none}
+}

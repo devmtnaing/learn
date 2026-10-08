@@ -1,6 +1,9 @@
 # LeetCode solution pages
 
-**Live: [learn.devmtnaing.com](https://learn.devmtnaing.com).** Open any problem and step through its solution.
+**Live: [learn.devmtnaing.com](https://learn.devmtnaing.com).** Two sections share one site, one design and one progress record:
+
+- **[LeetCode](https://learn.devmtnaing.com/leetcode)**: open any problem and step through its solution.
+- **[AI Engineer](https://learn.devmtnaing.com/ai-engineer)**: a self-study path from backend engineer to AI research engineer, built from the markdown course in [`course/`](course/README.md), with quizzes, flashcards, XP and streaks.
 
 [![Lowest Common Ancestor, step 4 of 7: the tree with the call stack beside it and the Ruby line that is running highlighted](docs/screenshots/walkthrough.png)](https://learn.devmtnaing.com/leetcode/lowest-common-ancestor-of-a-binary-tree)
 
@@ -32,7 +35,7 @@ theme. The screenshots below are all in the dark one.
 
 **The problem list.** 47 problems grouped by pattern, with search, a difficulty filter and ⌘K from any page.
 
-[![The home page: patterns down the side, problems with difficulty and acceptance rate](docs/screenshots/home.png)](https://learn.devmtnaing.com)
+[![The home page: patterns down the side, problems with difficulty and acceptance rate](docs/screenshots/home.png)](https://learn.devmtnaing.com/leetcode)
 
 **In Burmese.** Trapping Rain Water with two pointers, finished.
 
@@ -49,7 +52,7 @@ npm run audit      # every built page in a real browser (after npm run build)
 npm run refresh-problems   # re-read titles, tags and acceptance rates from LeetCode
 ```
 
-The home page lists 45 interview problems, 15 each of easy, medium and hard,
+The problem list has 45 interview problems, 15 each of easy, medium and hard,
 chosen where three of LeetCode's own study plans agree
 ([how](docs/problem-list.md)), plus 2 from outside that list, grouped by
 pattern (Arrays & Hashing, Two Pointers, Trees, …). Every one of them has a
@@ -59,11 +62,18 @@ solution page. To add a problem or fix a page, see
 ## What is in the repo
 
 ```
-src/pages/index.astro           the problem list
+src/pages/index.astro           the hub: both sections
+src/pages/leetcode/index.astro  the problem list
 src/pages/leetcode/[slug].astro renders every lesson folder
 src/lessons/<slug>/             one folder per solution page
+src/pages/ai-engineer/          the AI Engineer path, module guides and lesson steps
+src/pages/profile.astro         progress across both sections
+course/                         the AI Engineer course as markdown (the pages read it at build)
+src/lib/ai/                     course parser, quizzes, flashcards, progress painter
+src/components/ai/              Preact islands: lesson steps, practice, profile, rail
+src/lib/progress.ts             progress, XP and streak for the whole site (localStorage)
 src/lib/                        the shared kit: stepper, stage shapes, trees, i18n
-src/styles/                     tokens, site chrome, the lesson page, the stage
+src/styles/                     tokens (one design, a teal and an indigo accent), app shell, lessons, AI section
 scripts/check-lessons.mjs       structure and format check
 scripts/audit.mjs               drives every built page in Chromium
 scripts/refresh-problems.mjs    refreshes src/data/problems.json from LeetCode
@@ -73,7 +83,8 @@ docs/                           how the problem list was chosen; translation not
 wrangler.jsonc                  Cloudflare: serve dist/ at learn.devmtnaing.com
 ```
 
-The site is fully static: every page is prerendered and served as a file, so
+The site is fully static: every page is prerendered and served as a file (the
+AI Engineer's interactive steps are small Preact islands on those pages), so
 there's no backend. A solution page is a folder of data and one step generator
 per approach. The kit supplies the transport, code panel, language switching
 and layout. Every lesson has a spec in `verify/`, so `npm run verify --

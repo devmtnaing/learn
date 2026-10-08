@@ -56,10 +56,10 @@ const my = (v?: T) => (v == null || typeof v === 'string' ? undefined : v.my);
 const plain = (v: T) => en(v).replace(/<[^>]+>/g, '');
 const lcUrl = (slug: string) => `https://leetcode.com/problems/${slug}/`;
 ---
-<Base title={`${plain(p.title)} · ${SITE_NAME}`} description={p.summary}>
+<Base section="leetcode" where="LeetCode" title={`${plain(p.title)} · ${SITE_NAME}`} description={p.summary}>
 <div class="shell">
   <nav class="crumbs" aria-label="Breadcrumb">
-    <a href="/">LeetCode</a><span>/</span>
+    <a href="/leetcode">LeetCode</a><span>/</span>
     <span>{plain(p.title)}</span>
   </nav>
 </div>
@@ -69,6 +69,9 @@ const lcUrl = (slug: string) => `https://leetcode.com/problems/${slug}/`;
   <header>
     <div class="top-row">
       <span class="eyebrow" data-i18n={my(p.eyebrow)} set:html={en(p.eyebrow)} />
+      <button class="solve-top" type="button" data-solve={p.slug} aria-pressed="false" hidden>
+        <span aria-hidden="true">✓</span> <span data-solve-label>Mark as solved</span>
+      </button>
       <div class="lang-switch" role="group" aria-label="Page language">
         <button class="lang-opt" data-lang-opt="en" aria-pressed="true">English</button>
         <button class="lang-opt" data-lang-opt="my" aria-pressed="false" lang="my">မြန်မာ</button>
@@ -201,12 +204,38 @@ const lcUrl = (slug: string) => `https://leetcode.com/problems/${slug}/`;
 
 <div class="shell">
   <nav class="pager" aria-label="Lesson navigation">
-    <a class="up" href="/"><span class="dir">Back to</span><span>All problems</span></a>
+    <a class="up" href="/leetcode"><span class="dir">Back to</span><span>All problems</span></a>
+    <button class="solve-btn" type="button" data-solve={p.slug} aria-pressed="false" hidden>
+      <span class="dir">Your progress</span><span data-solve-label>Mark as solved</span>
+    </button>
   </nav>
 </div>
 </Base>
 
 <script>
   import { initLangSwitch } from '../lib/i18n.js';
+  import { get, subscribe, toggleChecked, touch } from '../lib/progress';
   initLangSwitch();
+  // the hub's "jump back in" offers the last problem opened
+  const title = document.querySelector('.wrap h1')?.textContent?.trim();
+  const sub = document.querySelector('.wrap header .eyebrow')?.textContent?.replace(/\s+/g, ' ').trim();
+  if (title) touch('leetcode', { url: location.pathname, title, sub: sub ?? 'LeetCode' });
+
+  // "Mark as solved", at the top and at the foot of the page: a tick on the
+  // problem list and LeetCode XP
+  const solves = [...document.querySelectorAll<HTMLButtonElement>('[data-solve]')];
+  if (solves.length) {
+    const id = `leetcode:${solves[0].dataset.solve}`;
+    const paint = () => {
+      const on = !!get().checked[id];
+      for (const b of solves) {
+        b.setAttribute('aria-pressed', String(on));
+        b.querySelector('[data-solve-label]')!.textContent = on ? 'Solved' : b.classList.contains('solve-top') ? 'Mark as solved' : 'Mark as solved (+20 XP)';
+        b.hidden = false;
+      }
+    };
+    for (const b of solves) b.addEventListener('click', () => toggleChecked(id, 20, 'leetcode'));
+    paint();
+    subscribe(paint);
+  }
 </script>

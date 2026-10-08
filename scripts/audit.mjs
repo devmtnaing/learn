@@ -46,7 +46,7 @@ async function accessibility(page, where) {
   return found.map((x) => `a11y (${where}) ${x}`);
 }
 
-/* The masthead's search dialog (SiteSearch.astro), driven from a lesson. */
+/* The top bar's search dialog (SiteSearch.astro), driven from a lesson. */
 async function siteSearch(page, base, slugs) {
   const found = [];
   const open = () => page.$eval('#search-dlg', (d) => d.open);
@@ -77,8 +77,8 @@ async function siteSearch(page, base, slugs) {
   await page.keyboard.press('Enter');
   await page.waitForURL('**/leetcode/two-sum', { timeout: 5000 }).catch(() => found.push('Enter on "two sum" did not open /leetcode/two-sum'));
   await page.setViewportSize({ width: 320, height: 700 });
-  const bar = await page.$eval('.masthead', (m) => m.offsetHeight);
-  if (bar > 60) found.push(`the masthead wraps at 320px (${bar}px tall)`);
+  const bar = await page.$eval('.app-top', (m) => m.offsetHeight);
+  if (bar > 60) found.push(`the top bar wraps at 320px (${bar}px tall)`);
   return found;
 }
 
@@ -98,16 +98,18 @@ if (!existsSync(resolve(ROOT, 'dist/index.html'))) {
   process.exit(1);
 }
 
-/* dist/ served as a static site: /x resolves to /x.html or /x/index.html. Its own
- * server rather than `astro preview`, which runs one instance per project. */
+/* dist/ served as a static site: /x resolves to /x.html, else /x/index.html, the
+ * order Cloudflare uses (/leetcode is leetcode.html beside the leetcode/ folder of
+ * lessons). Its own server rather than `astro preview`, which runs one instance
+ * per project. */
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml',
   '.json': 'application/json', '.png': 'image/png', '.woff2': 'font/woff2', '.ico': 'image/x-icon', '.xml': 'application/xml' };
 function serve() {
   const server = createServer((req, res) => {
     let file = join(DIST, decodeURIComponent(new URL(req.url, 'http://x').pathname));
     if (!file.startsWith(DIST)) { res.writeHead(403).end(); return; }
-    if (existsSync(file) && statSync(file).isDirectory()) file = join(file, 'index.html');
-    else if (!existsSync(file) && existsSync(`${file}.html`)) file = `${file}.html`;   // build.format 'file'
+    if (existsSync(`${file}.html`) && !(existsSync(file) && statSync(file).isFile())) file = `${file}.html`;   // build.format 'file'
+    else if (existsSync(file) && statSync(file).isDirectory()) file = join(file, 'index.html');
     if (!existsSync(file)) { res.writeHead(404).end('not found'); return; }
     res.writeHead(200, { 'content-type': TYPES[extname(file)] ?? 'application/octet-stream' });
     res.end(readFileSync(file));
@@ -327,7 +329,7 @@ async function main() {
     const errors = [];
     page.on('pageerror', (e) => errors.push(`page error: ${e.message}`));
     await page.setViewportSize({ width: 400, height: 850 });
-    await page.goto(BASE);
+    await page.goto(`${BASE}/leetcode`);
     const home = await page.evaluate(() => ({
       over: document.documentElement.scrollWidth - window.innerWidth,
       links: [...document.querySelectorAll('a.ptitle')].map((a) => a.getAttribute('href')),
@@ -337,17 +339,55 @@ async function main() {
     for (const scheme of ['light', 'dark']) {
       await page.setViewportSize({ width: 1300, height: 900 });
       await page.emulateMedia({ colorScheme: scheme });
-      await page.goto(BASE);
+      await page.goto(`${BASE}/leetcode`);
       a11y.push(...await accessibility(page, scheme));
     }
     const search = await siteSearch(page, BASE, slugs);
-    report('home page', [
+    report('problem list', [
       ...errors,
       ...search,
       ...(home.over > 0 ? [`${home.over}px too wide at 400px`] : []),
       ...missing.map((s) => `no link to /leetcode/${s}`),
       ...a11y,
     ]);
+
+    // The hub and a sample of AI Engineer pages: no errors, nothing too wide,
+    // AA in both themes. Lesson steps render client-side, so wait for them.
+    const others = [
+      ['/', 'h1'],
+      ['/ai-engineer', '.track-tabs'],
+      ['/ai-engineer/track-2', '.timeline'],
+      ['/ai-engineer/track-2/2-7', '.guide-hero'],
+      ['/ai-engineer/track-1/1-1/concepts', '.session-body h1'],
+      ['/ai-engineer/track-1/1-4/learn', '.check'],
+      ['/ai-engineer/track-2/2-7/quiz', '.option'],
+      ['/ai-engineer/practice', '.grid-cards'],
+      ['/ai-engineer/papers', '.check'],
+      ['/ai-engineer/projects', 'details'],
+      ['/profile', '.seg'],
+    ];
+    for (const [path, ready] of others) {
+      const found = [];
+      const onError = (e) => found.push(`page error: ${e.message}`);
+      page.on('pageerror', onError);
+      for (const width of [400, 320]) {
+        await page.setViewportSize({ width, height: 850 });
+        await page.emulateMedia({ colorScheme: 'light' });
+        await page.goto(`${BASE}${path}`);
+        await page.waitForSelector(ready, { timeout: 5000 }).catch(() => found.push(`${ready} never appeared`));
+        const over = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+        if (over > 0) found.push(`${over}px too wide at ${width}px`);
+      }
+      for (const scheme of ['light', 'dark']) {
+        await page.setViewportSize({ width: 1500, height: 900 });
+        await page.emulateMedia({ colorScheme: scheme });
+        await page.goto(`${BASE}${path}`);
+        await page.waitForSelector(ready, { timeout: 5000 }).catch(() => {});
+        found.push(...await accessibility(page, scheme));
+      }
+      page.off('pageerror', onError);
+      report(path, [...new Set(found)]);
+    }
   }
 
   await browser.close();

@@ -1,5 +1,5 @@
 /* Implement Trie: the trie itself is stage.js's trieOutline(), styled in
    kit.css. The part 1 widget's prefix field: */
-.tw-input{font-family:"IBM Plex Mono",monospace;font-size:14px;width:7.5em;padding:6px 9px;border-radius:7px;
+.tw-input{font-family:var(--mono);font-size:14px;width:7.5em;padding:6px 9px;border-radius:7px;
   border:1px solid var(--line-2);background:var(--surface);color:var(--ink)}
 .tw-input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}

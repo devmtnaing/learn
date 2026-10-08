@@ -1,0 +1,55 @@
+---
+import AiLayout from '../../layouts/AiLayout.astro';
+import Icon from '../../components/Icon.astro';
+import { papers } from '../../lib/ai/course';
+const total = papers.reduce((a, s) => a + s.papers.length, 0);
+---
+<AiLayout title="Papers" description="The core machine learning papers, in reading order." where="AI Engineer · Papers">
+  <div class="kicker">Papers</div>
+  <h1 class="page-h">Reading list</h1>
+  <p class="page-sub">
+    <span data-papers-read>0</span> / {total} summarised · ★ = full three-pass read. Tick a paper once you've written its one-page summary.
+  </p>
+  {papers.map((s) => (
+    <section>
+      <h2 class="section-title">{s.title}</h2>
+      <div class="checklist tc-rose" style="margin-top:0">
+        {s.papers.map((x) => (
+          <div class="check" data-check={x.id} data-xp="15">
+            <button class="box" type="button" role="checkbox" aria-checked="false" aria-label={`Summarised: ${x.title}`}><Icon name="check" size={16} /></button>
+            <span style="flex:1">
+              {x.star && <span style="color:var(--xp)">★ </span>}<b>{x.title}</b>
+              <span class="paper-meta">{x.by}</span>
+            </span>
+            {x.url && <a href={x.url} target="_blank" rel="noopener" aria-label={`Open ${x.title}`} style="color:var(--muted)"><Icon name="ext" size={18} /></a>}
+          </div>
+        ))}
+      </div>
+    </section>
+  ))}
+</AiLayout>
+
+<script>
+  import { get, subscribe, toggleChecked } from '../../lib/progress';
+  const rows = [...document.querySelectorAll<HTMLElement>('[data-check]')];
+  const paint = () => {
+    const p = get();
+    let n = 0;
+    for (const r of rows) {
+      const on = !!p.checked[r.dataset.check!];
+      if (on) n++;
+      r.classList.toggle('on', on);
+      r.querySelector('[role=checkbox]')?.setAttribute('aria-checked', String(on));
+    }
+    const c = document.querySelector('[data-papers-read]');
+    if (c) c.textContent = String(n);
+  };
+  // the whole row toggles (the box is the keyboard target); the paper link opens normally
+  for (const r of rows)
+    r.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) return;
+      toggleChecked(r.dataset.check!, Number(r.dataset.xp));
+    });
+  paint();
+  subscribe(paint);
+</script>

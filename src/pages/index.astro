@@ -1,188 +1,47 @@
 ---
-import Base from '../layouts/Base.astro';
-import { SITE_NAME } from '../data/site';
-import { asOf } from '../data/problems-meta.json';
-import { all, groups, haystack, leetcodeUrl, PAGE as WALKTHROUGH } from '../data/catalog';
+/* The hub: the two sections of the site, and where to pick up. */
+import AiLayout from '../layouts/AiLayout.astro';
+import Icon from '../components/Icon.astro';
+import JumpBackIn from '../components/ai/JumpBackIn';
+import { all, PAGE } from '../data/catalog';
+import { tracks, units } from '../lib/ai/course';
+import { quizzes } from '../lib/ai/quizzes';
 
-const worked = all.filter((p) => WALKTHROUGH[p.id]).length;
+const walkthroughs = all.filter((p) => PAGE[p.id]).length;
+const modules = tracks.reduce((a, t) => a + t.modules.length, 0);
+const questions = Object.values(quizzes).reduce((a, q) => a + q.length, 0);
 ---
-<Base
-  title={`LeetCode · ${SITE_NAME}`}
-  description="LeetCode interview problems grouped by pattern, with step-by-step walkthroughs and tested code in five languages."
->
-  <div class="shell">
-    <div class="page-head">
-      <h1>LeetCode</h1>
-      <p class="lede">
-        Interview problems, grouped by pattern. Open one to step through the solution,
-        with code in Ruby, Python, JavaScript, Go and Rust.
-      </p>
-    </div>
-
-    <div class="plist">
-      <aside class="cats">
-        <nav aria-label="Patterns">
-          <a class="cat" href="#top" data-cat="" aria-current="true">
-            <span>All problems</span><span class="cat-n">{all.length}</span>
-          </a>
-          {groups.map((g) => (
-            <a class="cat" href={`#${g.id}`} data-cat={g.id}>
-              <span>{g.name}</span><span class="cat-n">{g.rows.length}</span>
-            </a>
-          ))}
-        </nav>
-      </aside>
-
-      <div class="plist-main" id="top">
-        <form class="filters" role="search" data-filters hidden>
-          <label class="search">
-            <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5 14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            <input type="search" name="q" placeholder="Search by name, number or pattern" aria-label="Search problems" autocomplete="off" spellcheck="false">
-          </label>
-          <select name="d" aria-label="Difficulty">
-            <option value="">All difficulties</option>
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-          </select>
-          <label class="only">
-            <input type="checkbox" name="solved" value="1">
-            <span>With a solution</span>
-          </label>
-        </form>
-        <p class="plist-count" aria-live="polite" data-summary>
-          {all.length} problems · {worked} with an interactive solution
-        </p>
-
-        {groups.map((g) => (
-          <section class="cat-sec" id={g.id} data-sec={g.id}>
-            <header>
-              <h2>{g.name}</h2>
-              <span data-sec-count>{g.rows.length} {g.rows.length === 1 ? 'problem' : 'problems'}</span>
-            </header>
-            <ul class="prows">
-              {g.rows.map((p) => (
-                <li
-                  class={WALKTHROUGH[p.id] ? 'prow has-page' : 'prow'}
-                  data-d={p.difficulty.toLowerCase()}
-                  data-text={haystack(p)}
-                  data-solved={WALKTHROUGH[p.id] ? '1' : undefined}
-                >
-                  <span class="pnum">{p.id}</span>
-                  <div class="pmain">
-                    {WALKTHROUGH[p.id]
-                      ? <a class="ptitle" href={WALKTHROUGH[p.id]}>{p.title}</a>
-                      : <span class="ptitle">{p.title}</span>}
-                    <span class="psub">
-                      {!WALKTHROUGH[p.id] && <span class="soon">Solution coming soon</span>}
-                      {p.extra && <span>Outside the core list</span>}
-                      <a class="lc" href={leetcodeUrl(p.slug)} target="_blank" rel="noopener">View on LeetCode ↗</a>
-                    </span>
-                  </div>
-                  <span class="ptags">{p.tags.slice(0, 3).join(' · ')}</span>
-                  <span class={`diff ${p.difficulty.toLowerCase()}`}>{p.difficulty}</span>
-                  <span class="prate" title={`Acceptance rate on LeetCode, as of ${asOf}`}>{p.acRate}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ))}
-
-        <p class="plist-empty" data-empty hidden>
-          No problems match. <button type="button" data-clear>Clear the filters</button>
-        </p>
-        <p class="plist-foot">Difficulty, tags and acceptance rates from LeetCode, as of {asOf}.</p>
+<AiLayout section="hub" where="Home" title="Home" description="LeetCode walkthroughs you can step through, and a self-study path from backend engineer to AI research engineer.">
+  <div class="kicker">learn.devmtnaing.com</div>
+  <h1 class="page-h">Practise the interview. Then go deeper.</h1>
+  <p class="page-sub">
+    LeetCode problems you can step through one state change at a time, and a self-study path from backend engineer
+    to AI research engineer. XP, streaks and your daily goal count across both.
+  </p>
+  <JumpBackIn client:only="preact" units={units} />
+  <h2 class="section-title">Sections</h2>
+  <div class="hub-sections">
+    <a class="hub-card tc-teal" href="/leetcode">
+      <div class="kicker" style="color:var(--ct)">LeetCode</div>
+      <h2>Interview problems</h2>
+      <p>Grouped by pattern. Each walkthrough quotes the problem, steps through the algorithm and ends with tested code in Ruby, Python, JavaScript, Go and Rust.</p>
+      <div class="hub-stats">
+        <span><b>{all.length}</b>problems</span>
+        <span><b>{walkthroughs}</b>walkthroughs</span>
+        <span><b>5</b>languages</span>
       </div>
-    </div>
+      <span class="go">Browse problems <Icon name="chevron" size={16} /></span>
+    </a>
+    <a class="hub-card tc-indigo" href="/ai-engineer">
+      <div class="kicker" style="color:var(--ct)">AI Engineer</div>
+      <h2>Backend → AI research engineer</h2>
+      <p>Three tracks, each a job you can be hired for: AI application, ML systems, research. Concepts, resources, builds, quizzes and checkpoints.</p>
+      <div class="hub-stats">
+        <span><b>{modules}</b>modules</span>
+        <span><b>{questions}</b>quiz questions</span>
+        <span><b>{units.length}</b>steps</span>
+      </div>
+      <span class="go">Open the path <Icon name="chevron" size={16} /></span>
+    </a>
   </div>
-</Base>
-
-<script>
-  // Search, difficulty and pattern filters. Everything is in the markup
-  // already, so without JavaScript the full list shows and the pattern links
-  // scroll to their section; this only hides rows. State lives in the URL
-  // (?q=&d=&solved=1#pattern) so a filtered list can be shared.
-  const form = document.querySelector<HTMLFormElement>('[data-filters]')!;
-  const q = form.elements.namedItem('q') as HTMLInputElement;
-  const d = form.elements.namedItem('d') as HTMLSelectElement;
-  const solved = form.elements.namedItem('solved') as HTMLInputElement;
-  const cats = [...document.querySelectorAll<HTMLAnchorElement>('.cat')];
-  const secs = [...document.querySelectorAll<HTMLElement>('[data-sec]')];
-  const summary = document.querySelector('[data-summary]')!;
-  const empty = document.querySelector<HTMLElement>('[data-empty]')!;
-  let cat = '';
-
-  const params = new URLSearchParams(location.search);
-  q.value = params.get('q') ?? '';
-  d.value = params.get('d') ?? '';
-  solved.checked = params.get('solved') === '1';
-  const fromHash = location.hash.slice(1);
-  if (secs.some((s) => s.dataset.sec === fromHash)) cat = fromHash;
-  form.hidden = false;
-
-  const plural = (n: number) => `${n} ${n === 1 ? 'problem' : 'problems'}`;
-
-  function apply() {
-    const terms = q.value.toLowerCase().split(/\s+/).filter(Boolean);
-    const counts: Record<string, number> = {};
-    let shown = 0, shownSolved = 0;
-    for (const sec of secs) {
-      let n = 0;
-      for (const row of sec.querySelectorAll<HTMLElement>('.prow')) {
-        const hit = (!d.value || row.dataset.d === d.value)
-          && (!solved.checked || row.dataset.solved)
-          && terms.every((t) => row.dataset.text!.includes(t));
-        row.hidden = !hit;
-        if (hit) { n++; if (row.dataset.solved) shownSolved++; }
-      }
-      counts[sec.dataset.sec!] = n;
-      const inCat = !cat || sec.dataset.sec === cat;
-      sec.hidden = !inCat || n === 0;
-      sec.querySelector('[data-sec-count]')!.textContent = plural(n);
-      if (inCat) shown += n;
-    }
-    // Sidebar counts follow the search and difficulty, not the chosen pattern.
-    let total = 0;
-    for (const a of cats) {
-      const id = a.dataset.cat!;
-      const n = id ? counts[id] : 0;
-      total += n;
-      if (id) {
-        a.querySelector('.cat-n')!.textContent = String(n);
-        a.classList.toggle('none', n === 0);
-      }
-      a.setAttribute('aria-current', String(id === cat));
-    }
-    cats[0].querySelector('.cat-n')!.textContent = String(total);
-    summary.textContent = shown
-      ? `${plural(shown)} · ${shownSolved} with an interactive solution`
-      : 'No problems match';
-    empty.hidden = shown > 0;
-
-    const next = new URLSearchParams();
-    if (q.value) next.set('q', q.value);
-    if (d.value) next.set('d', d.value);
-    if (solved.checked) next.set('solved', '1');
-    const url = `${location.pathname}${next.size ? `?${next}` : ''}${cat ? `#${cat}` : ''}`;
-    // Safari throws once a page calls replaceState too often (a held key in
-    // the search box); the filter has already applied, so only the URL lags.
-    try { history.replaceState(null, '', url); } catch { /* rate-limited */ }
-  }
-
-  form.addEventListener('input', apply);
-  form.addEventListener('submit', (e) => e.preventDefault());
-  for (const a of cats) {
-    a.addEventListener('click', (e) => {
-      e.preventDefault();
-      cat = a.dataset.cat!;
-      apply();
-      document.getElementById('top')!.scrollIntoView({ block: 'start' });
-    });
-  }
-  document.querySelector('[data-clear]')!.addEventListener('click', () => {
-    q.value = ''; d.value = ''; solved.checked = false; cat = '';
-    apply();
-    q.focus();
-  });
-  apply();
-</script>
+</AiLayout>

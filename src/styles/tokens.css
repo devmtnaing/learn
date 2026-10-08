@@ -1,70 +1,115 @@
-/* Palette and shape, in all three theme states: system, forced light,
-   forced dark. Every other stylesheet reads colour only through these.
-   Text colours clear WCAG AA (4.5:1) on every background they sit on —
+/* Palette, type and shape, in all three theme states: system, forced light,
+   forced dark. Every other stylesheet reads colour and fonts only through
+   these. Text colours clear WCAG AA (4.5:1) on every background they sit on:
    ground, surface, sunk and the soft tints; npm run audit checks it.
-   color-scheme follows the theme so native parts — scrollbars, range
-   tracks, number spinners — are drawn dark on the dark theme too. */
+   color-scheme follows the theme so native parts (scrollbars, range tracks,
+   number spinners) are drawn dark on the dark theme too.
+
+   One design system, two accents: <html data-section> picks the accent.
+   LeetCode pages are teal, the AI Engineer course and the hub are indigo. */
 :root{
   color-scheme:light;
-  --ground:#EEF2F2;
+  --font:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans Myanmar",sans-serif;
+  --display:Sora,"Plus Jakarta Sans",-apple-system,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  --ground:#F3F4F9;
   --surface:#FFFFFF;
-  --sunk:#E3E9EA;
-  --ink:#0F1A1E;
-  --ink-2:#4B5D64;
-  --ink-3:#5B696E;
-  --line:#CCD7D9;
-  --line-2:#B4C3C6;
-  --accent:#0C727B;
-  --accent-soft:#D8EDEE;
+  --sunk:#EAECF5;
+  --ink:#161427;
+  --ink-2:#4A4966;
+  --ink-3:#5C5B77;
+  --line:#E1E2EE;
+  --line-2:#C9CADB;
   --amber:#945908;
-  --amber-soft:#F6E7CD;
+  --amber-soft:#F8ECD6;
   --up:#197551;
-  --up-soft:#D6EDE2;
+  --up-soft:#DCF1E7;
   --down:#A63A2B;
-  --down-soft:#F6DED9;
-  --shadow:0 1px 2px rgba(15,26,30,.07), 0 10px 24px -16px rgba(15,26,30,.35);
-  --radius:10px;
+  --down-soft:#F9E2DE;
+  --shadow:0 1px 2px rgba(22,20,39,.05), 0 10px 24px -16px rgba(22,20,39,.3);
+  --radius:12px;
+
+  /* the two accents; --accent is whichever one this section uses */
+  --indigo:#5141E0;
+  --indigo-edge:#3A2DB8;
+  --indigo-soft:#ECEBFF;
+  --teal:#0B7077;
+  --teal-edge:#08545A;
+  --teal-soft:#DCF1F0;
+  --accent:var(--indigo);
+  --accent-edge:var(--indigo-edge);
+  --accent-soft:var(--indigo-soft);
+  /* text drawn on a solid accent fill */
+  --on-accent:#FFFFFF;
+
+  /* the sidebar is dark in both themes */
+  --side-bg:#15132A;
+  --side-ink:#B9B8D3;
+  --side-dim:#9391B5;
+  --side-line:#26243F;
+  --side-hover:#1F1D38;
+}
+:root[data-section="leetcode"]{
+  --accent:var(--teal);
+  --accent-edge:var(--teal-edge);
+  --accent-soft:var(--teal-soft);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     color-scheme:dark;
-    --ground:#0C1315;
-    --surface:#141E21;
-    --sunk:#0F1A1D;
-    --ink:#E7EFF0;
-    --ink-2:#A2B5BB;
-    --ink-3:#8C9CA2;
-    --line:#26363A;
-    --line-2:#33474C;
-    --accent:#4FC0C9;
-    --accent-soft:#103539;
+    --ground:#0F0E1A;
+    --surface:#17162A;
+    --sunk:#121124;
+    --ink:#ECEBF7;
+    --ink-2:#B0AFCB;
+    --ink-3:#9897B6;
+    --line:#2A2945;
+    --line-2:#37365A;
     --amber:#DFA94C;
-    --amber-soft:#332815;
+    --amber-soft:#33281550;
     --up:#4FC08A;
     --up-soft:#11312450;
-    --down:#E07C64;
+    --down:#E8806A;
     --down-soft:#3A1E1750;
     --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 24px -16px rgba(0,0,0,.8);
+    --indigo:#A39AFF;
+    --indigo-edge:#6E61E6;
+    --indigo-soft:#25204F;
+    --teal:#4FC0C9;
+    --teal-edge:#2A8F97;
+    --teal-soft:#103539;
+    --on-accent:#0F0E1A;
+    --side-bg:#0A0913;
+    --side-line:#1D1C31;
+    --side-hover:#17162A;
   }
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
-  --ground:#0C1315;
-  --surface:#141E21;
-  --sunk:#0F1A1D;
-  --ink:#E7EFF0;
-  --ink-2:#A2B5BB;
-  --ink-3:#8C9CA2;
-  --line:#26363A;
-  --line-2:#33474C;
-  --accent:#4FC0C9;
-  --accent-soft:#103539;
+  --ground:#0F0E1A;
+  --surface:#17162A;
+  --sunk:#121124;
+  --ink:#ECEBF7;
+  --ink-2:#B0AFCB;
+  --ink-3:#9897B6;
+  --line:#2A2945;
+  --line-2:#37365A;
   --amber:#DFA94C;
-  --amber-soft:#332815;
+  --amber-soft:#33281550;
   --up:#4FC08A;
   --up-soft:#11312450;
-  --down:#E07C64;
+  --down:#E8806A;
   --down-soft:#3A1E1750;
   --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 24px -16px rgba(0,0,0,.8);
+  --indigo:#A39AFF;
+  --indigo-edge:#6E61E6;
+  --indigo-soft:#25204F;
+  --teal:#4FC0C9;
+  --teal-edge:#2A8F97;
+  --teal-soft:#103539;
+  --on-accent:#0F0E1A;
+  --side-bg:#0A0913;
+  --side-line:#1D1C31;
+  --side-hover:#17162A;
 }
-

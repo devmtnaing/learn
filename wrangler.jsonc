@@ -12,7 +12,7 @@
 // own: assets stay at the top level and are uploaded from the branch, and
 // the production route is not applied to Previews.
 {
-  "$schema": "node_modules/wrangler/config-schema.json"
+  "$schema": "node_modules/wrangler/config-schema.json",
   "name": "learn",
   "compatibility_date": "2026-09-25",
   "assets": {

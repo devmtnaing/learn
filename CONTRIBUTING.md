@@ -1,4 +1,13 @@
-# Contributing a solution page
+# Contributing
+
+This repo is the site at [learn.devmtnaing.com](https://learn.devmtnaing.com),
+with two sections. Most of this guide is about the first:
+
+- **LeetCode solution pages** (`src/lessons/`): the rest of this guide.
+- **The AI Engineer course** (`course/` and `src/pages/ai-engineer/`): see
+  [Changing the AI Engineer course](#changing-the-ai-engineer-course) at the end.
+
+## Contributing a solution page
 
 The most useful contribution is a new solution page for a problem on the list
 that doesn't have one yet: any row on the problem list (`/leetcode`) marked *Solution coming
@@ -9,7 +18,7 @@ Before you start, open a page or two to see what one looks like:
 copy. Every page has the same parts in the same order — the layout comes from
 the shared kit, so you write content, not markup.
 
-## What a page promises
+### What a page promises
 
 A reader comes back to these pages to relearn a problem, watch it run, and copy
 code they can trust. So three rules are firm:
@@ -25,14 +34,14 @@ code they can trust. So three rules are firm:
   carries between steps, in the shape the code holds it: the map, the stack,
   the call stack. It isn't a cartoon of the idea.
 
-## You will need
+### You will need
 
 - Node 20+, Python 3.10+, Ruby 3
 - Docker, for Go and Rust. The verifier runs them in `golang:1.23-alpine` and
   `rust:1.98-slim`, and reports them as *skipped*, not passed, when Docker isn't
   running.
 
-## Building a page, step by step
+### Building a page, step by step
 
 A page is one folder, `src/lessons/<leetcode-slug>/`. The route finds it and
 the problem list links it automatically, so there is nothing else to register.
@@ -46,7 +55,7 @@ verify/<slug>/spec.py               the corpus, the oracle, the five drivers
 verify/<slug>/adapter.mjs           how the walkthrough reads a corpus line
 ```
 
-### 1. Get the problem exactly right
+#### 1. Get the problem exactly right
 
 Quote the statement, don't paraphrase it: readers will submit against the real
 one. LeetCode's GraphQL endpoint returns it without a key:
@@ -59,13 +68,13 @@ curl -s -X POST https://leetcode.com/graphql/ -H 'Content-Type: application/json
 `statement.html` holds the prose paragraphs only. Examples and constraints
 have their own components in `lesson.js` and `page.js`.
 
-### 2. Write the brute force first
+#### 2. Write the brute force first
 
 It is the reference everything else is checked against, so write it first and
 confirm it on the examples. Then write the better approach. Most pages show two
 (the brute force and the one worth learning); some show three.
 
-### 3. Write the listings as files, then generate the code table
+#### 3. Write the listings as files, then generate the code table
 
 Write each approach in each language as a plain file (`brute.rb`,
 `brute.py`, `brute.js`, `brute.go`, `brute.rs`, `hash.rb`, …) and mark each
@@ -85,7 +94,7 @@ and paste the `CODE` block into `lesson.js`. Don't retype listings: the
 verifier runs the text in `lesson.js`, and the generator strips the markers so
 that text is exactly the file you wrote.
 
-### 4. Write `lesson.js`
+#### 4. Write `lesson.js`
 
 Copy `src/lessons/two-sum/lesson.js` and replace its parts. It ends with one
 `mountLesson({...})` call. Keep that call last in the file, because it runs the
@@ -131,7 +140,7 @@ and calls get `cells(items, { wide: true })` and a board or matrix
 Give a failed comparison its own frame. The branch that *doesn't* fire is often
 the one worth seeing.
 
-### 5. Write `page.js`
+#### 5. Write `page.js`
 
 Every prop is required, and `npm run check` names any that are missing:
 `title`, `summary`, `eyebrow`, `lede`, `links`, `constraints`, `part1Sub`,
@@ -145,7 +154,7 @@ Traps are the places the statement trips people up: each one names what the
 wrong code returns, and you ran it to find out. Notes are questions a reader would ask
 ("Why check for the partner *before* storing?"), answered in a paragraph.
 
-### 6. Verify
+#### 6. Verify
 
 Write `verify/<slug>/spec.py`: `DRIVERS` (a program per language that reads
 one case per line and prints one answer per line, with `{SOL}` where the
@@ -174,7 +183,7 @@ Things that have bitten before:
 - Rust's `i32` overflows silently in release builds.
 - Go's `for range` over a map is randomly ordered.
 
-### 7. Check the page
+#### 7. Check the page
 
 ```sh
 npm run check        # structure: every key highlighted, every part present
@@ -192,7 +201,7 @@ finds and opens a page. What it cannot
 tell you is whether the page reads well — open it
 beside another one and look.
 
-## Burmese
+### Burmese
 
 Pages are bilingual, but **you don't need to write Burmese**. Any string can
 be plain English, or `t(english, burmese)` from `kit.js`. A missing Burmese side
@@ -203,7 +212,7 @@ If you do translate: keep code, identifiers, problem titles and terms of art
 translate idioms word for word. [docs/translation-review.md](docs/translation-review.md)
 collects phrasings a native reader should check. Help there is very welcome.
 
-## Pull request checklist
+### Pull request checklist
 
 - [ ] `npm run check` passes
 - [ ] `npm run verify -- <slug>` passes, with Go and Rust run (not skipped)
@@ -225,9 +234,39 @@ shared page code but neither the skill nor this guide, so a reviewer can ask
 whether the docs need to follow. A third job runs `npm run audit` over every
 page. Reading the page beside another one is still yours to do.
 
-## Using Claude Code
+### Using Claude Code
 
 The repo ships a project skill, `.claude/skills/leetcode-solution-page/`. In
 Claude Code, `/leetcode-solution-page <problem>` follows this guide end to end,
 verification included. It holds a contribution to the same standard as a
 hand-written one: the checklist above still applies.
+
+## Changing the AI Engineer course
+
+The course is plain markdown in [`course/`](course/README.md), and the pages
+under `/ai-engineer` are built from it at build time
+(`src/lib/ai/course.ts`), so a change to the markdown is a change to the site.
+
+- **Module text** lives in each track's README. A module is a heading
+  (`## 1.4 …` in Track 1, `### 2.7 …` in Tracks 2 and 3, `## Level 2: …` in
+  Math) with `**Why:**`, `**Concepts:**`, `**Learn**` (`- *Core:*` and
+  `- *Optional:*` items), `**Build**` (`- [ ]` items) and `**Checkpoint:**`.
+  Keep that shape: the parser turns each part into a step of the module.
+- **Time estimates** come from the weeks column of each track's module table.
+  They are weeks at ~13.5 hours a week; the site scales them to the reader's
+  chosen pace.
+- **Quizzes and flashcards** are in `src/lib/ai/quizzes.ts` and
+  `src/lib/ai/flashcards.ts`, keyed by module id (`t1-1.4`). A question names
+  its correct option and says why.
+- **Papers and projects** are `course/track-3-research-engineer/papers.md` and
+  `course/projects/README.md`.
+- **A new section** (another course next to LeetCode and AI Engineer) is one
+  entry in `src/data/sections.ts`, which gives it a rail icon and its own menu,
+  plus its pages.
+
+Checklist for a course change:
+
+- [ ] `npm run build` succeeds, and the module still shows all of its steps on its track page
+- [ ] `npm run audit` passes: it checks the hub and a sample of AI Engineer
+      pages for errors, overflow at 320 and 400px, and contrast in both themes
+- [ ] links you added open (resources are linked out, so check them)

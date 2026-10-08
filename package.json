@@ -1,5 +1,5 @@
 {
-  "name": "leetcode-solution-pages",
+  "name": "learn",
   "type": "module",
   "version": "0.1.0",
   "private": true,
@@ -12,7 +12,8 @@
     "audit": "node scripts/audit.mjs",
     "refresh-problems": "node scripts/refresh-problems.mjs",
     "deploy": "npm run build && wrangler deploy",
-    "serve": "wrangler dev"
+    "serve": "wrangler dev",
+    "screenshots": "node scripts/screenshots.mjs"
   },
   "dependencies": {
     "@astrojs/preact": "^6.0.6",
@@ -20,7 +21,7 @@
     "marked": "^18.1.0",
     "preact": "^10.29.8"
   },
-  "description": "Interactive, verified LeetCode solution pages — step through the algorithm, copy code that was run in five languages.",
+  "description": "learn.devmtnaing.com: interactive, verified LeetCode walkthroughs and the AI Engineer course, from backend engineer to AI research engineer.",
   "license": "MIT",
   "devDependencies": {
     "axe-core": "^4.13.0",

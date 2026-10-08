@@ -26,7 +26,7 @@ export default function JumpBackIn({ units }: { units: UnitRef[] }) {
   if (next)
     cards.push({
       key: 'ai',
-      color: next.color,
+      color: 'indigo',
       kicker: 'AI Engineer · up next',
       title: next.moduleTitle,
       sub: `${next.trackShort} · ${next.moduleLabel} · ${next.label}`,

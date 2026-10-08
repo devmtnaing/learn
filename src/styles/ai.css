@@ -20,6 +20,7 @@
 }
 .tc-slate{--c:#5F6B85;--ce:#46506A;--cs:#E9ECF3;--ct:#3D465C}
 .tc-teal{--c:#0B7077;--ce:#08545A;--cs:#DCF1F0;--ct:#08545A}
+.tc-sky{--c:#0369A1;--ce:#075985;--cs:#E0F2FE;--ct:#075985}
 .tc-indigo{--c:#5141E0;--ce:#3A2DB8;--cs:#ECEBFF;--ct:#3A2DB8}
 .tc-rose{--c:#C2346A;--ce:#962550;--cs:#FDE8EF;--ct:#962550}
 .tc-amber{--c:#B4650A;--ce:#8A4C06;--cs:#FDF0DC;--ct:#7F4605}
@@ -27,6 +28,7 @@
   :root:not([data-theme="light"]){--xp:#F5B03C;--streak:#F2784F;--ok-edge:#2E8F62;--bad-edge:#B0533F}
   :root:not([data-theme="light"]) .tc-slate{--c:#8792AE;--ce:#5F6B85;--cs:#232838;--ct:#B5BDD2}
   :root:not([data-theme="light"]) .tc-teal{--c:#4FC0C9;--ce:#2A8F97;--cs:#103539;--ct:#6FD3DA}
+  :root:not([data-theme="light"]) .tc-sky{--c:#5CC3F2;--ce:#2B8FC0;--cs:#0C2D3F;--ct:#7FD3F7}
   :root:not([data-theme="light"]) .tc-indigo{--c:#A39AFF;--ce:#6E61E6;--cs:#25204F;--ct:#BDB6FF}
   :root:not([data-theme="light"]) .tc-rose{--c:#F27AA3;--ce:#C2346A;--cs:#3A1726;--ct:#F7A6C2}
   :root:not([data-theme="light"]) .tc-amber{--c:#F0A93E;--ce:#B4650A;--cs:#3A2A10;--ct:#F7C46E}
@@ -34,6 +36,7 @@
 :root[data-theme="dark"]{--xp:#F5B03C;--streak:#F2784F;--ok-edge:#2E8F62;--bad-edge:#B0533F}
 :root[data-theme="dark"] .tc-slate{--c:#8792AE;--ce:#5F6B85;--cs:#232838;--ct:#B5BDD2}
 :root[data-theme="dark"] .tc-teal{--c:#4FC0C9;--ce:#2A8F97;--cs:#103539;--ct:#6FD3DA}
+:root[data-theme="dark"] .tc-sky{--c:#5CC3F2;--ce:#2B8FC0;--cs:#0C2D3F;--ct:#7FD3F7}
 :root[data-theme="dark"] .tc-indigo{--c:#A39AFF;--ce:#6E61E6;--cs:#25204F;--ct:#BDB6FF}
 :root[data-theme="dark"] .tc-rose{--c:#F27AA3;--ce:#C2346A;--cs:#3A1726;--ct:#F7A6C2}
 :root[data-theme="dark"] .tc-amber{--c:#F0A93E;--ce:#B4650A;--cs:#3A2A10;--ct:#F7C46E}
@@ -345,3 +348,7 @@ a.s{text-decoration:none;color:var(--ink)}
 .plan-title{font-family:var(--display);font-size:18px;margin-top:4px}
 .plan-main small{color:var(--muted);line-height:1.5}
 .linkish{background:none;border:0;padding:0;font:inherit;color:var(--accent);font-weight:600;cursor:pointer;text-decoration:underline}
+
+/* answered options stay readable; only the ones not picked step back a little */
+.option:disabled{color:var(--ink-2)}
+.option.right:disabled,.option.wrong:disabled{color:var(--ink)}

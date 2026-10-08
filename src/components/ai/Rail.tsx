@@ -103,7 +103,7 @@ export default function Rail({ units, mode = 'ai' }: { units: UnitRef[]; mode?: 
               <i style={{ background: SECTION_COLOR.ai }} />
               <b>AI Engineer</b>
               <small>
-                {totalXp(p, 'ai')} XP · {streak(p, 'ai')}-day streak · {crownCount(p)} crowns
+                {totalXp(p, 'ai')} XP · {streak(p, 'ai')}-day streak · {crownCount(p)} {crownCount(p) === 1 ? 'crown' : 'crowns'}
               </small>
             </a>
           </div>

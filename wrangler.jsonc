@@ -13,7 +13,7 @@
 // the production route is not applied to Previews.
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "leetcode-solutions",
+  "name": "learn",
   "compatibility_date": "2026-09-25",
   "assets": {
     "directory": "./dist",

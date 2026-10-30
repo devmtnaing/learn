@@ -258,6 +258,14 @@ under `/ai-engineer` are built from it at build time
 - **Quizzes and flashcards** are in `src/lib/ai/quizzes.ts` and
   `src/lib/ai/flashcards.ts`, keyed by module id (`t1-1.4`). A question names
   its correct option and says why.
+- **Lessons** (the optional *Lesson* step) are in `src/lib/ai/lessons.ts`,
+  keyed by module id like quizzes: one small idea per screen in markdown, each
+  with a `choice`, `number` or `text` check that has a hint and a why. A lesson
+  can name a notebook under `course/` (e.g. `00-setup/notebooks/step-1.ipynb`).
+  The site links it to Colab and GitHub and serves it as a download from
+  `/ai-engineer/notebooks/`. Every exercise in a notebook needs a hidden
+  solution and an `assert` check cell, and the solutions should pass when run
+  top to bottom.
 - **Papers and projects** are `course/track-3-research-engineer/papers.md` and
   `course/projects/README.md`.
 - **A new section** (another course next to LeetCode and AI Engineer) is one

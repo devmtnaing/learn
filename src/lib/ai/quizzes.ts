@@ -3,6 +3,52 @@
 export type Question = { q: string; o: string[]; a: number; why: string }
 
 export const quizzes: Record<string, Question[]> = {
+  // ───────────── Setup ─────────────
+  'setup-1': [
+    {
+      q: 'data has shape (4, 3). What is the shape of data.mean(axis=1, keepdims=True)?',
+      o: ['(4, 1)', '(4,)', '(1, 3)', '(3,)'],
+      a: 0,
+      why: 'axis=1 collapses the columns (one value per row), and keepdims leaves that axis as size 1.',
+    },
+    {
+      q: 'Which of these broadcasts without an error?',
+      o: ['(4, 3) + (3,)', '(4, 3) + (4,)', '(2, 3) + (3, 2)', '(5,) + (4,)'],
+      a: 0,
+      why: 'Compared from the right, 3 vs 3 matches and the missing dimension stretches. The others have a pair that is neither equal nor 1.',
+    },
+    {
+      q: 'Why does a stable softmax subtract the row maximum first?',
+      o: ['To stop exp() overflowing; the result is unchanged', 'To make the outputs sum to 1', 'To make it faster', 'To turn the scores negative for the loss'],
+      a: 0,
+      why: 'A constant shift cancels in the division, but it keeps the largest exponent at exp(0) = 1.',
+    },
+    {
+      q: 'torch.arange(6).reshape(3, -1) has shape…',
+      o: ['(3, 2)', '(3, 6)', '(2, 3)', 'Error'],
+      a: 0,
+      why: '-1 means "work it out": 6 numbers in 3 rows is 2 per row.',
+    },
+    {
+      q: 'a = np.array([1, 2, 3]); t = torch.from_numpy(a); a[0] = 100. What is t?',
+      o: ['tensor([100, 2, 3])', 'tensor([1, 2, 3])', 'An error', 'tensor([100])'],
+      a: 0,
+      why: 'from_numpy shares memory with the array. torch.tensor(a) would make a copy.',
+    },
+    {
+      q: 'w = 3, loss = (w - 5) ** 2, learning rate 0.1. After one gradient-descent step, w is…',
+      o: ['3.4', '2.6', '7', '3.04'],
+      a: 0,
+      why: 'grad = 2(w - 5) = -4, so w - 0.1 × (-4) = 3.4.',
+    },
+    {
+      q: 'What happens if you forget w.grad.zero_() in the training loop?',
+      o: ['Gradients add up across steps, so the steps grow and w overshoots', 'Training crashes with an error', 'w stops changing', 'Nothing changes'],
+      a: 0,
+      why: 'backward() adds into .grad. Old gradients pile up and the updates get too big.',
+    },
+  ],
+
   // ───────────── Track 1 ─────────────
   't1-1.1': [
     {

@@ -2,7 +2,7 @@
 import type { ComponentChildren } from 'preact'
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
 import type { Question } from '../../lib/ai/quizzes'
-import type { BuildItem, Resource, UnitKind } from '../../lib/ai/course'
+import type { BuildItem, Lesson as LessonData, LessonCheck, Notebook, Resource, UnitKind } from '../../lib/ai/course'
 import { addXp, markDone, toggleChecked, totalXp, touch, update, get } from '../../lib/progress'
 import { Icon, shuffle, useProgress, XP } from './ui'
 
@@ -24,6 +24,8 @@ export type SessionProps = {
   module: SessionModule
   track: { id: string; short: string; subtitle: string }
   questions?: Question[]
+  lesson?: LessonData
+  notebook?: Notebook
   backUrl: string
   guideUrl: string
 }
@@ -32,9 +34,7 @@ export type SessionProps = {
 
 function useEnter(fn: () => void, enabled = true) {
   const ref = useRef(fn)
-  useEffect(() => {
-    ref.current = fn
-  })
+  ref.current = fn // during render, so an Enter right after typing sees the latest state
   useEffect(() => {
     if (!enabled) return
     const h = (e: KeyboardEvent) => {
@@ -262,6 +262,7 @@ function Checklist({ s, exit, finish }: UnitProps) {
           ? 'Work through the core resources. Tick each one when finished. Links open in a new tab.'
           : 'Hands-on work. This is where the learning happens. Tick each build when it runs and you have written notes on it.'}
       </p>
+      {s.notebook && <NotebookCard nb={s.notebook} label={m.label} />}
       <div class="checklist">{req.map((r) => item(r, isRes ? XP.coreResource : XP.build))}</div>
       {required.length > 0 && optional.length > 0 && (
         <>
@@ -396,6 +397,191 @@ export function Quiz({ questions, title, exit, onComplete }: { questions: Questi
   )
 }
 
+// ───────── lesson: one idea per screen, each with a check question ─────────
+
+/** "(2, 3)", "2,3" and "[2, 3]" all compare equal; so do "(3,)" and "3". */
+const normAnswer = (x: string) => x.toLowerCase().replace(/[\s()[\]]/g, '').replace(/,$/, '')
+const parseNum = (x: string) => Number(x.trim().replace(/[−–]/g, '-'))
+
+function isRight(c: LessonCheck, sel: number | null, answer: string) {
+  if (c.kind === 'choice') return sel === c.a
+  if (c.kind === 'number') {
+    const n = parseNum(answer)
+    return answer.trim() !== '' && Number.isFinite(n) && Math.abs(n - c.a) <= (c.tol ?? 0.001)
+  }
+  return c.a.some((a) => normAnswer(a) === normAnswer(answer))
+}
+
+function answerHtml(c: LessonCheck) {
+  if (c.kind === 'choice') return c.oHtml![c.a]
+  return c.kind === 'number' ? String(c.a) : c.a[0]
+}
+
+export function NotebookCard({ nb, label }: { nb: Notebook; label: string }) {
+  return (
+    <div class="card notebook">
+      <div class="row">
+        <span class="chip-icon" style={{ background: 'var(--cs)', color: 'var(--ct)' }}>
+          <Icon name="code" size={20} />
+        </span>
+        <span class="grow">
+          <b>{label} notebook</b>
+          <small>Exercises with self-checks. Runs in Colab (free GPU) or Jupyter on your machine.</small>
+        </span>
+      </div>
+      <div class="notebook-actions">
+        <a class="btn track sm" href={nb.colab} target="_blank" rel="noopener">
+          <Icon name="play" size={14} /> Open in Colab
+        </a>
+        <a class="btn ghost sm" href={nb.download} download={nb.file}>
+          <Icon name="download" size={14} /> Download .ipynb
+        </a>
+        <a class="btn ghost sm" href={nb.github} target="_blank" rel="noopener">
+          <Icon name="github" size={14} /> View on GitHub
+        </a>
+      </div>
+    </div>
+  )
+}
+
+type LessonStatus = 'ask' | 'hint' | 'right' | 'shown'
+
+function Lesson({ s, exit, finish }: UnitProps) {
+  const l = s.lesson!
+  const posKey = `lesson-pos:${s.unitId}`
+  // where you left off, so a long lesson can be done over several sittings
+  const [idx, setIdx] = useState(() => {
+    try {
+      const n = Number(localStorage.getItem(posKey))
+      return n > 0 && n < l.screens.length ? n : 0
+    } catch {
+      return 0
+    }
+  })
+  const [sel, setSel] = useState<number | null>(null)
+  const [answer, setAnswer] = useState('')
+  const [status, setStatus] = useState<LessonStatus>('ask')
+  const sc = l.screens[idx]
+  const c = sc.check
+  const last = idx === l.screens.length - 1
+  const answered = status === 'right' || status === 'shown'
+  const ready = !c || (c.kind === 'choice' ? sel !== null : answer.trim() !== '')
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(posKey, String(idx))
+    } catch {}
+  }, [idx])
+
+  const go = (to: number) => {
+    setIdx(to)
+    setSel(null)
+    setAnswer('')
+    setStatus('ask')
+    window.scrollTo(0, 0)
+  }
+  const check = () => {
+    if (!c || answered || !ready) return
+    if (isRight(c, sel, answer)) {
+      if (status === 'ask') addXp(XP.quizCorrect)
+      setStatus('right')
+    } else setStatus(status === 'ask' ? 'hint' : 'shown')
+  }
+  const next = () => {
+    if (!last) return go(idx + 1)
+    try {
+      localStorage.removeItem(posKey)
+    } catch {}
+    markDone(s.unitId, XP.unitBonus)
+    finish('Lesson complete!', 'Next: run the notebook, then read the docs in the Learn step.')
+  }
+  useEnter(!c || answered ? next : check)
+  useEffect(() => {
+    const h = (e: KeyboardEvent) => {
+      const n = Number(e.key)
+      if (c?.kind === 'choice' && !answered && !(e.target instanceof HTMLInputElement) && n >= 1 && n <= c.o.length) setSel(n - 1)
+    }
+    window.addEventListener('keydown', h)
+    return () => window.removeEventListener('keydown', h)
+  }, [c, answered])
+
+  const backBtn = idx > 0 && (
+    <button class="btn ghost" onClick={() => go(idx - 1)}>
+      Back
+    </button>
+  )
+  const footer =
+    status === 'right' ? (
+      <Footer tone="ok" msg={<><b>Correct!</b><span dangerouslySetInnerHTML={{ __html: c!.whyHtml }} /></>}>
+        <button class="btn ok" onClick={next}>
+          Continue
+        </button>
+      </Footer>
+    ) : status === 'shown' ? (
+      <Footer tone="bad" msg={<><b dangerouslySetInnerHTML={{ __html: `Answer: ${answerHtml(c!)}` }} /><span dangerouslySetInnerHTML={{ __html: c!.whyHtml }} /></>}>
+        <button class="btn red" onClick={next}>
+          Continue
+        </button>
+      </Footer>
+    ) : status === 'hint' ? (
+      <Footer tone="bad" msg={<><b>Not quite. Try again.</b><span>Hint: <span dangerouslySetInnerHTML={{ __html: c!.hintHtml }} /></span></>}>
+        <button class="btn track" disabled={!ready} onClick={check}>
+          Check
+        </button>
+      </Footer>
+    ) : (
+      <Footer hints={false}>
+        {backBtn}
+        <button class="btn track" disabled={!ready} onClick={c ? check : next}>
+          {c ? 'Check' : last ? 'Finish' : 'Continue'}
+        </button>
+      </Footer>
+    )
+
+  return (
+    <Frame progress={(idx + (answered || !c ? 1 : 0)) / l.screens.length} onClose={exit} footer={footer}>
+      <span class="pill">
+        <Icon name="play" size={14} /> Lesson · {s.module.label} · {idx + 1} / {l.screens.length}
+      </span>
+      <h1>{sc.title}</h1>
+      <div class="prose lesson-body" dangerouslySetInnerHTML={{ __html: sc.html }} />
+      {c && (
+        <div class="lesson-check">
+          <div class="section-title">Check</div>
+          <p class="lesson-q" dangerouslySetInnerHTML={{ __html: c.qHtml }} />
+          {c.kind === 'choice' ? (
+            <div class="options" role="radiogroup" aria-label="Answers">
+              {c.oHtml!.map((o, i) => {
+                const cls = ['option', !answered && sel === i && 'sel', answered && i === c.a && 'right', status === 'shown' && sel === i && 'wrong'].filter(Boolean).join(' ')
+                return (
+                  <button key={i} class={cls} disabled={answered} onClick={() => setSel(i)} role="radio" aria-checked={sel === i}>
+                    <span class="k">{i + 1}</span>
+                    <span dangerouslySetInnerHTML={{ __html: o }} />
+                  </button>
+                )
+              })}
+            </div>
+          ) : (
+            <input
+              class={`answer-input ${status === 'right' ? 'right' : status === 'shown' ? 'wrong' : ''}`}
+              type="text"
+              inputMode={c.kind === 'number' ? 'decimal' : 'text'}
+              autocomplete="off"
+              spellcheck={false}
+              aria-label="Your answer"
+              placeholder={c.kind === 'number' ? 'A number, e.g. 3.5' : 'e.g. (2, 3)'}
+              value={answer}
+              disabled={answered}
+              onInput={(e) => setAnswer((e.target as HTMLInputElement).value)}
+            />
+          )}
+        </div>
+      )}
+      {last && l.notebook && <NotebookCard nb={l.notebook} label={s.module.label} />}
+    </Frame>
+  )
+}
+
 function Checkpoint({ s, exit, finish }: UnitProps) {
   const p = useProgress()
   const m = s.module
@@ -457,6 +643,8 @@ export default function Session(s: SessionProps) {
   switch (s.kind) {
     case 'concepts':
       return <Concepts s={s} exit={exit} finish={finish} />
+    case 'lesson':
+      return <Lesson s={s} exit={exit} finish={finish} />
     case 'resources':
     case 'build':
       return <Checklist s={s} exit={exit} finish={finish} />

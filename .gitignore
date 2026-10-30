@@ -25,3 +25,6 @@ __pycache__/
 
 # Cloudflare Wrangler local state
 .wrangler/
+
+# exercises folder: personal practice code, not part of the repo
+exercises/

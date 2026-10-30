@@ -4,6 +4,7 @@
  * the slices they need as props, so the markdown never ships to the browser. */
 import { marked } from 'marked'
 import { quizzes } from './quizzes'
+import { lessons, type Check } from './lessons'
 
 const files = import.meta.glob('/course/**/*.md', { query: '?raw', import: 'default', eager: true }) as Record<string, string>
 const read = (p: string) => {
@@ -34,7 +35,7 @@ export type Track = { id: string; slug: string; title: string; short: string; su
 export type Paper = { id: string; star: boolean; title: string; by: string; url: string | null }
 export type PaperSection = { title: string; papers: Paper[] }
 export type Project = { id: string; title: string; template: boolean; html: string }
-export type UnitKind = 'concepts' | 'resources' | 'build' | 'quiz' | 'checkpoint'
+export type UnitKind = 'concepts' | 'lesson' | 'resources' | 'build' | 'quiz' | 'checkpoint'
 
 const hash = (s: string) => {
   let h = 5381
@@ -204,8 +205,8 @@ export const projects = parseProjects()
 
 // ───────── units: the five steps of every module ─────────
 
-export const UNIT_LABEL: Record<UnitKind, string> = { concepts: 'Concepts', resources: 'Learn', build: 'Build', quiz: 'Quiz', checkpoint: 'Checkpoint' }
-export const UNIT_SLUG: Record<UnitKind, string> = { concepts: 'concepts', resources: 'learn', build: 'build', quiz: 'quiz', checkpoint: 'checkpoint' }
+export const UNIT_LABEL: Record<UnitKind, string> = { concepts: 'Concepts', lesson: 'Lesson', resources: 'Learn', build: 'Build', quiz: 'Quiz', checkpoint: 'Checkpoint' }
+export const UNIT_SLUG: Record<UnitKind, string> = { concepts: 'concepts', lesson: 'lesson', resources: 'learn', build: 'build', quiz: 'quiz', checkpoint: 'checkpoint' }
 
 export const BASE = '/ai-engineer'
 export const trackUrl = (t: Track) => `${BASE}/${t.slug}`
@@ -214,6 +215,7 @@ export const unitUrl = (t: Track, m: Module, k: UnitKind) => `${moduleUrl(t, m)}
 
 export function unitKinds(m: Module): UnitKind[] {
   const k: UnitKind[] = ['concepts']
+  if (lessons[m.id]) k.push('lesson')
   if (m.resources.length) k.push('resources')
   if (m.build.length) k.push('build')
   if (quizzes[m.id]?.length) k.push('quiz')
@@ -247,3 +249,47 @@ export const trackColor = (trackId: string) => tracks.find((t) => t.id === track
 export const trackWeeks = (t: Track) => t.modules.reduce((a, m) => a + (Number(m.weeks?.split(/[–-]/).at(-1)) || 0), 0)
 /** Upper end of a module's estimate, in course weeks, or 0 when it has none. */
 export const moduleWeeks = (m: Module) => Number(m.weeks?.split(/[–-]/).at(-1)) || 0
+
+// ───────── lessons and notebooks ─────────
+
+const REPO = 'devmtnaing/learn'
+const notebooks = import.meta.glob('/course/**/*.ipynb', { query: '?raw', import: 'default', eager: true }) as Record<string, string>
+
+/** A notebook under /course: its raw JSON, plus where to open or download it. */
+export type Notebook = { file: string; colab: string; github: string; download: string }
+export const notebookFile = (path: string) => path.replace('/notebooks/', '/').replace(/^\d+-/, '').replace(/\//g, '-') // '00-setup/notebooks/step-1.ipynb' → 'setup-step-1.ipynb'
+export function notebookFor(path: string): Notebook {
+  if (notebooks[`/course/${path}`] == null) throw new Error(`notebook missing: course/${path}`)
+  const file = notebookFile(path)
+  return {
+    file,
+    colab: `https://colab.research.google.com/github/${REPO}/blob/main/course/${path}`,
+    github: `https://github.com/${REPO}/blob/main/course/${path}`,
+    download: `${BASE}/notebooks/${file}`,
+  }
+}
+export const allNotebooks = () => Object.entries(notebooks).map(([k, json]) => ({ file: notebookFile(k.replace('/course/', '')), json }))
+
+export type LessonCheck = Check & { qHtml: string; oHtml?: string[]; hintHtml: string; whyHtml: string }
+export type LessonScreen = { title: string; html: string; check?: LessonCheck }
+export type Lesson = { screens: LessonScreen[]; notebook?: Notebook }
+
+/** The module's lesson with its markdown rendered, or undefined if it has none. */
+export function lessonFor(m: Module): Lesson | undefined {
+  const l = lessons[m.id]
+  if (!l) return undefined
+  return {
+    notebook: l.notebook ? notebookFor(l.notebook) : undefined,
+    screens: l.screens.map((sc) => ({
+      title: sc.title,
+      html: block(sc.md),
+      check: sc.check && {
+        ...sc.check,
+        qHtml: inline(sc.check.q),
+        oHtml: sc.check.kind === 'choice' ? sc.check.o.map(inline) : undefined,
+        hintHtml: inline(sc.check.hint),
+        whyHtml: inline(sc.check.why),
+      },
+    })),
+  }
+}

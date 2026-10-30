@@ -359,6 +359,8 @@ async function main() {
       ['/ai-engineer/track-2', '.timeline'],
       ['/ai-engineer/track-2/2-7', '.guide-hero'],
       ['/ai-engineer/track-1/1-1/concepts', '.session-body h1'],
+      ['/ai-engineer/setup/step-1/lesson', '.lesson-check'],
+      ['/ai-engineer/setup/step-1/build', '.notebook'],
       ['/ai-engineer/track-1/1-4/learn', '.check'],
       ['/ai-engineer/track-2/2-7/quiz', '.option'],
       ['/ai-engineer/practice', '.grid-cards'],

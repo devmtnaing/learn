@@ -6,7 +6,7 @@ import type { IconName } from '../../lib/icons';
 
 interface Props { track: Track; module: Module }
 const { track, module: m } = Astro.props;
-const KIND_ICON: Record<UnitKind, IconName> = { concepts: 'bulb', resources: 'bookOpen', build: 'code', quiz: 'help', checkpoint: 'trophy' };
+const KIND_ICON: Record<UnitKind, IconName> = { concepts: 'bulb', lesson: 'play', resources: 'bookOpen', build: 'code', quiz: 'help', checkpoint: 'trophy' };
 ---
 <div class="stepper">
   {unitKinds(m).map((k) => (

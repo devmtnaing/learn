@@ -194,6 +194,7 @@ a.card.row, .card.row { display: flex; }
 .option.wrong { border-color: var(--bad); background: var(--bad-soft); box-shadow: 0 3px 0 var(--bad); }
 .option.wrong .k { background: var(--bad); color: var(--on-accent); }
 .option:disabled { cursor: default; }
+.option { font-family: inherit; }
 
 .footer { position: fixed; left: 0; right: 0; bottom: 0; border-top: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); }
 .footer.ok { background: var(--ok-soft); border-color: color-mix(in srgb, var(--ok) 35%, transparent); }
@@ -225,6 +226,23 @@ a.card.row, .card.row { display: flex; }
 .prose th { background: var(--bg-2); }
 .prose pre { background: var(--bg-2); border: 1px solid var(--line); padding: 14px; border-radius: 12px; overflow-x: auto; font-size: 13px; }
 .prose pre code { background: none; padding: 0; }
+.prose :not(pre) > code { font-family: var(--mono); font-size: 0.9em; background: var(--bg-2); padding: 1px 5px; border-radius: 5px; }
+/* ───────── lesson step ───────── */
+.lesson-body { max-width: 80ch; }
+.lesson-body > * + * { margin-top: 14px; }
+.lesson-body pre { line-height: 1.45; }
+.lesson-check { max-width: 80ch; border-top: 1px solid var(--line); margin-top: 26px; }
+.lesson-q { font-size: 18px; font-weight: 600; line-height: 1.5; margin: 0; }
+.lesson-q code, .option code, .footer .msg code { font-family: var(--mono); font-size: 0.9em; background: var(--bg-2); padding: 1px 5px; border-radius: 5px; }
+.lesson-check .options { margin-top: 16px; }
+.answer-input { margin-top: 16px; width: min(320px, 100%); font: 600 17px var(--mono); color: var(--ink); background: var(--card); border: 1.5px solid var(--line); border-radius: 12px; padding: 12px 14px; box-shadow: 0 3px 0 var(--line); }
+.answer-input:focus { outline: none; border-color: var(--c, var(--accent)); box-shadow: 0 3px 0 var(--c, var(--accent)); }
+.answer-input.right { border-color: var(--ok); background: var(--ok-soft); box-shadow: 0 3px 0 var(--ok); }
+.answer-input.wrong { border-color: var(--bad); background: var(--bad-soft); box-shadow: 0 3px 0 var(--bad); }
+.notebook { margin: 22px 0 6px; max-width: 80ch; }
+.notebook small { display: block; }
+.notebook-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.notebook-actions .btn { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
 .prose ul, .prose ol { padding-left: 22px; }
 .prose input[type='checkbox'] { accent-color: var(--accent); }
 .guide-hero { border-radius: 22px; padding: 26px 28px; background: linear-gradient(135deg, var(--c), var(--ce)); color: var(--on-accent); margin: 10px 0 26px; }

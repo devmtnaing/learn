@@ -215,6 +215,16 @@ per_img = images.mean(axis=1, keepdims=True)   # (4, 1)
 images - per_img                               # (4, 3) ✓
 \`\`\`
 
+First, \`per_img\` holds each row's mean: (5 + 6 + 7) / 3 = 6, and so on down the rows.
+
+${viz(
+  grid([[5, 6, 7], [3, 4, 5], [9, 8, 7], [1, 2, 3]], { hl: ['0,*'], cap: 'images (4, 3)' }),
+  'mean(axis=1) →',
+  grid([[6], [4], [8], [2]], { hl: ['0,0'], cap: 'per_img (4, 1)' }),
+)}
+
+Then the column is copied across the 3 columns (dashed boxes) and subtracted box by box. The first box is 5 − 6 = −1:
+
 ${viz(
   grid([[5, 6, 7], [3, 4, 5], [9, 8, 7], [1, 2, 3]], { cap: 'images (4, 3)' }),
   '−',

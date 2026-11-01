@@ -458,9 +458,18 @@ function Lesson({ s, exit, finish }: UnitProps) {
       return 0
     }
   })
-  const [sel, setSel] = useState<number | null>(null)
-  const [answer, setAnswer] = useState('')
-  const [status, setStatus] = useState<LessonStatus>('ask')
+  // answered checks, by screen title, so going back shows your answer instead of asking again
+  const ansKey = `lesson-answers:${s.unitId}`
+  const [saved, setSaved] = useState<Record<string, { sel: number | null; answer: string; status: LessonStatus }>>(() => {
+    try {
+      return JSON.parse(localStorage.getItem(ansKey) ?? '{}')
+    } catch {
+      return {}
+    }
+  })
+  const [sel, setSel] = useState<number | null>(() => saved[l.screens[idx].title]?.sel ?? null)
+  const [answer, setAnswer] = useState(() => saved[l.screens[idx].title]?.answer ?? '')
+  const [status, setStatus] = useState<LessonStatus>(() => saved[l.screens[idx].title]?.status ?? 'ask')
   const sc = l.screens[idx]
   const c = sc.check
   const last = idx === l.screens.length - 1
@@ -474,18 +483,28 @@ function Lesson({ s, exit, finish }: UnitProps) {
   }, [idx])
 
   const go = (to: number) => {
+    const v = saved[l.screens[to].title]
     setIdx(to)
-    setSel(null)
-    setAnswer('')
-    setStatus('ask')
+    setSel(v?.sel ?? null)
+    setAnswer(v?.answer ?? '')
+    setStatus(v?.status ?? 'ask')
     window.scrollTo(0, 0)
+  }
+  const settle = (st: LessonStatus) => {
+    setStatus(st)
+    if (st !== 'right' && st !== 'shown') return
+    const next = { ...saved, [sc.title]: { sel, answer, status: st } }
+    setSaved(next)
+    try {
+      localStorage.setItem(ansKey, JSON.stringify(next))
+    } catch {}
   }
   const check = () => {
     if (!c || answered || !ready) return
     if (isRight(c, sel, answer)) {
       if (status === 'ask') addXp(XP.quizCorrect)
-      setStatus('right')
-    } else setStatus(status === 'ask' ? 'hint' : 'shown')
+      settle('right')
+    } else settle(status === 'ask' ? 'hint' : 'shown')
   }
   const next = () => {
     if (!last) return go(idx + 1)
@@ -513,18 +532,21 @@ function Lesson({ s, exit, finish }: UnitProps) {
   const footer =
     status === 'right' ? (
       <Footer tone="ok" msg={<><b>Correct!</b><span dangerouslySetInnerHTML={{ __html: c!.whyHtml }} /></>}>
+        {backBtn}
         <button class="btn ok" onClick={next}>
           Continue
         </button>
       </Footer>
     ) : status === 'shown' ? (
       <Footer tone="bad" msg={<><b dangerouslySetInnerHTML={{ __html: `Answer: ${answerHtml(c!)}` }} /><span dangerouslySetInnerHTML={{ __html: c!.whyHtml }} /></>}>
+        {backBtn}
         <button class="btn red" onClick={next}>
           Continue
         </button>
       </Footer>
     ) : status === 'hint' ? (
       <Footer tone="bad" msg={<><b>Not quite. Try again.</b><span>Hint: <span dangerouslySetInnerHTML={{ __html: c!.hintHtml }} /></span></>}>
+        {backBtn}
         <button class="btn track" disabled={!ready} onClick={check}>
           Check
         </button>

@@ -239,6 +239,28 @@ a.card.row, .card.row { display: flex; }
 .answer-input:focus { outline: none; border-color: var(--c, var(--accent)); box-shadow: 0 3px 0 var(--c, var(--accent)); }
 .answer-input.right { border-color: var(--ok); background: var(--ok-soft); box-shadow: 0 3px 0 var(--ok); }
 .answer-input.wrong { border-color: var(--bad); background: var(--bad-soft); box-shadow: 0 3px 0 var(--bad); }
+/* lesson pictures, built by src/lib/ai/viz.ts */
+.viz { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin: 18px 0; max-width: 80ch; }
+.viz-col { flex-direction: column; align-items: stretch; gap: 8px; }
+.viz-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.viz-op { font: 600 18px var(--mono); color: var(--muted); }
+.viz-cap { font: 500 12.5px var(--mono); color: var(--muted); text-align: center; }
+.viz-cap code { font-size: 1em; }
+.viz-grid { display: grid; gap: 3px; }
+.viz-cell { min-width: 2.3em; height: 2.3em; padding: 0 4px; display: grid; place-items: center; border-radius: 6px; background: var(--bg-2); border: 1.5px solid var(--line); font: 600 13.5px var(--mono); color: var(--ink); }
+.viz-cell.hl { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.viz-cell.ghost { opacity: 0.5; border-style: dashed; background: transparent; }
+.viz-cell.px { min-width: 1.9em; height: 1.9em; font-size: 11px; background: color-mix(in srgb, var(--ink) var(--v), var(--card)); border-color: transparent; }
+.viz-cell.px.dark { color: var(--card); }
+.viz-bars, .viz-steps { display: grid; grid-template-columns: 4.6em 1fr 6.6em; align-items: center; gap: 6px 10px; }
+.viz-bars { grid-template-columns: auto 1fr auto; }
+.viz-bar-label, .viz-step-label { font: 500 12.5px var(--mono); color: var(--muted); }
+.viz-bar-text, .viz-step-w { font: 600 13px var(--mono); }
+.viz-bar { height: 14px; border-radius: 99px; background: var(--bg-2); box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
+.viz-bar > span { display: block; height: 100%; border-radius: 99px; background: var(--accent); }
+.viz-lane { position: relative; height: 14px; border-radius: 99px; background: var(--bg-2); box-shadow: inset 0 0 0 1px var(--line); }
+.viz-lane > b { position: absolute; top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--accent); }
+.viz-target { position: absolute; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; background: var(--ok); }
 .notebook { margin: 22px 0 6px; max-width: 80ch; }
 .notebook small { display: block; }
 .notebook-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
